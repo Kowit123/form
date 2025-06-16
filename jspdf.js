@@ -121,7 +121,7 @@ lineY += 1;
 
 const cLines = `2.ค่าที่พัก`;
 doc.text(cLines,3,lineY);     
-const c1Lines = `เป็นเงิน ${accommodationTotal.toLocaleString()} บาท`
+const c1Lines = `เป็นเงิน ${document.getElementById("result_2").textContent} บาท`
 doc.text(c1Lines,19,lineY, { align: "right" });
 lineY += 1;
 
