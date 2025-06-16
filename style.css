@@ -214,22 +214,11 @@ h1 {
             }
         }
     }
-        .dateTogo{
-        display: flex;
-        width: 98%;
-        div {
-            label {
-                display: block;
-            }
-            input {
-                width: 45%;
-            }
-        }   
-    }
-        .in-date_1 {
+    
+        .in-date_1, .dateTogo {
             display: flex;
             width: 98%;
-            .u10d1, .in-date_2{
+            .u10d1, .in-date_2, .dateTogo_1, .dateTogo_2{
                 width: 50%;
             }
             input{
