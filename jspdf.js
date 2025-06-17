@@ -137,7 +137,7 @@ if (mc_2) {
 lineY += 0.3;
 
 
-const cLines = `2.ค่าที่พัก`;
+const cLines = `2.ค่าที่พัก  ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`;
 doc.text(cLines,3,lineY);     
 const c1Lines = `เป็นเงิน ${document.getElementById("result_2").textContent} บาท`
 doc.text(c1Lines,pageWidth-2, lineY, {align: 'right'});
@@ -195,21 +195,64 @@ doc.text(eLines1,3, lineY)
 doc.text(`เป็นเงิน ${vehicles_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
+const rows = document.querySelectorAll("#Hired-vehicles_detail .vehicles");
+rows.forEach((row) => {
+  const detailInput = row.querySelector(".vehicles_detail");
+  const costInput = row.querySelector(".vehicles_cost");
+  const detail = detailInput?.value.trim() || "";
+  const cost = costInput?.value.trim() || "";
+  if (detail || cost) {
+    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
+    lineY += 0.7;
+  }
+});
+lineY += 0.3;
+
 const fLines1  = `5.ค่าลงทะเบียน`;
 doc.text(fLines1,3, lineY)
 doc.text(`เป็นเงิน ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
+
+const rows1 = document.querySelectorAll("#Registration_fee_detail .fee_detail");
+rows1.forEach((row) => {
+  const detailInput = row.querySelector(".Registration_fee_detail");
+  const costInput = row.querySelector(".Registration-fee");
+  const detail = detailInput?.value.trim() || "";
+  const cost = costInput?.value.trim() || "";
+  if (detail || cost) {
+    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
+    lineY += 0.7;
+  }
+});
+lineY += 0.3;
+
 
 const gLines1  = `6.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
 doc.text(gLines1,3, lineY)
 doc.text(`เป็นเงิน ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 1;
 
+const rows2 = document.querySelectorAll("#other-cost_detail .other_cost");
+rows2.forEach((row) => {
+  const detailInput = row.querySelector(".other-cost_detail");
+  const costInput = row.querySelector(".otherCost");
+  const detail = detailInput?.value.trim() || "";
+  const cost = costInput?.value.trim() || "";
+  if (detail || cost) {
+    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
+    lineY += 0.7;
+  }
+});
+lineY += 0.3;
+
+
 doc.text(`รวมค่าใช้จ่ายเป็นเวงินประมาณ ${all_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 doc.text(`(${numberToThaiText(all_cost)})`,pageWidth-2, lineY, {align: 'right'});
 lineY += 1;
 
+groupHeight = 3.1;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const text1 = "ลงชื่อ...............................................ผู้ขอรับเงิน";
 const marginLeft = 10.75;
 const marginRight = 0.5;
@@ -225,6 +268,8 @@ const text3_1 = `${document.getElementById("requesting_position").value}`;
 doc.text(text3_1, centerX-0.3, lineY, { align: 'center' });
 lineY+= 1;
 
+groupHeight = 7.3;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const last_paragraph = `โดยเบิกจ่าายจากงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี................หมวดเงินใช้สอยรหัส...............................เป็นเงิน ${all_cost.toLocaleString()} บาท (${numberToThaiText(all_cost)})`
 const last = doc.splitTextToSize(last_paragraph, 16);
 doc.text(last,3, lineY);
@@ -345,4 +390,15 @@ function numberToThaiText(number) {
 
   return bahtText;
 }
+
+function checkAddPageGroup(doc, lineY, groupHeight) {
+  const pageHeight = doc.internal.pageSize.height;
+  const marginBottom = 2; // สมมติขอบล่าง
+  if (lineY + groupHeight > pageHeight - marginBottom) {
+    doc.addPage();
+    return 2.5; // สมมติระยะห่างบนหน้ากระดาษใหม่ (margin top)
+  }
+  return y;
+}
+
 
