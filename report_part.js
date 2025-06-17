@@ -47,7 +47,7 @@ y += 1;
 const firstLineWidth = 13;
 const nextLinesWidth = 16;
 
-const descripts = `ตามคำสั่ง/บันทึกที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} ได้อนุมัติให้ ข้าพเจ้า ${document.getElementById("nrq_re").value} ตำแหน่ง ${document.getElementById("pst_re").value} สังกัด ${document.getElementById("pt_re").value} เดินทางไปปฏิบัติราชการเพื่อ ${document.getElementById("w_re").value} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ออกเดินทางจาก ( )บ้านพัก ( )สำนักงาน ประเทศไทย ตั้งแต่วันที่ ${document.getElementById("thai-datepicker9").value} เวลา ${document.getElementById("timepicker3").value} น. และกลับถึง ( )บ้านพัก ( )สำนักงาน ประเทศไทย วันที่ ${document.getElementById("thai-datepicker10").value} เวลา ${document.getElementById("timepicker4").value} ${document.getElementById("daysresult").textContent}`;
+const descripts = `ตามคำสั่ง/บันทึกที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} ได้อนุมัติให้ ข้าพเจ้า ${document.getElementById("nrq_re").value} ตำแหน่ง ${document.getElementById("pst_re").value} สังกัด ${document.getElementById("pt_re").value} เดินทางไปปฏิบัติราชการเพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ออกเดินทางจาก ( )บ้านพัก ( )สำนักงาน ประเทศไทย ตั้งแต่วันที่ ${document.getElementById("thai-datepicker9").value} เวลา ${document.getElementById("timepicker3").value} น. และกลับถึง ( )บ้านพัก ( )สำนักงาน ประเทศไทย วันที่ ${document.getElementById("thai-datepicker10").value} เวลา ${document.getElementById("timepicker4").value} ${document.getElementById("daysresult").textContent}`;
 
 const linesTemps = doc.splitTextToSize(descripts, firstLineWidth);
 
@@ -685,7 +685,7 @@ const foot2 = [
 
 const finalY3 = doc.lastAutoTable.finalY
 doc.text(`ตัวอักษร   ${numberToThaiText(document.getElementById("k").textContent)}`,1.5,finalY3 + 1.4);
-y3 += finalY2-2.3;
+y3 += finalY2-4;
 
 centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y3);
 centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y3);

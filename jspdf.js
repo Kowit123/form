@@ -29,7 +29,6 @@
       const requesting_name = document.getElementById("requesting_name").value;
       const requesting_position = document.getElementById("requesting_position").value;
       const requesting_part = document.getElementById("requesting_part").value;
-      const YDUGO = document.getElementById("YDUGO").value;
       const project = document.getElementById("project").value;
       const at = document.getElementById("at").value;
       const thai_datepicker2 = document.getElementById("thai-datepicker2").value;
@@ -93,7 +92,7 @@ const firstLineWidth = 13;
 const nextLinesWidth = 16;
 
 // ข้อความเต็ม
-const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ${YDUGO} เรื่อง${project} ณ ${at} ในงวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
+const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในงวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
 
 const linesTemp = doc.splitTextToSize(aLines, firstLineWidth);
 
@@ -415,7 +414,7 @@ function numberToThaiText(number) {
 
 function checkAddPageGroup(doc, lineY, groupHeight) {
   const pageHeight = doc.internal.pageSize.height;
-  const marginBottom = 2; // สมมติขอบล่าง
+  const marginBottom = 3; // สมมติขอบล่าง
   if (lineY + groupHeight > pageHeight - marginBottom) {
     doc.addPage();
     return 2.5; // สมมติระยะห่างบนหน้ากระดาษใหม่ (margin top)
