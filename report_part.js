@@ -113,6 +113,17 @@ y += 0.3;
 
 doc.text(`3.ค่าพาหนะ`, 3, y);
 doc.text(`เป็นเงิน ${document.getElementById("R_distance-cost_result").textContent} บาท`, pageWidth-2, y,{align: 'right'});
+const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+const selected = Array.from(checkboxes).map(cb => cb.value);
+let checkboxX = 5; // จุดเริ่มแสดงค่า checkbox
+selected.forEach((value, index) => {
+  const text = ` ${value}`;
+  doc.text(text, checkboxX, y);
+
+  // คำนวณความกว้างของข้อความ แล้วเว้นระยะถัดไป
+  const textWidth = doc.getTextWidth(text);
+  checkboxX += textWidth + 0.5; // เว้นห่างระหว่างคำ
+});
 y += 0.7;
 const dLines1 = `${document.querySelector('input[name="type"]:checked')?.value} หมายเลขทะเบียนรถ ${document.getElementById("R_vehicle_number").value} โดยมี ${document.getElementById("R_driver").value} เป็นพนักงานขับรถ`;
 if (document.getElementById("R_vehicle_number").value || document.getElementById("R_driver").value) {

@@ -166,6 +166,7 @@ const selected = Array.from(checkboxes).map(cb => cb.value);
 
 // แสดงใน PDF
 doc.text(`3. ค่าพาหนะ`, 3, lineY);
+doc.text(`เป็นเงิน ${totald} บาท`,pageWidth-2, lineY, {align: 'right'}); 
 doc.text(`(`,5.1,lineY);
 let checkboxX = 5.2; // จุดเริ่มแสดงค่า checkbox
 selected.forEach((value, index) => {
@@ -187,7 +188,6 @@ if (vehicle_number && driver) {
 }
 const dLines2 = `ระยะทาง ${distance} กิโลเมตร`;
 doc.text(dLines2,4, lineY)
-doc.text(`เป็นเงิน ${totald} บาท`,pageWidth-2, lineY, {align: 'right'}); 
 lineY += 0.7;
 
 const eLines1  = `4.ค่าพาหนะรับจ้าง`;
@@ -233,12 +233,13 @@ doc.text(`เป็นเงิน ${other_cost.toLocaleString()} บาท`,pag
 lineY += 1;
 
 const rows2 = document.querySelectorAll("#other-cost_detail .other_cost");
-rows2.forEach((row) => {
-  const detailInput = row.querySelector(".other-cost_detail");
+rows2.forEach((row,index) => {
+  const detailInput = row.querySelector(".Other-cost_detail");
   const costInput = row.querySelector(".otherCost");
   const detail = detailInput?.value.trim() || "";
   const cost = costInput?.value.trim() || "";
-  if (detail || cost) {
+  console.log(`Row ${index + 1}:`, detail, cost);
+  if (detail || cost ) {
     doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
     lineY += 0.7;
   }
@@ -294,7 +295,7 @@ lineY += 0.7;
 doc.addPage();
 
     // เตรียมข้อมูลจาก input
-    const entries = document.querySelectorAll(".entry");
+    const entries = document.querySelectorAll(".entry12");
     const data = [];
 
     entries.forEach(entry => {
@@ -314,10 +315,31 @@ doc.addPage();
       head: [['ชื่อ-นามสกุล', 'ตำแหน่ง', 'หน่วยงาน']],
       body: data,
       startY: 3,
+      theme: 'grid',
       styles: {
         font: 'THSarabunNew',
-        fontSize: 16
-      }
+        fontSize: 14,
+        halign: 'center',
+        valign: 'middle',
+      },
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: 0,
+        lineWidth: 0.02,
+        lineColor: [0, 0, 0]
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: 0,
+        lineWidth: 0.02,
+        lineColor: [0, 0, 0],
+      },
+      footStyles: {
+        fillColor: [255, 255, 255],
+        textColor: 0,
+        lineWidth: 0.02,
+        lineColor: [0, 0, 0]
+      },
     });
 doc.save("document.pdf");
 }

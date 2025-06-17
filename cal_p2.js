@@ -293,6 +293,7 @@ R_checkbox.addEventListener('change', function() {
       R_inputDiv.style.display = 'none';
     }
     });
+    
 const R2_checkbox = document.getElementById('R_personal_car');
 R2_checkbox.addEventListener('change', function() {
   if (this.checked) {

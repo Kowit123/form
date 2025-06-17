@@ -59,27 +59,27 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // เพิ่ม-ลบแถว
-let entryCount = 1;
+let entryCount1 = 1;
 
-function addEntry() {
-  entryCount++;
+function addEntry1() {
+  entryCount1++;
   const container = document.getElementById("form-container");
-  const div = document.createElement("div");
-  div.className = "entry";
+  const div1 = document.createElement("div");
+  div1.className = "entry12";
 
-  div.innerHTML = `
-    <input type="text" name="name_${entryCount}" placeholder="ชื่อ-นามสกุล">
-    <input type="text" name="department_${entryCount}" placeholder="หน่วยงาน">
-    <input type="text" name="position_${entryCount}" placeholder="ตำแหน่ง">
+  div1.innerHTML = `
+    <input type="text" name="name_${entryCount1}" placeholder="ชื่อ-นามสกุล">
+    <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน">
+    <input type="text" name="position_${entryCount1}" placeholder="ตำแหน่ง">
     <button class="remove-btn" onclick="removeEntry(this)">&minus;</button>
   `;
-  container.appendChild(div);
+  container.appendChild(div1);
 }
 function removeEntry(button) {
   const container = button.closest(".entry")
   if (container) {
     container.remove();
-    entryCount--;
+    entryCount1--;
   }
 }
 
@@ -338,9 +338,9 @@ function addothercostLine() {
   const div = document.createElement("div");
   div.classList.add("other_cost");
   div.innerHTML = `
-    <div class="other_cost" style ="display:grid; grid-template-columns: 60% 45% 10%; margin-bottom: 1%;">
+    <div class="other_cost1" style ="display:grid; grid-template-columns: 60% 45% 10%; margin-bottom: 1%;">
       <div>
-        <input class="other-cost_detail" name="other-cost_detail_${other}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style="margin: 0; display: flex; align-items: center; width:94%;">
+        <input class="Other-cost_detail" name="other-cost_detail_${other}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style="margin: 0; display: flex; align-items: center; width:94%;">
       </div>  
       <div>
         <input class="otherCost" name="otherCost" type="number" placeholder="จำนวนเงิน" oninput="updateothercostTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
