@@ -74,8 +74,8 @@ h1 {
     color: #333;
 }
 /* main_form */
-#container {
-    max-width: 900px;
+#container, #container2 {
+    max-width: 1000px;
     margin: auto;
     background-color: hsl(0, 0%, 99%);
     padding: 1.75rem 3rem 3rem 3rem;
@@ -87,30 +87,31 @@ h1 {
     /* firtst_part*/
     .agency_part, .About_the_project {
         input {
-            width: 95%;
+            width: 98.8%;
         }
     }
 
     .bookNum_date {
         display: flex;
-
+        justify-content: space-between;
+        width: 98.8%;
         .Book_number {
-            width:60%;
+            width:49%;
             input {
-                width: 90%;
+                width: 100%;
             }
         }
         .date_1 {
-            width:60%;
+            width:49%;
             input {
-                width: 90%;
+                width: 100%;
             }
         }
     }
 
     .subject {
         input {
-            width: 95%;
+            width: 98.8%;
         }
     }
 
@@ -118,27 +119,40 @@ h1 {
         display: flex;
 
         .Dear {
-            width:60%;
+            width:48%;
             input {
-                width: 74.5%;
+                width: 100%;
             }
         }
     }
     .wRequesting {
         padding: 0;
+        width: 100%;
+        div {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
         input {
-            width: 29.6%;
-            margin-right: 1%;
+            width: 30%;
         }
 
     }
 
-    .header-row, .entry {
+    .header-row, .entry12{
+        display: flex;
+        justify-content: space-between;
+        input {
+            width: 29%;
+        }
+    }
+    /* .header-row, .entry {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr auto;
         gap: 10px;
         margin-bottom: 10px;
         align-items: center;
+        width: 100%;
 
         button {
 
@@ -167,7 +181,7 @@ h1 {
 
     .header-row {
         width: 89%;
-    }
+    } */
 
     .YDUGO {
     margin-top: 2rem;
@@ -194,36 +208,25 @@ h1 {
 
     .location {
         display: flex;
-        width: 98%;
+        width: 100%;
         .at {
-            width:60%;
+            width:98.8%;
             input {
-                width: 90%;
-            }
-        }
-        .District {
-            width:60%;
-            input {
-                width: 90%;
-            }
-        }
-        .Province {
-            width:60%;
-            input {
-                width: 90%;
+                width: 100%;
             }
         }
     }
     
         .in-date_1, .dateTogo {
             display: flex;
-            width: 98%;
+            justify-content: space-between;
+            width: 98.8%;
             .u10d1, .in-date_2, .dateTogo_1, .dateTogo_2{
-                width: 50%;
+                width: 49%;
             }
             input{
                 margin: 0;
-                width: 94%;
+                width: 100%;
             }
 
         }
@@ -355,7 +358,6 @@ p {
     margin-bottom: 1rem;
     align-items: center;
     margin-right: 16%;
-    display: none;
     input {
         margin: 0;
         width: 95%;
@@ -452,17 +454,6 @@ p {
         margin-left: 10%;
     }        
     }
-}
-
-
-
-#container2 {
-    max-width: 1000px;
-    margin: auto;
-    background-color: hsl(0, 0%, 99%);
-    padding: 1.75rem 3rem 3rem 3rem;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 

@@ -38,7 +38,7 @@
             <!--first_part-->
             <div class="agency_part">
                 <label for="agency">ส่วนราชการ:</label>
-                <input id="agency" type="text" placeholder="&nbsp;&nbsp;กรุณากรอกชื่อหน่วยงาน">
+                <input id="agency" type="text" placeholder="&nbsp;&nbsp;กรุณากรอกชื่อหน่วยงาน" value="คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม">
             </div>
             <div class="bookNum_date">
                 <div class="Book_number">
@@ -76,18 +76,21 @@
             <div class="copanain">
             <label style="margin-bottom: 0.5rem;">ผู้ร่วมเดินทาง :</label>
             <!-- หัวตาราง -->
-            <div class="header-row" style="margin-bottom: 0;">
+            <div class="header-row" style="margin-bottom: 0; margin-right: 20%; margin-left: 14%;">
                 <label>ชื่อ</label>
                 <label>ตำแหน่ง</label>
-                <label>สังกัด</label>
+                <label >สังกัด</label>
             </div>
             <div id="form-container" class="form-container">
                 <div class ="entry12">
-                <input type="text" name="name_1" placeholder="ชื่อ-นามสกุล">
-                <input type="text" name="department_1" placeholder="ตำแหน่ง">
-                <input type="text" name="position_1" placeholder="สังกัด">
-                <button class="add-btn" onclick="addEntry1()">&plus;</button>
+                <input type="text" name="name_1" id="name_1" placeholder="ชื่อ-นามสกุล">
+                <input type="text" name="position_1" id="position_1" placeholder="ตำแหน่ง">
+                <input type="text" name="department_1" id="department_1" placeholder="สังกัด">
+                <div>
+                <button class="add-btn" onclick="addEntry1()" style="margin: 0; background-color: blue;">&plus;</button>
+                </div>                
                 </div>
+
             </div>
             </div>
             <!--YDUGO-->
@@ -156,7 +159,14 @@
         <h2 style="color: rgb(83, 83, 83); font-size: 1.5rem; margin: 1.2rem 0;">ประมาณค่าใช้จ่ายในการเดินทางไปราชการ</h2>
         <!--ค่าเบี้ยเลี้ง-->
         <div class="allowance">
+            <div class="F_line" style="display: flex; justify-content: space-between;">
             <label>1.ค่าเบี้ยเลี้ยง</label>
+            <div class="cost_display">
+                <p>เป็นจำนวนเงิน</p>
+                <span id="result">&nbsp;0</span>
+                <p>&nbsp;บาท</p>
+            </div>
+            </div>
             <div class="idd">
             <div>
             <div class="f2_1">    
@@ -170,25 +180,29 @@
                 <input id="dc_2" type="number" placeholder="จำนวนวัน">
             </div>
             </div>
-            <div class="tatal-cost_allowance">
-                <p>เป็นจำนวนเงิน</p>
-                <span id="result">&nbsp;0</span>
-                <p>&nbsp;บาท</p>
-            </div>
             </div>
         </div>
         <!--Accommodation_cost-->
         <div class="accommodation" id="accommodation">
-            <div class="lb" style="display: flex;">
-            <label style="margin-right: 3%;">2. ค่าที่พัก</label>
-                    <div style="display: flex;  margin-right: 3%;">
+            <div class="F_line" style="display: flex; width: 100%; justify-content: space-between;">
+            <label style="margin-right: 3%; width: 10%;">2. ค่าที่พัก</label>
+                <div style="width: 25%; display: flex;">
+                    <div style="display: flex;  margin-right: 10%;">
                         <input type="radio" id="mao" name="fav_language" value="เหมาจ่าย" style="margin: 0;">
-                        <label for="mao" style="font-weight: normal;">เหมาจ่าย</label>
+                        <label for="mao" style="font-weight: normal;  align-content: center;">เหมาจ่าย</label>
                     </div>
                     <div style="display: flex;">
                         <input type="radio" id="jing" name="fav_language" value="จ่ายจริง" style="margin: 0;">
-                        <label for="jing" style="font-weight: normal;">จ่ายจริง</label>
+                        <label for="jing" style="font-weight: normal; align-content: center;">จ่ายจริง</label>
                     </div>
+                </div>
+                <div class="cost_display" style="width: 30%; justify-content: flex-end;">
+                    <div class="tatal-cost_accommodation" id="top-right-total">
+                    <p>เป็นจำนวนเงิน&nbsp;</p>
+                    <span id="result_2">0</span>
+                    <p>&nbsp;บาท</p>
+                </div> 
+                </div>    
             </div>
             <div class="all" id="all">
                 <div class="detail_cost">
@@ -197,77 +211,82 @@
                     <input class="accommodation_day" name="accommodation_day_1" type="number" placeholder="จำนวนวัน">
                     <button class="add-btn" onclick="addAccommodationLine()" style="text-align: center; margin: 0;">＋</button>
                 </div>
-                <!-- ยอดรวมเงิน -->
-                <div class="tatal-cost_accommodation" id="top-right-total">
-                    <p>เป็นจำนวนเงิน&nbsp;</p>
-                    <span id="result_2">0</span>
-                    <p>&nbsp;บาท</p>
-                </div>  
+                <!-- ยอดรวมเงิน --> 
             </div>                      
         </div>
             <!--ยานพาหนะ-->
             <div class="Transportation_expenses">
-                <p>3.ค่าพาหนะ</p>
-                <form id="List" class="Transportation-expenses_List" >
-                    <div>
-                        <input type="checkbox" id="airplane" name="topicT" value="เครื่องบิน">
+                <div class="F_line" style="display: flex; justify-content: space-between;">
+                    <p style="margin-bottom: 0;">3.ค่าพาหนะ</p>
+                <div class="cost_display">
+                    <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
+                    <span class="vehicles_cost" id="Transportation_expenses_result" style="margin: 0; display: flex; align-items: center;">0</span>
+                    <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>                        
+                </div>
+                </div>    
+                <form id="List" class="Transportation-expenses_List" style="margin-top: 1%;">
+                    <div style="margin-right: 4.6%;">
+                        <input type="checkbox" data-id="airplane" name="topicT" value="เครื่องบิน">
                         <label for="airplane">เครื่องบิน</label><br>
                     </div>
                     <div>
-                        <input type="checkbox" id="train" name="topicT" value="รถไฟ">
+                        <input type="checkbox" data-id="train" name="topicT" value="รถไฟ">
                         <label for="train">รถไฟ</label><br>
                     </div>
                     <div>
-                        <input type="checkbox" id="bus" name="topicT" value="รถประจำทาง">
+                        <input type="checkbox" data-id="bus" name="topicT" value="รถประจำทาง">
                         <label for="bus">รถประจำทาง</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="reign_car" name="topicT" value="รถยนต์ของทางราชการ">
+                        <input type="checkbox" data-id="reign_car" id="reign_car" name="topicT" value="รถยนต์ของทางราชการ">
                         <label for="reign_car">รถยนต์ของทางราชการ</label>
                     </div>
                     <div>
-                        <input type="checkbox" id="personal_car" name="topicT" value="รถยนต์ส่วนบุคคล">
+                        <input type="checkbox" data-id="personal_car" id="personal_car" name="topicT" value="รถยนต์ส่วนบุคคล">
                         <label for="personal_car">รถยนต์ส่วนบุคคล</label>
                     </div>
+                    <div>
+                        <input type="checkbox" data-id="vv" name="topicT" value="พาหนะรับจ้าง">
+                        <label for="vv">พาหนะรับจ้าง</label>
+                    </div>
                 </form>
-                <div class="detail_car" id="detail_car">
-                    <input class="vehicle_number" id="vehicle_number" type="text" placeholder="หมายเลขทะเบียนรถ">
-                    <input class="driver" id="driver" type="text" placeholder="พนักงานขับรถยนต์">
-                </div>
-                <div class="distance-cost">
-                    <div class="distance">
-                        <label for="distance" style="width: 23%; display: flex; align-items: center;">ระยะทางโดยประมาณ</label>
-                        <input id="distance" type="number" placeholder="ระยะทางไป-กลับ โดยประมาณ">
-                        <label for="distance" style="margin-left: 1%; display: flex; align-items: center;">กม.</label>
+                    <div id="personal_car_box" class="input-box" style="display: none;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
+                        <p style="margin: 0;">เป็นจำนวนเงิน</p>
+                        <span id="total_personal_car">&nbsp;0</span>
+                    <p style="margin: 0;">&nbsp;บาท</p> 
+                    </div> 
+                    </div>   
+
+                    <div id="reign_car_box" class="input-box" style="display: none;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 20%; justify-content: flex-end;" >
+                        <p style="margin: 0;">เป็นจำนวนเงิน</p>
+                        <span id="total_reign_car">&nbsp;0</span>
+                    <p style="margin: 0;">&nbsp;บาท</p> 
+                    </div> 
+                    </div> 
+
+                    <div id="airplane_box" class="input-box" style="display: none; width: 100%;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
-                    <div class="tatal-cost_distance">
-                        <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
-                        <span id="distance-cost_result" style="margin: 0; display: flex; align-items: center;">0</span>
-                        <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
+                    <div id="train_box" class="input-box" style="display: none;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
-                </div>
-            </div>
-            <!--ยานพาหนะ2-->
-            <div class="hired_vehicles">
-                <div class="F_line">
-                <label style="margin: 0; display: flex; align-items: center;">4. ค่าพาหนะรับจ้าง</label>
-                <div>
-                    <button class="add-btn" onclick="addHired_vehiclesLine()" style="margin: 0; margin-right: 3%; margin-left: 11.5%; background-color:#0004ff;">＋</button>
-                    <div class="hired-vehicles_cost">
-                        <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
-                        <span id="vehicles-cost_result" style="margin: 0; display: flex; align-items: center;">0</span>
-                        <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>                        
+                    <div id="bus_box" class="input-box" style="display: none;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถประจำทาง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
-                </div>
-                </div>
-                <div class="Hired-vehicles_detail" id="Hired-vehicles_detail" style="display: block;"></div>
+                    <div id="vv_box" class="input-box" style="display: none;">
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">พาหนะรับจ้าง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                    </div>
             </div>
 
             <!--ค่าลงทะเบียน-->
             <div class="Registration">
-                <div class="F_line-Registration">
-                <label style="margin: 0; display: flex; align-items: center;">5. ค่าลงทะเบียน</label>
-                <div>
+                <div class="F_line" style="display: flex; justify-content: space-between;">
+                <label style="margin: 0; display: flex; align-items: center;">4. ค่าลงทะเบียน</label>
+                <div style="width: 60%; margin: 0; justify-content: flex-end;">
                     <button class="add-btn" onclick="addRegistrationfeeLine()" style="margin: 0; margin-right: 3%; margin-left: 11.5%; background-color:#0004ff;">＋</button>
                     <div class="Registration_fee">
                         <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
@@ -276,14 +295,14 @@
                     </div>
                 </div>
                 </div>
-                <div class="Registration_fee_detail" id="Registration_fee_detail" style="display: block;"></div>
+                <div class="Registration_fee_detail" id="Registration_fee_detail" style="display: block; margin-top: 1%;"></div>
             </div>
 
             <!--ค่าใช้จ่ายอื่นๆ-->
             <div class="other-cost">
-                <div class="F_line-other">
-                <label style="margin: 0; display: flex; align-items: center;">6. ค่าใช้จ่ายอื่นๆ</label>
-                <div style="display: flex;  float: right; margin-right: 4%;">
+                <div class="F_line" style="display: flex; justify-content: space-between;">
+                <label style="margin: 0; display: flex; align-items: center;">5. ค่าใช้จ่ายอื่นๆ</label>
+                <div class="cost_display" style="margin: 0; width: 60%; justify-content: flex-end;">
                     <button class="add-btn" onclick="addothercostLine()" style="margin: 0; margin-right: 3%; margin-left: 11.5%; background-color:#0004ff;">＋</button>
                     <div class="other-cost2" >
                         <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
@@ -300,7 +319,7 @@
                 
             <!--ค่าใช้จ่ายรวม-->
             <div class="all-cost" style="margin-top: 1rem; display: block; margin-bottom: 7%;">
-                <div class="all-cost1" style="display: flex;  float: right; margin-right: 4%;">
+                <div class="all-cost1" style="display: flex;  float: right; ">
                     <p style="margin: 0; display: flex; align-items: center;">รวมค่าใช้จ่ายเป็นเงินประมาณ&nbsp;&nbsp;</p>
                     <span id="GrandTotal" style="margin: 0; display: flex; align-items: center;">0</span>
                     <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>                        
@@ -566,6 +585,10 @@
                     <div>
                         <input type="checkbox" id="R_personal_car" name="type" value="รถยนต์ส่วนบุคคล">
                         <label for="R_personal_car">รถยนต์ส่วนบุคคล</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="R_personal_car" name="type" value="อื่นๆ">
+                        <label for="R_personal_car">อื่นๆ</label>
                     </div>
                 </form>
                 <div class="R_detail_car" id="R_detail_car">

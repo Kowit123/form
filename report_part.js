@@ -20,7 +20,7 @@ calculateDuration();
 const pageWidth = doc.internal.pageSize.getWidth();
 doc.text(`สัญญาเงินยืมเลขที่ ${document.getElementById("con_number").value}    วันที่ ${document.getElementById("thai-datepicker6").value}`,3,2,{align: 'left'});
 doc.text(`ชื่อผู้ยืม ${document.getElementById("Borrower").value}    จำนวนเงิน ${parseFloat(document.getElementById("amount_borrow")?.value || 0).toLocaleString()} บาท`,3,2.7,{align: 'left'});
-doc.text(`ส่วนที1`,pageWidth-2,2, {align: 'right'});
+doc.text(`ส่วนที่1`,pageWidth-2,2, {align: 'right'});
 doc.text(`แบบ 8708`,pageWidth-2,2.7,{align: 'right'});
 
 
@@ -143,7 +143,7 @@ rows.forEach((row) => {
   const detail = detailInput?.value.trim() || "";
   const cost = costInput?.value.trim() || "";
   if (detail || cost) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`, 5, y);
+    doc.text(`${detail} เป็นเงิน ${cost} บาท`, 5, y);
     y += 0.7;
   }
 });
@@ -178,7 +178,7 @@ register_costrows.forEach((row) => {
   const detail = detailInput?.value.trim() || "";
   const cost = costInput?.value.trim() || "";
   if (detail || cost) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`, 5, y);
+    doc.text(`${detail} เป็นเงิน ${cost} บาท`, 5, y);
     y += lineHeight1;
   }
 });
@@ -216,7 +216,7 @@ R_other_cost_resultrows.forEach((row) => {
   const detail = (detailInput.value || "").trim();
   const cost = (costInput.value || "").trim();
   if (detail || cost) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท)`, 5, y);
+    doc.text(`${detail} เป็นเงิน ${cost} บาท)`, 5, y);
     y += lineHeight;
   }
 });

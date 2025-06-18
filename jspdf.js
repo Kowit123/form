@@ -35,10 +35,6 @@
       const thai_datepicker3 = document.getElementById("thai-datepicker3").value;
       const thai_datepicker4 = document.getElementById("thai-datepicker4").value;
       const thai_datepicker5 = document.getElementById("thai-datepicker5").value;
-      const vehicle_number = document.getElementById("vehicle_number").value;
-      const driver = document.getElementById("driver").value; 
-      const distance = document.getElementById("distance").value;
-      const distance_result = document.getElementById("distance-cost_result").value;
       const name_1 = document.getElementsByName("name_1").value;
       
 
@@ -92,7 +88,7 @@ const firstLineWidth = 13;
 const nextLinesWidth = 16;
 
 // ข้อความเต็ม
-const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในงวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
+const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
 
 const linesTemp = doc.splitTextToSize(aLines, firstLineWidth);
 
@@ -115,7 +111,7 @@ allLines.forEach((line, index) => {
 lineY += 0.3;
 const bLines = `1.ค่าเบี้ยเลี้ยง`;
 doc.text(bLines,3,lineY);     
-const b1Lines = `เป็นเงิน ${allowanceTotal.toLocaleString()} บาท`;
+const b1Lines = `รวมเป็นเงินทั้งสิ้น ${allowanceTotal.toLocaleString()} บาท`;
 doc.text(b1Lines,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
@@ -123,14 +119,14 @@ let mc_1 = document.getElementById("mc_1").value.trim();
 if (mc_1) {
   let pc_1 = document.getElementById("pc_1").value.trim() || "0";
   let dc_1= document.getElementById("dc_1").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${mc_1} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน)`, 5, lineY);
+  doc.text(`ค่าเบี้ยเลี้ยง ${mc_1} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน`, 5, lineY);
   lineY += 0.7;
 }
 let mc_2 = document.getElementById("mc_2").value.trim();
 if (mc_2) {
   let pc_2 = document.getElementById("pc_2").value.trim() || "0";
   let dc_2= document.getElementById("dc_2").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${mc_2} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน)`, 5, lineY);
+  doc.text(`ค่าเบี้ยเลี้ยง ${mc_2} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน`, 5, lineY);
   lineY += 0.7;
 }
 lineY += 0.3;
@@ -138,7 +134,7 @@ lineY += 0.3;
 
 const cLines = `2.ค่าที่พัก  ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`;
 doc.text(cLines,3,lineY);     
-const c1Lines = `เป็นเงิน ${document.getElementById("result_2").textContent} บาท`
+const c1Lines = `รวมเป็นเงินทั้งสิ้น ${document.getElementById("result_2").textContent} บาท`
 doc.text(c1Lines,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
@@ -157,79 +153,112 @@ Accommodation_Costrows.forEach((row) => {
 lineY += 0.3;
 
 
-
-
-// ดึง checkbox ที่ถูกติ๊ก
-const checkboxes = document.querySelectorAll('input[name="topicT"]:checked');
-const selected = Array.from(checkboxes).map(cb => cb.value);
-
 // แสดงใน PDF
 doc.text(`3. ค่าพาหนะ`, 3, lineY);
-doc.text(`เป็นเงิน ${totald} บาท`,pageWidth-2, lineY, {align: 'right'}); 
-doc.text(`(`,5.1,lineY);
-let checkboxX = 5.2; // จุดเริ่มแสดงค่า checkbox
-selected.forEach((value, index) => {
-  const text = ` ${value}`;
-  doc.text(text, checkboxX, lineY);
-
-  // คำนวณความกว้างของข้อความ แล้วเว้นระยะถัดไป
-  const textWidth = doc.getTextWidth(text);
-  checkboxX += textWidth + 0.5; // เว้นห่างระหว่างคำ
-});
-doc.text(`)`,(checkboxX - 0.4 ),lineY);
+const totalAll = document.getElementById("Transportation_expenses_result").textContent.trim();
+doc.text(`รวมเป็นเงินทั้งสิ้น ${totalAll || "0"} บาท`, pageWidth-2, lineY,{align:'right'});
 lineY += 0.7;
 
-const dLines = `หมายเลขทะเบียน ${vehicle_number} โดยมี ${driver} เป็นพนักงานขับรถ`;
-if (vehicle_number && driver) {
-  const dlines1 = doc.splitTextToSize(dLines, 15);
-  doc.text(dlines1, 4, lineY);
-  lineY += 0.7;
+
+const personalBox = document.querySelector("#personal_car_box");
+if (personalBox && personalBox.style.display !== "none") {
+  const inputs = personalBox.querySelectorAll("input");
+  const license = inputs[0].value.trim();
+  const driver = inputs[1].value.trim();
+  const distance = inputs[2].value.trim();
+  const total = document.getElementById("total_personal_car").textContent.trim();
+
+  if (license || driver || distance) {
+    const text1 = `รถยนต์ส่วนบุคคล หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ ระยะทางโดยประมาณ ${distance || "-"} กม.    เป็นเงินจำนวน ${total} บาท`;
+    const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const firstX = 5;
+    const indentX = 3;
+
+    lines.forEach((line, index) => {
+    const x = index === 0 ? firstX : indentX;
+    doc.text(line, x, lineY + index * 0.7);
+  });
+
+    lineY += lines.length * 0.7; // ปรับระยะ Y ตามจำนวนบรรทัด
+  }
 }
-const dLines2 = `ระยะทาง ${distance} กิโลเมตร`;
-doc.text(dLines2,4, lineY)
-lineY += 0.7;
 
-const eLines1  = `4.ค่าพาหนะรับจ้าง`;
-doc.text(eLines1,3, lineY)
-doc.text(`เป็นเงิน ${vehicles_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
-lineY += 0.7;
+  // ===== รถยนต์ราชการ =====
+  const reignBox = document.querySelector("#reign_car_box");
+  if (reignBox && reignBox.style.display !== "none") {
+    const inputs = reignBox.querySelectorAll("input");
+    const license = inputs[0].value.trim();
+    const driver = inputs[1].value.trim();
+    const distance = inputs[2].value.trim();
+    const total = document.getElementById("total_reign_car").textContent.trim();
 
-const rows = document.querySelectorAll("#Hired-vehicles_detail .vehicles");
-rows.forEach((row) => {
-  const detailInput = row.querySelector(".vehicles_detail");
-  const costInput = row.querySelector(".vehicles_cost");
-  const detail = detailInput?.value.trim() || "";
-  const cost = costInput?.value.trim() || "";
-  if (detail || cost) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
-    lineY += 0.7;
+    if (license || driver || distance) {
+      const text1 = `รถยนต์ของทางราชการ หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ ระยะทางโดยประมาณ ${distance || "-"} กม.   เป็นเงินจำนวน ${total} บาท`
+      const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const firstX = 5;
+    const indentX = 3;
+
+    lines.forEach((line, index) => {
+    const x = index === 0 ? firstX : indentX;
+    doc.text(line, x, lineY + index * 0.7);
+  });
+      lineY += lines.length * 0.7;
+    }
   }
-});
-lineY += 0.3;
 
-const fLines1  = `5.ค่าลงทะเบียน`;
+  // ===== รายการอื่น ๆ =====
+  const transportTypes = [
+    { id: "airplane", label: "เครื่องบิน" },
+    { id: "train", label: "รถไฟ" },
+    { id: "bus", label: "รถประจำทาง" },
+    { id: "vv", label: "พาหนะรับจ้าง" }
+  ];
+
+  for (const type of transportTypes) {
+    const box = document.querySelector(`#${type.id}_box`);
+    if (box && box.style.display !== "none") {
+      const inputs = box.querySelectorAll("input");
+      const detail = inputs[0].value.trim();
+      const amount = inputs[1].value.trim();
+
+      if (detail || amount) {
+        doc.text(`${type.label} ${detail || ""}`, 5, lineY);
+        doc.text(`เป็นเงินจำนวน ${amount || "0"} บาท`, pageWidth - 2, lineY,{align: 'right'});
+        lineY += 0.7;
+      }
+    }
+  }
+  lineY += 0.3;
+
+
+const fLines1  = `4.ค่าลงทะเบียน`;
 doc.text(fLines1,3, lineY)
-doc.text(`เป็นเงิน ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+doc.text(`รวมเป็นเงินทั้งสิ้น ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
-const rows1 = document.querySelectorAll("#Registration_fee_detail .fee_detail");
-rows1.forEach((row) => {
-  const detailInput = row.querySelector(".Registration_fee_detail");
-  const costInput = row.querySelector(".Registration-fee");
-  const detail = detailInput?.value.trim() || "";
-  const cost = costInput?.value.trim() || "";
-  if (detail || cost) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
-    lineY += 0.7;
-  }
-});
+  const rows = document.querySelectorAll(".Registration_fee_cost");
+
+  rows.forEach(row => {
+    const detail = row.querySelector('.Registration_fee_detail')?.value || "-";
+    const fee = parseFloat(row.querySelector('.Registration-fee')?.value || 0);
+    const person = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
+    const total = fee * person;
+
+    grandTotal += total;
+
+    const line = `${detail} จำนวน ${fee.toLocaleString()} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
+    const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
+    doc.text(lines, 5, lineY);
+    lineY += lines.length * 0.7;
+  });
+
 lineY += 0.3;
 
 
-const gLines1  = `6.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
+const gLines1  = `5.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
 doc.text(gLines1,3, lineY)
-doc.text(`เป็นเงิน ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
-lineY += 1;
+doc.text(`รวมเป็นเงินทั้งสิ้น ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+lineY += 0.7;
 
 const rows2 = document.querySelectorAll("#other-cost_detail .other_cost");
 rows2.forEach((row,index) => {
@@ -239,14 +268,14 @@ rows2.forEach((row,index) => {
   const cost = costInput?.value.trim() || "";
   console.log(`Row ${index + 1}:`, detail, cost);
   if (detail || cost ) {
-    doc.text(`ค่า ${detail} เป็นเงิน ${cost} บาท`,5, lineY);
+    doc.text(`${detail} เป็นเงินจำนวน ${cost} บาท`,5, lineY);
     lineY += 0.7;
   }
 });
 lineY += 0.3;
 
 
-doc.text(`รวมค่าใช้จ่ายเป็นเวงินประมาณ ${all_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+doc.text(`รวมค่าใช้จ่ายเป็นเงินประมาณ ${all_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 doc.text(`(${numberToThaiText(all_cost)})`,pageWidth-2, lineY, {align: 'right'});
 lineY += 1;
@@ -270,13 +299,13 @@ lineY+= 1;
 
 groupHeight = 7.3;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
-const last_paragraph = `โดยเบิกจ่าายจากงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี................หมวดเงินใช้สอยรหัส...............................เป็นเงิน ${all_cost.toLocaleString()} บาท (${numberToThaiText(all_cost)})`
+const last_paragraph = `โดยเบิกจ่ายจากงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี................หมวดเงินใช้สอยรหัส................................เป็นเงิน ${all_cost.toLocaleString()} บาท (${numberToThaiText(all_cost)})`
 const last = doc.splitTextToSize(last_paragraph, 16);
 doc.text(last,3, lineY);
 lineY += 1.4;
 doc.text(`ความคิดเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ.......................................................................`,3, lineY);
 lineY += 0.7;
-doc.text(`ความเห็นจาก หัวหน้าสำนักงานเลขานุการ............................................................................................................`,3, lineY);
+doc.text(`ความเห็นจาก หัวหน้าสำนักงานเลขานุการฯ............................................................................................................`,3, lineY);
 lineY += 0.7;
 doc.text(`ความเห็นจาก หัวหน้าสำนักวิชาฯ/หัวหน้าส่วนงานฯ.............................................................................................`,3, lineY);
 lineY += 0.7;
@@ -290,7 +319,7 @@ lineY += 0.7;
 doc.text(`(..............................................)`,pageWidth-3, lineY, {align: 'right'});
 lineY += 0.7;
 
-
+if (entryCount1 > 1) {
 doc.addPage();
 
     // เตรียมข้อมูลจาก input
@@ -340,6 +369,7 @@ doc.addPage();
         lineColor: [0, 0, 0]
       },
     });
+  }
 doc.save("document.pdf");
 }
 

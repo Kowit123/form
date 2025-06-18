@@ -71,12 +71,14 @@ function addEntry1() {
     <input type="text" name="name_${entryCount1}" placeholder="ชื่อ-นามสกุล">
     <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน">
     <input type="text" name="position_${entryCount1}" placeholder="ตำแหน่ง">
-    <button class="remove-btn" onclick="removeEntry(this)">&minus;</button>
+    <div>
+    <button class="remove-btn" onclick="removeEntry(this)" style="margin:0; background-color:red;">&minus;</button>
+    </div>
   `;
   container.appendChild(div1);
 }
 function removeEntry(button) {
-  const container = button.closest(".entry")
+  const container = button.closest(".entry12")
   if (container) {
     container.remove();
     entryCount1--;
@@ -114,20 +116,6 @@ pc2.addEventListener('input',calculateAllowance);
 dc2.addEventListener('input',calculateAllowance);
 
 
-const distance = document.getElementById('distance');
-const distance_result = document.getElementById('distance-cost_result');
-
-function calculatedistance () {
-  const x = parseFloat(distance.value) || 0;
-
-  distanceTotal = x * 4 * 2;
-  distance_result.textContent = distanceTotal.toLocaleString()
- let total = distanceTotal;
- window.totald = distanceTotal;
-  return total;
-
-}
-distance.addEventListener('input',calculatedistance);
 
 /*ค่าที่พัก*/
 // เพิ่ม-ลบแถว
@@ -230,53 +218,6 @@ function bindAccommodationEvents() {
 }
 
 
-/*ค่าพาหนะ*/
-// เพิ่ม-ลบแถว
-let vehiclesRow = 1;
-
-function addHired_vehiclesLine() {
-  vehiclesRow++;
-  const container = document.getElementById("Hired-vehicles_detail");
-  const div = document.createElement("div");
-  div.classList.add("vehicles");
-  div.innerHTML = `
-    <div class="vehicles-detail_cost" style ="display:grid; grid-template-columns: 60% 45% 10%; margin-bottom: 1%;">
-      <div>
-        <input class="vehicles_detail" name="vehicles_detail_${vehiclesRow}" type="text" placeholder="รายละเอียดค่าพาหนะรับจ้าง" style="margin: 0; display: flex; align-items: center; width:94%;">
-      </div>  
-      <div>
-        <input class="vehicles_cost" name="vehicles_cost" type="number" placeholder="จำนวนเงิน" oninput="updateHired_vehiclesTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
-        <button class="remove-btn" onclick="removeHired_vehiclesline(this)" style="margin: 0; display: flex; align-items: center; margin-left:3%">&minus;</button>
-      </div>  
-    </div>  
-  `;
-  container.appendChild(div);
-  updateHired_vehiclesTotal();
-  attachInputListeners();
-  updateGrandTotal();
-}
-function removeHired_vehiclesline(button) {
-  const vehiclesline = button.closest(".vehicles");
-  if (vehiclesline) {
-    vehiclesline.remove();
-    vehiclesRow--;
-  }
-}
-/*รวมเงิน*/
-function updateHired_vehiclesTotal() {
-  const inputs = document.querySelectorAll('.vehicles_cost');
-  let total = 0;
-  inputs.forEach(input => {
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      total += value;
-    }
-  });
-  document.getElementById("vehicles-cost_result").textContent = total.toLocaleString();
-  window.vehicles_cost = total;
-  return total;
-}
-
 /*ค่าลงทะเบียน*/
 // เพิ่ม-ลบแถว
 let Registration = 1;
@@ -287,12 +228,15 @@ function addRegistrationfeeLine() {
   const div = document.createElement("div");
   div.classList.add("fee_detail");
   div.innerHTML = `
-    <div class="Registration_fee_cost" style ="display:grid; grid-template-columns: 60% 45% 10%; margin-bottom: 1%;">
+    <div class="Registration_fee_cost" style ="display:grid; grid-template-columns: 50% 20% 25%; margin-bottom: 1%; width:100%; gap:1%;">
       <div>
-        <input class="Registration_fee_detail" name="Registration_fee_detail_${Registration}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:94%;">
-      </div>  
+        <input class="Registration_fee_detail" name="Registration_fee_detail_${Registration}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
+      </div> 
       <div>
         <input class="Registration-fee" name="Registration-fee" type="number" placeholder="จำนวนเงิน" oninput="updateRegistration_fee_Total()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+      </div>  
+      <div>
+        <input class="Registrationp-fee" name="Registrationp-fee" type="number" placeholder="จำนวนคน" oninput="updateRegistration_fee_Total()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
         <button class="remove-btn" onclick="removeRegistration_feeline(this)" style="margin: 0; display: flex; align-items: center; margin-left:3%">&minus;</button>
       </div>  
     </div> 
@@ -301,7 +245,6 @@ function addRegistrationfeeLine() {
   container.appendChild(div);
   updateRegistration_fee_Total();
   attachInputListeners();
-  updateGrandTotal();
 }
 function removeRegistration_feeline(button) {
   const feeline = button.closest(".fee_detail");
@@ -310,19 +253,25 @@ function removeRegistration_feeline(button) {
     Registration--;
     updateRegistration_fee_Total();
     attachInputListeners();
-    updateGrandTotal();
   }
 }
 /*รวมเงิน*/
 function updateRegistration_fee_Total() {
-  const inputs = document.querySelectorAll('.Registration-fee');
+  const rows = document.querySelectorAll('.Registration_fee_cost');
   let total = 0;
-  inputs.forEach(input => {
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      total += value;
+
+  rows.forEach(row => {
+    const feeInput = row.querySelector('.Registration-fee');
+    const personInput = row.querySelector('.Registrationp-fee');
+
+    const fee = parseFloat(feeInput?.value);
+    const person = parseFloat(personInput?.value);
+
+    if (!isNaN(fee) && !isNaN(person)) {
+      total += fee * person;
     }
   });
+
   document.getElementById("Registration-fee_result").textContent = total.toLocaleString();
   window.Registration_fee = total;
   return total;
@@ -338,9 +287,9 @@ function addothercostLine() {
   const div = document.createElement("div");
   div.classList.add("other_cost");
   div.innerHTML = `
-    <div class="other_cost1" style ="display:grid; grid-template-columns: 60% 45% 10%; margin-bottom: 1%;">
+    <div class="other_cost1" style ="display:grid; grid-template-columns: 99% 51% 10%; margin-bottom: 1%; margin-top: 1%;">
       <div>
-        <input class="Other-cost_detail" name="other-cost_detail_${other}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style="margin: 0; display: flex; align-items: center; width:94%;">
+        <input class="Other-cost_detail" name="other-cost_detail_${other}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style="margin: 0; display: flex; align-items: center; width:100%; margin-right:2%;">
       </div>  
       <div>
         <input class="otherCost" name="otherCost" type="number" placeholder="จำนวนเงิน" oninput="updateothercostTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
@@ -382,13 +331,12 @@ function updateothercostTotal() {
 //รวมเงินทั้งหมด
 function updateGrandTotal() {
   const other = updateothercostTotal();
-  const Registration_fee = updateRegistration_fee_Total();
-  const vehicles = updateHired_vehiclesTotal();
   const allowance = calculateAllowance();
-  const distance = calculatedistance();
   const Accommodation = updateAccommodationTotal();
+  const register = updateRegistration_fee_Total();
+  const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.trim());
 
-  const grandTotal = other + vehicles + Registration_fee + allowance + distance + Accommodation;
+  const grandTotal = other + allowance + Accommodation + register + vehicle;
 
   document.getElementById("GrandTotal").textContent = grandTotal.toLocaleString();
   window.all_cost = grandTotal;
@@ -396,7 +344,7 @@ function updateGrandTotal() {
 }
 
 function attachInputListeners() {
-  document.querySelectorAll('.otherCost, .Registration-fee, .vehicles_cost, .accommodation_cost, .distance')
+  document.querySelectorAll('.otherCost, .accommodation_cost, .Registration-fee, .Registrationp-fee')
     .forEach(input => {
       input.addEventListener('input', updateGrandTotal);
     });
@@ -416,16 +364,14 @@ mc2.addEventListener('input',updateGrandTotal);
 pc2.addEventListener('input',updateGrandTotal);
 dc2.addEventListener('input',updateGrandTotal);
 
-distance.addEventListener('input',attachInputListeners);
-distance.addEventListener('input',updateGrandTotal);
 
 
 
 
 
 
-const checkbox = document.getElementById('reign_car');
-const inputDiv = document.getElementById('detail_car');
+const checkbox = document.getElementById('personal_car');
+const inputDiv = document.getElementById('personal_car_detail');
 
 checkbox.addEventListener('change', function() {
   if (this.checked) {
@@ -435,14 +381,6 @@ checkbox.addEventListener('change', function() {
     }
     });
 
-const checkbox2 = document.getElementById('personal_car');
-checkbox2.addEventListener('change', function() {
-  if (this.checked) {
-    inputDiv.style.display = 'grid';
-    } else {
-      inputDiv.style.display = 'none';
-    }
-    });
 
 //ของหน้า2
   const input1 = document.getElementById("nrq_re");
@@ -458,3 +396,94 @@ checkbox2.addEventListener('change', function() {
   pst_re.addEventListener("input", function () {
     position_re_1.value = pst_re.value;
   });
+
+  const input1_1 = document.getElementById("requesting_name");
+  const input2_1 = document.getElementById("name_1");
+
+  input1_1.addEventListener("input", function () {
+    input2_1.value = input1_1.value;
+  });
+
+  const requesting_position = document.getElementById("requesting_position");
+  const position = document.getElementById("position_1");
+
+  requesting_position.addEventListener("input", function () {
+    position.value = requesting_position.value;
+  });
+
+
+  const requesting_part = document.getElementById("requesting_part");
+  const department_1 = document.getElementById("department_1");
+
+  requesting_part.addEventListener("input", function () {
+    department_1.value = requesting_part.value;
+  });
+
+document.addEventListener('DOMContentLoaded', function () {
+
+const checkboxess = document.querySelectorAll('input[name="topicT"]');
+
+checkboxess.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const id = checkbox.dataset.id;
+    const box = document.getElementById(id + '_box');
+
+    if (checkbox.checked) {
+      box.style.display = 'flex';
+    } else {
+      box.style.display = 'none';
+      // เคลียร์ input ข้างใน
+      const input = box.querySelectorAll('input');
+      input.forEach(input => input.value = '');
+      calculateTotal();
+    }
+  });
+});
+
+    const totalDisplay = document.querySelector('#Transportation_expenses_result');
+    const totalPersonalCarDisplay = document.querySelector('#total_personal_car');
+    const totalReignCarDisplay = document.querySelector('#total_reign_car');
+
+    function calculateTotal() {
+        let total = 0;
+
+        // ➤ รถยนต์ส่วนบุคคล × 8
+        const personalCarInput = document.querySelector('#personal_car_box input[type="number"]');
+        let personalCarAmount = 0;
+        if (personalCarInput && !isNaN(parseFloat(personalCarInput.value))) {
+            personalCarAmount = parseFloat(personalCarInput.value) * 8;
+            total += personalCarAmount;
+        }
+        totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+
+        // ➤ รถยนต์ราชการ × 8
+        const reignCarInput = document.querySelector('#reign_car_box input[type="number"]');
+        let reignCarAmount = 0;
+        if (reignCarInput && !isNaN(parseFloat(reignCarInput.value))) {
+            reignCarAmount = parseFloat(reignCarInput.value) * 8;
+            total += reignCarAmount;
+        }
+        totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+
+        // ➤ จำนวนเงินจาก input-box อื่นๆ
+        const allBoxes = document.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
+        allBoxes.forEach(box => {
+            const numberInputs = box.querySelectorAll('input[type="number"]');
+            numberInputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+        });
+
+        totalDisplay.textContent = total.toLocaleString();
+        updateGrandTotal();
+    }
+
+    // ➤ ติดตามทุก input number
+    const allInputs = document.querySelectorAll('.input-box input[type="number"]');
+    allInputs.forEach(input => {
+        input.addEventListener('input', calculateTotal);
+    });
+});
