@@ -475,12 +475,12 @@ p {
     margin-bottom: 4rem;   
 }
 
-.pdfbtt, .pdfbtt1 {
+/* .pdfbtt, .pdfbtt1 {
     margin: 0; /* ให้ปุ่มอยู่กลาง flex container */
-    position: absolute;
-    right: 45%;
+    /* position: absolute;
     margin-bottom: 2%;
-}
+   
+} */ 
 
 
 .n_display {
