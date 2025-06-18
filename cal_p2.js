@@ -223,19 +223,21 @@ function R_addRegisterLine() {
     div.classList.add("r_register");
 
   div.innerHTML = `
-    <div class="R_register-detail_cost" style ="display:flex; margin-bottom:0.5%;">
-      <div style = "margin-right:1%;width:38%;">
-        <input class="R_register_detail" name="R_register_detail${Real_RegisterRow}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style = "margin: 0 ; width:96%;">
-      </div>  
-      <div style = "margin-right:1%; width:20%">
-        <input class="R_register_cost" name="R_register_cost" type="number" placeholder="จำนวนเงิน" oninput="updateRegisterrcostTotal()" style = "margin: 0 ; width:94%;">
-      </div>  
-        <button class="remove-btn" onclick="R_removeRegisterLine(this)" style="text-align: center; margin: 0 ; background-color:red;">&minus;</button>
-      
-    </div> 
+<div class="R_register_fee_cost" style="display:grid; grid-template-columns: 50% 20% 25%; margin-bottom: 1%; width:100%; gap:2%; margin-top:1%;">
+  <div>
+    <input class="R_register_fee_detail" name="R_register_fee_detail_${Registration}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
+  </div> 
+  <div>
+    <input class="R_register_fee_amount" name="R_register_fee_amount" type="number" placeholder="จำนวนเงิน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+  </div>  
+  <div style="display: flex;">
+    <input class="R_register_fee_person" name="R_register_fee_person" type="number" placeholder="จำนวนคน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+    <button class="remove-btn" onclick="R_removeRegisterLine(this)" style="margin: 0; display: flex; align-items: center; margin-left:3%; background-color:red; ">&minus;</button>
+  </div>  
+</div>
   `;
   container.appendChild(div);
-  updateRegisterrcostTotal();
+  R_updateRegisterTotal();
 }
 function R_removeRegisterLine(button) {
   const containerAcc = button.closest(".r_register");
@@ -243,7 +245,7 @@ function R_removeRegisterLine(button) {
     containerAcc.remove();
     Real_RegisterRow--;
   }
-  updateRegisterrcostTotal();
+  R_updateRegisterTotal();
   grandTotal();
 }
 
@@ -259,10 +261,10 @@ function R_addOtherLine() {
   div.innerHTML = `
     <div class="R_other_cost" style ="display:flex; margin-bottom:0.5%;">
       <div style = "margin-right:1%;width:38%;">
-        <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style = "margin: 0 ; width:96%;">
+        <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่น" style = "margin: 0 ; width:96%;">
       </div>  
       <div style = "margin-right:1%; width:20%">
-        <input class="R_other_cost" name="R_other_cost" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
+        <input class="R_other_costs" name="R_other_cost" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
       </div>  
         <button class="remove-btn" onclick="R_removeOtherLine(this)" style="text-align: center; margin: 0 ; background-color:red;">&minus;</button>
       
@@ -359,52 +361,30 @@ document.getElementById("real_accommodation_day_1").addEventListener('input', up
 
 
 
-const R_distance = document.getElementById('R_distance');
-const R_distance_result = document.getElementById('R_distance-cost_result');
-function RE_calculatedistance () {
-  let R_distanceTotal 
-  const x = parseFloat(R_distance.value) || 0;
-  R_distanceTotal = x * 4 * 2;
-  R_distance_result.textContent = R_distanceTotal.toLocaleString()
- let total = R_distanceTotal;
- grandTotal();
-  return total;
-}
-R_distance.addEventListener('input',RE_calculatedistance);
-
-
-function updateR_hired_vehiclesTotal() {
-  const inputs = document.querySelectorAll('.R_vehicles_cost');
+function  R_updateRegisterTotal() {
+  const rows = document.querySelectorAll('.r_register');
   let total = 0;
-  inputs.forEach(input => {
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      total += value;
+
+  rows.forEach(row => {
+    const feeInput = row.querySelector('.R_register_fee_amount');
+    const personInput = row.querySelector('.R_register_fee_person');
+
+    const fee = parseFloat(feeInput?.value);
+    const person = parseFloat(personInput?.value);
+
+    if (!isNaN(fee) && !isNaN(person)) {
+      total += fee * person;
     }
   });
-  document.getElementById("R_vehicles-cost_result").textContent = total.toLocaleString();
-  window.vehicles_cost = total;
-  grandTotal();
-  return total;
-}
 
-function updateRegisterrcostTotal() {
-  const inputs = document.querySelectorAll('.R_register_cost');
-  let total = 0;
-  inputs.forEach(input => {
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      total += value;
-    }
-  });
   document.getElementById("R_register_cost_result").textContent = total.toLocaleString();
-  window.register_cost = total;
+  window.Registration_fee = total;
   grandTotal();
   return total;
 }
 
 function updateRealOthercostTotal() {
-  const inputs = document.querySelectorAll('.R_other_cost');
+  const inputs = document.querySelectorAll('.R_other_costs');
   let total = 0;
   inputs.forEach(input => {
     const value = parseFloat(input.value);
@@ -416,8 +396,8 @@ function updateRealOthercostTotal() {
   window.other_cost = total;
   grandTotal();
   return total;
-
 }
+
 
 function grandTotal() {
   function parseNumber(id) {
@@ -430,7 +410,7 @@ function grandTotal() {
   const G_1 = parseNumber("Real_GrandTotal_Allowance_Cost");
   const G_2 = parseNumber("Real_GrandTotal_Accommodation_Cost");
   const G_3 = parseNumber("R_distance-cost_result");
-  const G_4 = parseNumber("R_vehicles-cost_result");
+  const G_4 = parseNumber("R_Transportation_expenses_result");
   const G_5 = parseNumber("R_register_cost_result");
   const G_6 = parseNumber("R_other_cost_result");
 
@@ -527,6 +507,39 @@ const endDate = convertThaiFullDateToISO(endDateRaw);
     dateId++;
   }
 
+  // ฟังก์ชันคำนวณจำนวนเงินจากระยะทาง
+function updateAmount(uniqueId) {
+  const distanceInput = document.getElementById(`distance-${uniqueId}`);
+  const amountInput = document.getElementById(`amount-${uniqueId}`);
+  const distance = parseFloat(distanceInput.value);
+
+  if (!isNaN(distance)) {
+    amountInput.value = (distance * 4).toFixed(2);
+  } else {
+    amountInput.value = '';
+  }
+
+  calculateTotalAmount();
+}
+
+
+  function removeDateSection(id) {
+  const section = document.getElementById(`date-section-${id}`);
+  if (section) section.remove();
+}
+
+function calculateTotalAmount() {
+  let total = 0;
+  const amountInputs = document.querySelectorAll('input[placeholder="จำนวนเงิน (บาท)"]');
+  amountInputs.forEach(input => {
+    const value = parseFloat(input.value);
+    if (!isNaN(value)) {
+      total += value;
+    }
+  });
+  document.getElementById("k").textContent = total.toLocaleString();
+}
+
 function addEntry(id) {
   const entriesDiv = document.getElementById(`entries-${id}`);
   const entry = document.createElement("div");
@@ -562,35 +575,73 @@ function addEntry(id) {
   entriesDiv.appendChild(entry);
 }
 
-// ฟังก์ชันคำนวณจำนวนเงินจากระยะทาง
-function updateAmount(uniqueId) {
-  const distanceInput = document.getElementById(`distance-${uniqueId}`);
-  const amountInput = document.getElementById(`amount-${uniqueId}`);
-  const distance = parseFloat(distanceInput.value);
-
-  if (!isNaN(distance)) {
-    amountInput.value = (distance * 4).toFixed(2);
-  } else {
-    amountInput.value = '';
-  }
-
-  calculateTotalAmount();
-}
 
 
-  function removeDateSection(id) {
-  const section = document.getElementById(`date-section-${id}`);
-  if (section) section.remove();
-}
+document.addEventListener('DOMContentLoaded', function () {
 
-function calculateTotalAmount() {
-  let total = 0;
-  const amountInputs = document.querySelectorAll('input[placeholder="จำนวนเงิน (บาท)"]');
-  amountInputs.forEach(input => {
-    const value = parseFloat(input.value);
-    if (!isNaN(value)) {
-      total += value;
+const checkboxess = document.querySelectorAll('input[name="type"]');
+
+checkboxess.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const id = checkbox.dataset.id;
+    const box = document.getElementById(id + '_box');
+
+    if (checkbox.checked) {
+      box.style.display = 'flex';
+    } else {
+      box.style.display = 'none';
+      // เคลียร์ input ข้างใน
+      const input = box.querySelectorAll('input');
+      input.forEach(input => input.value = '');
+      calculateTotal();
     }
   });
-  document.getElementById("k").textContent = total.toLocaleString();
-}
+});
+
+    const totalDisplay = document.querySelector('#R_Transportation_expenses_result');
+    const totalPersonalCarDisplay = document.querySelector('#R_total_personal_car');
+    const totalReignCarDisplay = document.querySelector('#R_total_reign_car');
+
+    function calculateTotal() {
+        let total = 0;
+
+        // ➤ รถยนต์ส่วนบุคคล × 8
+        const personalCarInput = document.querySelector('#R_personal_car_box input[type="number"]');
+        let personalCarAmount = 0;
+        if (personalCarInput && !isNaN(parseFloat(personalCarInput.value))) {
+            personalCarAmount = parseFloat(personalCarInput.value) * 8;
+            total += personalCarAmount;
+        }
+        totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+
+        // ➤ รถยนต์ราชการ × 8
+        const reignCarInput = document.querySelector('#R_reign_car_box input[type="number"]');
+        let reignCarAmount = 0;
+        if (reignCarInput && !isNaN(parseFloat(reignCarInput.value))) {
+            reignCarAmount = parseFloat(reignCarInput.value) * 8;
+            total += reignCarAmount;
+        }
+        totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+
+        // ➤ จำนวนเงินจาก input-box อื่นๆ
+        const allBoxes = document.querySelectorAll('.input-box:not(#R_personal_car_box):not(#R_reign_car_box)');
+        allBoxes.forEach(box => {
+            const numberInputs = box.querySelectorAll('input[type="number"]');
+            numberInputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+        });
+
+        totalDisplay.textContent = total.toLocaleString();
+        grandTotal();
+    }
+
+    // ➤ ติดตามทุก input number
+    const allInputs = document.querySelectorAll('.input-box input[type="number"]');
+    allInputs.forEach(input => {
+        input.addEventListener('input', calculateTotal);
+    });
+});

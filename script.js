@@ -334,7 +334,7 @@ function updateGrandTotal() {
   const allowance = calculateAllowance();
   const Accommodation = updateAccommodationTotal();
   const register = updateRegistration_fee_Total();
-  const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.trim());
+  const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.replace(/,/g, '').trim());
 
   const grandTotal = other + allowance + Accommodation + register + vehicle;
 

@@ -119,14 +119,14 @@ let mc_1 = document.getElementById("mc_1").value.trim();
 if (mc_1) {
   let pc_1 = document.getElementById("pc_1").value.trim() || "0";
   let dc_1= document.getElementById("dc_1").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${mc_1} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน`, 5, lineY);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_1} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน`, 5, lineY);
   lineY += 0.7;
 }
 let mc_2 = document.getElementById("mc_2").value.trim();
 if (mc_2) {
   let pc_2 = document.getElementById("pc_2").value.trim() || "0";
   let dc_2= document.getElementById("dc_2").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${mc_2} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน`, 5, lineY);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_2} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน`, 5, lineY);
   lineY += 0.7;
 }
 lineY += 0.3;
@@ -146,7 +146,7 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    doc.text(`ค่าที่พักราคา ${accommodation_cost} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
+    doc.text(`-ค่าที่พักราคา ${accommodation_cost} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }
 });
@@ -168,11 +168,16 @@ if (personalBox && personalBox.style.display !== "none") {
   const distance = inputs[2].value.trim();
   const total = document.getElementById("total_personal_car").textContent.trim();
 
+  const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+  const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
+
   if (license || driver || distance) {
-    const text1 = `รถยนต์ส่วนบุคคล หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ ระยะทางโดยประมาณ ${distance || "-"} กม.    เป็นเงินจำนวน ${total} บาท`;
+    const text1 = `-รถยนต์ส่วนบุคคล 
+    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
     const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
-    const indentX = 3;
+    const indentX = 5;
 
     lines.forEach((line, index) => {
     const x = index === 0 ? firstX : indentX;
@@ -191,12 +196,14 @@ if (personalBox && personalBox.style.display !== "none") {
     const driver = inputs[1].value.trim();
     const distance = inputs[2].value.trim();
     const total = document.getElementById("total_reign_car").textContent.trim();
-
+    const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
     if (license || driver || distance) {
-      const text1 = `รถยนต์ของทางราชการ หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ ระยะทางโดยประมาณ ${distance || "-"} กม.   เป็นเงินจำนวน ${total} บาท`
+      const text1 = `-รถยนต์ของทางราชการ 
+      หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
+      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${total} บาท`
       const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
-    const indentX = 3;
+    const indentX = 5;
 
     lines.forEach((line, index) => {
     const x = index === 0 ? firstX : indentX;
@@ -220,11 +227,12 @@ if (personalBox && personalBox.style.display !== "none") {
       const inputs = box.querySelectorAll("input");
       const detail = inputs[0].value.trim();
       const amount = inputs[1].value.trim();
+      const amountFormatted = amount ? Number(amount.replace(/,/g, '')).toLocaleString() : "0";
 
       if (detail || amount) {
-        doc.text(`${type.label} ${detail || ""}`, 5, lineY);
-        doc.text(`เป็นเงินจำนวน ${amount || "0"} บาท`, pageWidth - 2, lineY,{align: 'right'});
-        lineY += 0.7;
+        doc.text(`-${type.label} 
+          ${detail || ""} เป็นเงิน ${amountFormatted} บาท`, 5, lineY);
+        lineY += 1.2;
       }
     }
   }
@@ -246,7 +254,7 @@ lineY += 0.7;
 
     grandTotal += total;
 
-    const line = `${detail} จำนวน ${fee.toLocaleString()} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
+    const line = `-${detail} จำนวน ${fee.toLocaleString()} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
     const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
     doc.text(lines, 5, lineY);
     lineY += lines.length * 0.7;
@@ -265,10 +273,10 @@ rows2.forEach((row,index) => {
   const detailInput = row.querySelector(".Other-cost_detail");
   const costInput = row.querySelector(".otherCost");
   const detail = detailInput?.value.trim() || "";
-  const cost = costInput?.value.trim() || "";
+  const cost = parseFloat(costInput?.value.trim() || 0).toLocaleString();
   console.log(`Row ${index + 1}:`, detail, cost);
   if (detail || cost ) {
-    doc.text(`${detail} เป็นเงินจำนวน ${cost} บาท`,5, lineY);
+    doc.text(`-${detail} เป็นเงิน ${cost} บาท`,5, lineY);
     lineY += 0.7;
   }
 });

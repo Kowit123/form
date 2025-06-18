@@ -112,43 +112,7 @@ Accommodation_Costrows.forEach((row) => {
 y += 0.3;
 
 doc.text(`3.ค่าพาหนะ`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("R_distance-cost_result").textContent} บาท`, pageWidth-2, y,{align: 'right'});
-const checkboxes = document.querySelectorAll('input[name="type"]:checked');
-const selected = Array.from(checkboxes).map(cb => cb.value);
-let checkboxX = 5; // จุดเริ่มแสดงค่า checkbox
-selected.forEach((value, index) => {
-  const text = ` ${value}`;
-  doc.text(text, checkboxX, y);
-
-  // คำนวณความกว้างของข้อความ แล้วเว้นระยะถัดไป
-  const textWidth = doc.getTextWidth(text);
-  checkboxX += textWidth + 0.5; // เว้นห่างระหว่างคำ
-});
 y += 0.7;
-const dLines1 = `${document.querySelector('input[name="type"]:checked')?.value} หมายเลขทะเบียนรถ ${document.getElementById("R_vehicle_number").value} โดยมี ${document.getElementById("R_driver").value} เป็นพนักงานขับรถ`;
-if (document.getElementById("R_vehicle_number").value || document.getElementById("R_driver").value) {
-  const dlines12 = doc.splitTextToSize(dLines1, 14);
-  doc.text(dlines12, 5, y);
-  y += 0.7;
-}
-y += 0.7;
-
-doc.text(`4.ค่าพาหนะรับจ้าง`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("R_vehicles-cost_result").textContent} บาท`, pageWidth-2, y,{align: 'right'});
-y += 0.7;
-const rows = document.querySelectorAll("#R_Hired-vehicles_detail .R_vehicles");
-rows.forEach((row) => {
-  const detailInput = row.querySelector(".R_vehicles_detail");
-  const costInput = row.querySelector(".R_vehicles_cost");
-  const detail = detailInput?.value.trim() || "";
-  const cost = costInput?.value.trim() || "";
-  if (detail || cost) {
-    doc.text(`${detail} เป็นเงิน ${cost} บาท`, 5, y);
-    y += 0.7;
-  }
-});
-y += 0.3;
-
 
 const lineHeight1 = 0.7;
 const smallGap1 = 0.3;
@@ -194,7 +158,7 @@ const R_other_cost_resultrows = document.querySelectorAll("#R_other_detail .r_ot
 // คำนวณจำนวนบรรทัดที่จะพิมพ์ (บรรทัดหัวข้อ 1 บรรทัด + บรรทัด detail ที่ไม่ว่าง)
 const linesCount = 1 + Array.from(R_other_cost_resultrows).filter(row => {
   const detailInput = row.querySelector(".R_other_detail");
-  const costInput = row.querySelector(".R_other_cost");
+  const costInput = row.querySelector(".R_other_costs");
   return (detailInput.value.trim() || costInput.value.trim());
 }).length;
 
