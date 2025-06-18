@@ -259,7 +259,7 @@ function R_addOtherLine() {
   div.innerHTML = `
     <div class="R_other_cost" style ="display:flex; margin-bottom:0.5%;">
       <div style = "margin-right:1%;width:38%;">
-        <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่น" style = "margin: 0 ; width:96%;">
+        <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style = "margin: 0 ; width:96%;">
       </div>  
       <div style = "margin-right:1%; width:20%">
         <input class="R_other_cost" name="R_other_cost" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
