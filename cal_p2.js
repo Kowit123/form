@@ -42,6 +42,11 @@ function removerow() {
     updatecall();
 }
 
+function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(val.replace(/,/g, '')) || 0;
+}
+
 function updatecall() {
   // ดึงข้อมูล input ทั้งหมดในแต่ละ class ใหม่ทุกครั้ง
   const allowance_p2 = document.querySelectorAll(".allowance_p2");
@@ -53,11 +58,11 @@ function updatecall() {
   const total_p_1 = document.querySelectorAll(".total_p_1");
 
   for (let i = 0; i < allowance_p2.length; i++) {
-    const price_allowance_p2 = parseFloat(allowance_p2[i].value) || 0;
-    const count_accommodation_p2 = parseFloat(accommodation_p2[i].value) || 0;
-    const day_vehicles_p2 = parseFloat(vehicles_p2[i].value) || 0;
-    const day_Registration_p2 = parseFloat(Registration_p2[i].value) || 0;
-    const price_other_p2 = parseFloat(other_p2[i].value) || 0;
+    const price_allowance_p2 = parseNumber(allowance_p2[i].value) || 0;
+    const count_accommodation_p2 = parseNumber(accommodation_p2[i].value) || 0;
+    const day_vehicles_p2 = parseNumber(vehicles_p2[i].value) || 0;
+    const day_Registration_p2 = parseNumber(Registration_p2[i].value) || 0;
+    const price_other_p2 = parseNumber(other_p2[i].value) || 0;
 
     // คำนวณรวมเฉพาะแถวนี้
     const rowTotal = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2 + day_Registration_p2;
@@ -278,12 +283,12 @@ const Real_GrandTotal_Allowance_Cost = document.getElementById("Real_GrandTotal_
 let R_AllowanceTotal1 = 0;
 let R_AllowanceTotal2 = 0;
 function calculateRealAllowance () {
-  const real_allowance_cost_1 =  parseFloat(document.getElementById("real_allowance_cost_1").value) || 0;
-  const real_NumberOfPersons_1 =  parseFloat(document.getElementById("real_NumberOfPersons_1").value) || 0;
-  const real_NumberOfDate_1 =  parseFloat(document.getElementById("real_NumberOfDate_1").value) || 0;
-  const real_allowance_cost_2 =  parseFloat(document.getElementById("real_allowance_cost_2").value) || 0;
-  const real_NumberOfPersons_2 =  parseFloat(document.getElementById("real_NumberOfPersons_2").value) || 0;
-  const real_NumberOfDate_2 =  parseFloat(document.getElementById("real_NumberOfDate_2").value) || 0;
+  const real_allowance_cost_1 =  parseNumber(document.getElementById("real_allowance_cost_1").value) || 0;
+  const real_NumberOfPersons_1 =  parseNumber(document.getElementById("real_NumberOfPersons_1").value) || 0;
+  const real_NumberOfDate_1 =  parseNumber(document.getElementById("real_NumberOfDate_1").value) || 0;
+  const real_allowance_cost_2 =  parseNumber(document.getElementById("real_allowance_cost_2").value) || 0;
+  const real_NumberOfPersons_2 =  parseNumber(document.getElementById("real_NumberOfPersons_2").value) || 0;
+  const real_NumberOfDate_2 =  parseNumber(document.getElementById("real_NumberOfDate_2").value) || 0;
 
   R_AllowanceTotal1 = (real_allowance_cost_1*real_NumberOfPersons_1*real_NumberOfDate_1);
   R_AllowanceTotal2 = (real_allowance_cost_2*real_NumberOfPersons_2*real_NumberOfDate_2);
@@ -310,9 +315,9 @@ function updateRealAccommodationTotal() {
   const days_accommodation = document.querySelectorAll(".real_accommodation_day");
 
   for (let i = 0; i < prices_accommodation.length; i++) {
-    const price_accommodation_ = parseFloat(prices_accommodation[i].value) || 0;
-    const count_accommodation = parseFloat(counts_accommodation[i].value) || 0;
-    const day_accommodation = parseFloat(days_accommodation[i].value) || 0;
+    const price_accommodation_ = parseNumber(prices_accommodation[i].value) || 0;
+    const count_accommodation = parseNumber(counts_accommodation[i].value) || 0;
+    const day_accommodation = parseNumber(days_accommodation[i].value) || 0;
 
     totalAcc += price_accommodation_ * count_accommodation * day_accommodation;
   }
@@ -336,8 +341,8 @@ function  R_updateRegisterTotal() {
     const feeInput = row.querySelector('.R_register_fee_amount');
     const personInput = row.querySelector('.R_register_fee_person');
 
-    const fee = parseFloat(feeInput?.value);
-    const person = parseFloat(personInput?.value);
+    const fee = parseNumber(feeInput?.value);
+    const person = parseNumber(personInput?.value);
 
     if (!isNaN(fee) && !isNaN(person)) {
       total += fee * person;
@@ -565,50 +570,78 @@ checkboxess.forEach(checkbox => {
   });
 });
 
-    const totalDisplay = document.querySelector('#R_Transportation_expenses_result');
-    const totalPersonalCarDisplay = document.querySelector('#R_total_personal_car');
-    const totalReignCarDisplay = document.querySelector('#R_total_reign_car');
+const totalDisplay = document.querySelector('#R_Transportation_expenses_result');
+const totalPersonalCarDisplay = document.querySelector('#R_total_personal_car');
+const totalReignCarDisplay = document.querySelector('#R_total_reign_car');
 
-    function calculateTotal() {
-        let total = 0;
+function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(val.replace(/,/g, '')) || 0;
+}
 
-        // ➤ รถยนต์ส่วนบุคคล × 8
-        const personalCarInput = document.querySelector('#R_personal_car_box input[type="number"]');
-        let personalCarAmount = 0;
-        if (personalCarInput && !isNaN(parseFloat(personalCarInput.value))) {
-            personalCarAmount = parseFloat(personalCarInput.value) * 8;
-            total += personalCarAmount;
-        }
-        totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+function calculateTotal() {
+    let total = 0;
 
-        // ➤ รถยนต์ราชการ × 8
-        const reignCarInput = document.querySelector('#R_reign_car_box input[type="number"]');
-        let reignCarAmount = 0;
-        if (reignCarInput && !isNaN(parseFloat(reignCarInput.value))) {
-            reignCarAmount = parseFloat(reignCarInput.value) * 8;
-            total += reignCarAmount;
-        }
-        totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+    // รถยนต์ส่วนบุคคล × 8
+const personalCarInput = document.querySelector('#R_personal_car_box input.comma-number');
+console.log(personalCarInput); // ตรวจสอบค่าที่อ่านได้
+console.log(personalCarInput.value);
+let personalCarAmount = 0;
+if (personalCarInput) {
+    personalCarAmount = parseNumber(personalCarInput.value) * 8;
+    total += personalCarAmount;
+}
+totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-        // ➤ จำนวนเงินจาก input-box อื่นๆ
-        const allBoxes = document.querySelectorAll('.input-box:not(#R_personal_car_box):not(#R_reign_car_box)');
-        allBoxes.forEach(box => {
-            const numberInputs = box.querySelectorAll('input[type="number"]');
-            numberInputs.forEach(input => {
-                const value = parseFloat(input.value);
-                if (!isNaN(value)) {
-                    total += value;
-                }
-            });
-        });
-
-        totalDisplay.textContent = total.toLocaleString();
-        grandTotal();
+    // รถยนต์ราชการ × 8
+    const reignCarInput = document.querySelector('#R_reign_car_box input.comma-number');
+    let reignCarAmount = 0;
+    if (reignCarInput) {
+        reignCarAmount = parseNumber(reignCarInput.value) * 8;
+        total += reignCarAmount;
     }
+    totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
-    // ➤ ติดตามทุก input number
-    const allInputs = document.querySelectorAll('.input-box input[type="number"]');
-    allInputs.forEach(input => {
-        input.addEventListener('input', calculateTotal);
+    // input-box อื่นๆ
+    const allBoxes = document.querySelectorAll('.input-box:not(#R_personal_car_box):not(#R_reign_car_box)');
+    allBoxes.forEach(box => {
+        const numberInputs = box.querySelectorAll('input.comma-number');
+        numberInputs.forEach(input => {
+            const value = parseNumber(input.value);
+            if (!isNaN(value)) {
+                total += value;
+            }
+        });
     });
+
+    totalDisplay.textContent = total.toLocaleString();
+    updateGrandTotal();
+}
+
+// ➤ ติดตามทุก input
+const allInputs = document.querySelectorAll('.input-box input');
+allInputs.forEach(input => {
+    input.addEventListener('input', calculateTotal);
+});
+
+
+
+// ฟังก์ชันจัดรูปแบบตัวเลขให้มี comma
+function formatNumberWithCommas(value) {
+    value = value.replace(/,/g, '');
+    if (value === '' || isNaN(value)) return '';
+    return Number(value).toLocaleString('en-US');
+}
+
+// ดัก event input เฉพาะ input ที่มี class comma-number
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('comma-number')) {
+        // กรองให้เหลือแต่ตัวเลข
+        let raw = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = formatNumberWithCommas(raw);
+    }
+});
+
+// เรียกคำนวณครั้งแรกเมื่อโหลดหน้า
+calculateTotal();
 });

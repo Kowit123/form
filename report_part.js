@@ -1,4 +1,3 @@
-
 async function generate_reportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
@@ -77,18 +76,22 @@ y += 0.7;
 
 
 let DetailOfAllowance1 = document.getElementById("real_allowance_cost_1").value.trim();
+
 if (DetailOfAllowance1) {
+  let DetailOfAllowance1formatted = DetailOfAllowance1 ? Number(DetailOfAllowance1.replace(/,/g, '')).toLocaleString() : "-";
   let persons1 = document.getElementById("real_NumberOfPersons_1").value.trim() || "0";
   let days1 = document.getElementById("real_NumberOfDate_1").value.trim() || "0";
-  doc.text(`-ค่าเบี้ยเลี้ยง ${DetailOfAllowance1} บาท จำนวน ${persons1} คน ระยะเวลา ${days1} วัน`, 5, y);
+  
+  doc.text(`-ค่าเบี้ยเลี้ยง ${DetailOfAllowance1formatted} บาท จำนวน ${persons1} คน ระยะเวลา ${days1} วัน`, 5, y);
   y += 0.7;
 }
 
 let DetailOfAllowance2 = document.getElementById("real_allowance_cost_2").value.trim();
 if (DetailOfAllowance2) {
+  let DetailOfAllowance2formatted = DetailOfAllowance1 ? Number(DetailOfAllowance1.replace(/,/g, '')).toLocaleString() : "-";
   let persons2 = document.getElementById("real_NumberOfPersons_2").value.trim() || "0";
   let days2 = document.getElementById("real_NumberOfDate_2").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${DetailOfAllowance2} บาท จำนวน ${persons2} คน ระยะเวลา ${days2} วัน)`, 5, y);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${DetailOfAllowance2formatted} บาท จำนวน ${persons2} คน ระยะเวลา ${days2} วัน`, 5, y);
   y += 0.7;
 }
 y+= 0.3;
@@ -105,7 +108,8 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (cost !== "0" || rooms !== "0" || days !== "0") {
-    doc.text(`-ค่าที่พักราคา ${cost} บาท จำนวน ${rooms} ห้อง ระยะเวลา ${days} วัน`, 5, y);
+    const costH = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
+    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} ห้อง ระยะเวลา ${days} วัน`, 5, y);
     y += 0.7;
   }
 });
@@ -224,9 +228,10 @@ register_costrows.forEach((row) => {
   const R_register_fee_person = row.querySelector(".R_register_fee_person");
   const detail = detailInput?.value.trim() || "";
   const cost = costInput?.value.trim() || "";
+  const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
   const person = R_register_fee_person?.value.trim() || "";
   if (detail || cost) {
-    doc.text(`-${detail} ค่าลงทะเบียน ${cost} บาท จำนวน ${person} คน`, 5, y);
+    doc.text(`-${detail} ค่าลงทะเบียน ${costFormatted} บาท จำนวน ${person} คน`, 5, y);
     y += lineHeight1;
   }
 });
@@ -263,8 +268,9 @@ R_other_cost_resultrows.forEach((row) => {
   const costInput = row.querySelector(".R_other_costs");
   const detail = (detailInput.value || "").trim();
   const cost = (costInput.value || "").trim();
+  const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
   if (detail || cost) {
-    doc.text(`-${detail} เป็นเงิน ${cost} บาท`, 5, y);
+    doc.text(`-${detail} เป็นเงิน ${costFormatted} บาท`, 5, y);
     y += lineHeight;
   }
 });
@@ -435,11 +441,26 @@ function generateBodyFromInputs() {
   for (let i = 1; i <= call; i++) {
     const name = document.getElementById(`name_re_${i}`)?.value || "";
     const position = document.getElementById(`position_re_${i}`)?.value || "";
-    const allowance = document.getElementById(`allowance_p2_${i}`)?.value || "";
-    const accommodation = document.getElementById(`accommodation_p2_${i}`)?.value || "";
-    const vehicles = document.getElementById(`vehicles_p2_${i}`)?.value || "";
-    const other = document.getElementById(`other_p2_${i}`)?.value || "";
-    const total = document.getElementById(`total_p_${i}`)?.value || "";
+
+    const allowance = document.getElementById(`allowance_p2_${i}`)?.value
+      ? Number(document.getElementById(`allowance_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
+      : "";
+
+    const accommodation = document.getElementById(`accommodation_p2_${i}`)?.value
+      ? Number(document.getElementById(`accommodation_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
+      : "";
+
+    const vehicles = document.getElementById(`vehicles_p2_${i}`)?.value
+      ? Number(document.getElementById(`vehicles_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
+      : "";
+
+    const other = document.getElementById(`other_p2_${i}`)?.value
+      ? Number(document.getElementById(`other_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
+      : "";
+
+    const total = document.getElementById(`total_p_${i}`)?.value
+      ? Number(document.getElementById(`total_p_${i}`).value.replace(/,/g, '')).toLocaleString()
+      : "";
 
     const row = [
       i,              // ลำดับ
@@ -584,8 +605,8 @@ doc.setFont("THSarabunNew", "normal");
     entries.forEach((entry) => {
       const inputs = entry.querySelectorAll('input');
       const detail = inputs[0].value || '-';
-      const amount = inputs[1].value || '-';
-      const distance = inputs[2].value || '-';
+      const amount = inputs[1].value ? Number(inputs[1].value.replace(/,/g, '')).toLocaleString() : '-';
+      const distance = inputs[2].value ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString() : '-';
 
       allData.push([date, detail, amount, distance]);
     });
@@ -680,8 +701,8 @@ y4 += 0.7;
 
     entries.forEach((entry) => {
       const inputs = entry.querySelectorAll('input');
-      const detail = inputs[0].value || '-';
-      const amount = inputs[2].value || '-';
+      const detail = inputs[0].value ? Number(inputs[0].value.replace(/,/g, '')).toLocaleString() : '-';
+      const amount = inputs[2].value ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString() : '-';
 
       allData1.push([date, detail, amount,]);
     });

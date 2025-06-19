@@ -69,8 +69,8 @@ function addEntry1() {
 
   div1.innerHTML = `
     <input type="text" name="name_${entryCount1}" placeholder="ชื่อ-นามสกุล">
-    <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน">
     <input type="text" name="position_${entryCount1}" placeholder="ตำแหน่ง">
+    <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน">
     <div>
     <button class="remove-btn" onclick="removeEntry(this)" style="margin:0; background-color:red;">&minus;</button>
     </div>
@@ -86,6 +86,7 @@ function removeEntry(button) {
 }
 
 
+
 //Allowance
 const mc1 = document.getElementById('mc_1');
 const pc1 = document.getElementById('pc_1');
@@ -95,18 +96,23 @@ const pc2 = document.getElementById('pc_2');
 const dc2 = document.getElementById('dc_2');
 const result = document.getElementById('result');
 
-function calculateAllowance () {
-  const v1 = parseFloat(mc1.value) || 0;
-  const v2 = parseFloat(pc1.value) || 0;
-  const v3 = parseFloat(dc1.value) || 0;
-  const v1_2 = parseFloat(mc2.value) || 0;
-  const v2_2 = parseFloat(pc2.value) || 0;
-  const v3_2 = parseFloat(dc2.value) || 0;
-  allowanceTotal = (v1 * v2 * v3) + (v1_2 * v2_2 * v3_2);
-  result.textContent = allowanceTotal.toLocaleString()
- let total = allowanceTotal;
-  return total;
 
+function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(val.replace(/,/g, '')) || 0;
+}
+
+function calculateAllowance () {
+  const v1 = parseNumber(mc1.value);
+  const v2 = parseNumber(pc1.value);
+  const v3 = parseNumber(dc1.value);
+  const v1_2 = parseNumber(mc2.value);
+  const v2_2 = parseNumber(pc2.value);
+  const v3_2 = parseNumber(dc2.value);
+  allowanceTotal = (v1 * v2 * v3) + (v1_2 * v2_2 * v3_2);
+  result.textContent = allowanceTotal.toLocaleString();
+  let total = allowanceTotal;
+  return total;
 }
 mc1.addEventListener('input',calculateAllowance);
 pc1.addEventListener('input',calculateAllowance);
@@ -129,7 +135,7 @@ function addAccommodationLine() {
 
   div.innerHTML = `
     <div class="detail_cost">
-        <input class="accommodation_cost" name="accommodation_cost_${accommodationRow}" type="text" placeholder="ค่าที่พัก">
+        <input class="accommodation_cost comma-number" name="accommodation_cost_${accommodationRow}" type="text" placeholder="ค่าที่พัก">
         <input class="accommodation_person" name="accommodation_person_${accommodationRow}" type="number" placeholder="จำนวนคน">
         <input class="accommodation_day" name="accommodation_day_${accommodationRow}" type="number" placeholder="จำนวนวัน">
         <button class="remove-btn" onclick="removeAccommodationline(this)" style = "margin:0;">&minus;</button>
@@ -162,9 +168,9 @@ function updateAccommodationTotal() {
   let totalAcc = 0;
 
   for (let i = 0; i < prices.length; i++) {
-    const price = parseFloat(prices[i].value) || 0;
-    const count = parseFloat(counts[i].value) || 0;
-    const day = parseFloat(days[i].value) || 0;
+    const price = parseNumber(prices[i].value) || 0;
+    const count = parseNumber(counts[i].value) || 0;
+    const day = parseNumber(days[i].value) || 0;
 
     totalAcc += price * count * day;
   }
@@ -233,7 +239,7 @@ function addRegistrationfeeLine() {
         <input class="Registration_fee_detail" name="Registration_fee_detail_${Registration}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
       </div> 
       <div>
-        <input class="Registration-fee" name="Registration-fee" type="number" placeholder="จำนวนเงิน" oninput="updateRegistration_fee_Total()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+        <input class="Registration-fee comma-number" name="Registration-fee" type="text" placeholder="จำนวนเงิน" oninput="updateRegistration_fee_Total()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
       </div>  
       <div>
         <input class="Registrationp-fee" name="Registrationp-fee" type="number" placeholder="จำนวนคน" oninput="updateRegistration_fee_Total()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
@@ -264,8 +270,8 @@ function updateRegistration_fee_Total() {
     const feeInput = row.querySelector('.Registration-fee');
     const personInput = row.querySelector('.Registrationp-fee');
 
-    const fee = parseFloat(feeInput?.value);
-    const person = parseFloat(personInput?.value);
+    const fee = parseNumber(feeInput?.value);
+    const person = parseNumber(personInput?.value);
 
     if (!isNaN(fee) && !isNaN(person)) {
       total += fee * person;
@@ -292,7 +298,7 @@ function addothercostLine() {
         <input class="Other-cost_detail" name="other-cost_detail_${other}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่นๆ" style="margin: 0; display: flex; align-items: center; width:100%; margin-right:2%;">
       </div>  
       <div>
-        <input class="otherCost" name="otherCost" type="number" placeholder="จำนวนเงิน" oninput="updateothercostTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+        <input class="otherCost comma-number" name="otherCost" type="text" placeholder="จำนวนเงิน" oninput="updateothercostTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
         <button class="remove-btn" onclick="removeothercostline(this)" style="margin: 0; display: flex; align-items: center; margin-left:3%">&minus;</button>
       </div>  
     </div> 
@@ -440,50 +446,76 @@ checkboxess.forEach(checkbox => {
   });
 });
 
-    const totalDisplay = document.querySelector('#Transportation_expenses_result');
-    const totalPersonalCarDisplay = document.querySelector('#total_personal_car');
-    const totalReignCarDisplay = document.querySelector('#total_reign_car');
+const totalDisplay = document.querySelector('#Transportation_expenses_result');
+const totalPersonalCarDisplay = document.querySelector('#total_personal_car');
+const totalReignCarDisplay = document.querySelector('#total_reign_car');
 
-    function calculateTotal() {
-        let total = 0;
+function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(val.replace(/,/g, '')) || 0;
+}
 
-        // ➤ รถยนต์ส่วนบุคคล × 8
-        const personalCarInput = document.querySelector('#personal_car_box input[type="number"]');
-        let personalCarAmount = 0;
-        if (personalCarInput && !isNaN(parseFloat(personalCarInput.value))) {
-            personalCarAmount = parseFloat(personalCarInput.value) * 8;
-            total += personalCarAmount;
-        }
-        totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+function calculateTotal() {
+    let total = 0;
 
-        // ➤ รถยนต์ราชการ × 8
-        const reignCarInput = document.querySelector('#reign_car_box input[type="number"]');
-        let reignCarAmount = 0;
-        if (reignCarInput && !isNaN(parseFloat(reignCarInput.value))) {
-            reignCarAmount = parseFloat(reignCarInput.value) * 8;
-            total += reignCarAmount;
-        }
-        totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+    // รถยนต์ส่วนบุคคล × 8
+const personalCarInput = document.querySelector('#personal_car_box input.comma-number');
+console.log(personalCarInput); // ตรวจสอบค่าที่อ่านได้
+console.log(personalCarInput.value);
+let personalCarAmount = 0;
+if (personalCarInput) {
+    personalCarAmount = parseNumber(personalCarInput.value) * 8;
+    total += personalCarAmount;
+}
+totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-        // ➤ จำนวนเงินจาก input-box อื่นๆ
-        const allBoxes = document.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
-        allBoxes.forEach(box => {
-            const numberInputs = box.querySelectorAll('input[type="number"]');
-            numberInputs.forEach(input => {
-                const value = parseFloat(input.value);
-                if (!isNaN(value)) {
-                    total += value;
-                }
-            });
-        });
-
-        totalDisplay.textContent = total.toLocaleString();
-        updateGrandTotal();
+    // รถยนต์ราชการ × 8
+    const reignCarInput = document.querySelector('#reign_car_box input.comma-number');
+    let reignCarAmount = 0;
+    if (reignCarInput) {
+        reignCarAmount = parseNumber(reignCarInput.value) * 8;
+        total += reignCarAmount;
     }
+    totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
-    // ➤ ติดตามทุก input number
-    const allInputs = document.querySelectorAll('.input-box input[type="number"]');
-    allInputs.forEach(input => {
-        input.addEventListener('input', calculateTotal);
+    // input-box อื่นๆ
+    const allBoxes = document.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
+    allBoxes.forEach(box => {
+        const numberInputs = box.querySelectorAll('input.comma-number');
+        numberInputs.forEach(input => {
+            const value = parseNumber(input.value);
+            if (!isNaN(value)) {
+                total += value;
+            }
+        });
     });
+
+    totalDisplay.textContent = total.toLocaleString();
+    updateGrandTotal();
+}
+
+// ➤ ติดตามทุก input
+const allInputs = document.querySelectorAll('.input-box input');
+allInputs.forEach(input => {
+    input.addEventListener('input', calculateTotal);
+});
+
+
+
+// ฟังก์ชันจัดรูปแบบตัวเลขให้มี comma
+function formatNumberWithCommas(value) {
+    value = value.replace(/,/g, '');
+    if (value === '' || isNaN(value)) return '';
+    return Number(value).toLocaleString('en-US');
+}
+
+// ดัก event input เฉพาะ input ที่มี class comma-number
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('comma-number')) {
+        // กรองให้เหลือแต่ตัวเลข
+        let raw = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = formatNumberWithCommas(raw);
+    }
+});
+
 });

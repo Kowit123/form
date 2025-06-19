@@ -45,6 +45,12 @@
       const all_cost = window.all_cost || 0;
       const totald = window.totald || 0;window.totald
 
+
+      function parseNumber(val) {
+    if (!val) return 0;
+    return parseFloat(val.replace(/,/g, '')) || 0;
+}
+
       //จัดเอกสาร
       //หัว
       doc.setFont("THSarabunNew", "bold");
@@ -117,16 +123,18 @@ lineY += 0.7;
 
 let mc_1 = document.getElementById("mc_1").value.trim();
 if (mc_1) {
+  const mc_1_ = mc_1 ? Number(mc_1.replace(/,/g, '')).toLocaleString() : "-";
   let pc_1 = document.getElementById("pc_1").value.trim() || "0";
   let dc_1= document.getElementById("dc_1").value.trim() || "0";
-  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_1} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน`, 5, lineY);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_1_} บาท จำนวน ${pc_1} คน ระยะเวลา ${dc_1} วัน`, 5, lineY);
   lineY += 0.7;
 }
 let mc_2 = document.getElementById("mc_2").value.trim();
 if (mc_2) {
+  const mc_2_ = mc_2 ? Number(mc_2.replace(/,/g, '')).toLocaleString() : "-";
   let pc_2 = document.getElementById("pc_2").value.trim() || "0";
   let dc_2= document.getElementById("dc_2").value.trim() || "0";
-  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_2} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน`, 5, lineY);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${mc_2_} บาท จำนวน ${pc_2} คน ระยะเวลา ${dc_2} วัน`, 5, lineY);
   lineY += 0.7;
 }
 lineY += 0.3;
@@ -249,13 +257,13 @@ lineY += 0.7;
 
   rows.forEach(row => {
     const detail = row.querySelector('.Registration_fee_detail')?.value || "-";
-    const fee = parseFloat(row.querySelector('.Registration-fee')?.value || 0);
+    const fee = parseNumber(row.querySelector('.Registration-fee')?.value || 0);
     const person = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
     const total = fee * person;
 
     grandTotal += total;
 
-    const line = `-${detail} จำนวน ${fee.toLocaleString()} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
+    const line = `-${detail} จำนวน ${fee} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
     const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
     doc.text(lines, 5, lineY);
     lineY += lines.length * 0.7;
@@ -337,8 +345,8 @@ doc.addPage();
 
     entries.forEach(entry => {
       const name = entry.querySelector("input[name^='name_']").value;
-      const dept = entry.querySelector("input[name^='position_']").value;
-      const pos = entry.querySelector("input[name^='department_']").value;
+      const pos = entry.querySelector("input[name^='position_']").value;
+      const dept = entry.querySelector("input[name^='department_']").value;
       data.push([name, pos, dept]);
     });
 

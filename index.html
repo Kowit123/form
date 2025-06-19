@@ -170,12 +170,12 @@
             <div class="idd">
             <div>
             <div class="f2_1">    
-                <input id="mc_1" type="number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
+                <input id="mc_1" type="text" class="comma-number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
                 <input id="pc_1" type="number" placeholder="จำนวนคน">   
                 <input id="dc_1" type="number" placeholder="จำนวนวัน">
             </div>
             <div class="f2_1">    
-                <input id="mc_2" type="number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
+                <input id="mc_2" type="text" class="comma-number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
                 <input id="pc_2" type="number" placeholder="จำนวนคน">   
                 <input id="dc_2" type="number" placeholder="จำนวนวัน">
             </div>
@@ -206,7 +206,7 @@
             </div>
             <div class="all" id="all">
                 <div class="detail_cost">
-                    <input class="accommodation_cost" name="accommodation_cost_1" type="number" placeholder="ค่าที่พัก">
+                    <input class="accommodation_cost comma-number" name="accommodation_cost_1" type="text" placeholder="ค่าที่พัก">
                     <input class="accommodation_person" name="accommodation_person_1" type="number" placeholder="จำนวนห้อง">
                     <input class="accommodation_day" name="accommodation_day_1" type="number" placeholder="จำนวนวัน">
                     <button class="add-btn" onclick="addAccommodationLine()" style="text-align: center; margin: 0;">＋</button>
@@ -251,7 +251,7 @@
                     </div>
                 </form>
                     <div id="personal_car_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
                         <p style="margin: 0;">เป็นจำนวนเงิน</p>
                         <span id="total_personal_car">&nbsp;0</span>
@@ -260,7 +260,7 @@
                     </div>   
 
                     <div id="reign_car_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 20%; justify-content: flex-end;" >
                         <p style="margin: 0;">เป็นจำนวนเงิน</p>
                         <span id="total_reign_car">&nbsp;0</span>
@@ -269,16 +269,16 @@
                     </div> 
 
                     <div id="airplane_box" class="input-box" style="display: none; width: 100%;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
                     <div id="train_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
                     <div id="bus_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถประจำทาง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถประจำทาง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
                     <div id="vv_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">พาหนะรับจ้าง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">พาหนะรับจ้าง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                     </div>
             </div>
 
@@ -356,7 +356,7 @@
                 </div>
                 <div class="date_6">
                 <label>จำนวนเงิน :</label>
-                <input  id="amount_borrow" type="number">
+                <input  id="amount_borrow" type="text" class="comma-number">
                 </div>
             </div>
             <hr class="solid">
@@ -461,15 +461,15 @@
                         <div style="padding: 1%; padding-top: 3%; width: 15%;"><p>ตำแหน่ง</p>
                         <input id="position_re_1" type="text" readonly></div>
                         <div style="width: 10%;"><p>ค่าเบี้ยเลี้ยง</p>
-                        <input class="allowance_p2" id="allowance_p2_1" type="number" min="0"></div>
+                        <input class="allowance_p2 comma-number" id="allowance_p2_1" type="text" min="0"></div>
                         <div style="width: 10%;"><p>ค่าที่พัก</p>
-                        <input class="accommodation_p2" id="accommodation_p2_1" type="number" min="0"></div>
+                        <input class="accommodation_p2 comma-number" id="accommodation_p2_1" type="text" min="0"></div>
                         <div style="width: 10%;"><p>ค่าพาหนะ</p>
-                        <input class="vehicles_p2" id="vehicles_p2_1" type="number" min="0"></div>
+                        <input class="vehicles_p2 comma-number" id="vehicles_p2_1" type="text" min="0"></div>
                         <div style="width: 10%;"><p>ค่าลงทะเบียน</p>
-                        <input class="Registration_p2" id="Registration_p2_1" type="number" min="0"></div>
+                        <input class="Registration_p2 comma-number" id="Registration_p2_1" type="text" min="0"></div>
                         <div style="width: 10%;"><p>ค่าใช้จ่ายอื่นๆ</p>
-                        <input class="other_p2" id="other_p2_1" type="number" min="0"></div>
+                        <input class="other_p2 comma-number" id="other_p2_1" type="text" min="0"></div>
                         <div style="width: 10%;"><p>รวม</p>
                         <input class="total_p2" id="total_p2_1" type="text" readonly></div>
                         <input class="total_p_1" id="total_p_1" type="text" readonly style="display: none;";>
@@ -520,14 +520,14 @@
             </div>
             <div class="Real_allowance_1"> 
                 <div class="left_part">
-                    <input id="real_allowance_cost_1" type="number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
+                    <input id="real_allowance_cost_1" type="text" class="comma-number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
                     <input id="real_NumberOfPersons_1" type="number" placeholder="จำนวนคน">   
                     <input id="real_NumberOfDate_1" type="number" placeholder="จำนวนวัน">
                 </div>
             </div>
             <div class="Real_allowance_2">    
                 <div class="left_part">
-                    <input id="real_allowance_cost_2" type="number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
+                    <input id="real_allowance_cost_2" type="text" class="comma-number" placeholder="ค่าเบี้ยเลี้ยง(บาท)">
                     <input id="real_NumberOfPersons_2" type="number" placeholder="จำนวนคน">   
                     <input id="real_NumberOfDate_2" type="number" placeholder="จำนวนวัน">
                 </div>
@@ -554,7 +554,7 @@
             </div>
             <div class="Real_accommodation_1">
                 <div class="left_part">
-                    <input class="real_accommodation_cost" id="real_accommodation_cost_1" type="number" placeholder="ค่าที่พัก">
+                    <input class="real_accommodation_cost comma-number" id="real_accommodation_cost_1" type="text" placeholder="ค่าที่พัก">
                     <input class="real_accommodation_person" id="real_accommodation_person_1" type="number" placeholder="จำนวนห้อง">
                     <input  class="real_accommodation_day" id="real_accommodation_day_1" type="number" placeholder="จำนวนวัน">
                     <button class="add-btn" onclick="addRealAccommodationRow()" style="text-align: center; margin: 0; background-color: blue;">&plus;</button>
@@ -599,7 +599,7 @@
                     </div>
                 </form>
                 <div id="R_personal_car_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
                         <p style="margin: 0;">เป็นจำนวนเงิน</p>
                         <span id="R_total_personal_car">&nbsp;0</span>
@@ -607,7 +607,7 @@
                     </div>
                 </div>
                 <div id="R_reign_car_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 20%; justify-content: flex-end;" >
                         <p style="margin: 0;">เป็นจำนวนเงิน</p>
                         <span id="R_total_reign_car">&nbsp;0</span>
@@ -615,16 +615,16 @@
                     </div>
                 </div>
                 <div id="R_airplane_box" class="input-box" style="display: none; width: 100%;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                 </div>
                 <div id="R_train_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                 </div>
                 <div id="R_bus_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถประจำทาง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถประจำทาง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                 </div>
                 <div id="R_vv_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">พาหนะรับจ้าง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">พาหนะรับจ้าง:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0;"><input type="text"  class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                 </div>
                 
 
