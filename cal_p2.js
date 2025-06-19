@@ -179,39 +179,6 @@ function removeRealAccommodationeRow(button) {
   updateRealAccommodationTotal();
   grandTotal();
 }
-/* เพิ่มลบแถว ค่าพาหนะ */
-let real_hired_vehiclesRow= 1;
-
-function R_addHired_vehiclesLine() {
-  real_hired_vehiclesRow++;
-  const container = document.getElementById("R_Hired-vehicles_detail");
-  const div = document.createElement("div");
-    div.classList.add("R_vehicles");
-
-  div.innerHTML = `
-    <div class="R_vehicles-detail_cost" style ="display:flex; margin-bottom:0.5%;">
-      <div style = "margin-right:1%;width:38%;">
-        <input class="R_vehicles_detail" name="R_vehicles_detail_${real_hired_vehiclesRow}" type="text" placeholder="รายละเอียดค่าพาหนะรับจ้าง" style = "margin: 0 ; width:96%;">
-      </div>  
-      <div style = "margin-right:1%; width:20%">
-        <input class="R_vehicles_cost" name="R_vehicles_cost" type="number" placeholder="จำนวนเงิน" oninput="updateR_hired_vehiclesTotal()" style = "margin: 0 ; width:94%;">
-      </div>  
-        <button class="remove-btn" onclick="R_removeHired_vehiclesline(this)" style="text-align: center; margin: 0 ; background-color:red;">&minus;</button>
-      
-    </div> 
-  `;
-  container.appendChild(div);
-}
-function R_removeHired_vehiclesline(button) {
-  const containerAcc = button.closest(".R_vehicles");
-  if (containerAcc) {
-    containerAcc.remove();
-    real_hired_vehiclesRow--;
-  }
-  updateR_hired_vehiclesTotal();
-  grandTotal();
-}
-
 
 /* เพิ่มลบแถว ค่าลงทะเบียน */
 let Real_RegisterRow= 1;
@@ -225,7 +192,7 @@ function R_addRegisterLine() {
   div.innerHTML = `
 <div class="R_register_fee_cost" style="display:grid; grid-template-columns: 50% 20% 25%; margin-bottom: 1%; width:100%; gap:2%; margin-top:1%;">
   <div>
-    <input class="R_register_fee_detail" name="R_register_fee_detail_${Registration}" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
+    <input class="R_register_fee_detail" name="R_register_fee_detail" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
   </div> 
   <div>
     <input class="R_register_fee_amount" name="R_register_fee_amount" type="number" placeholder="จำนวนเงิน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
@@ -264,7 +231,7 @@ function R_addOtherLine() {
         <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่น" style = "margin: 0 ; width:96%;">
       </div>  
       <div style = "margin-right:1%; width:20%">
-        <input class="R_other_costs" name="R_other_cost" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
+        <input class="R_other_costs" name="R_other_costs" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
       </div>  
         <button class="remove-btn" onclick="R_removeOtherLine(this)" style="text-align: center; margin: 0 ; background-color:red;">&minus;</button>
       

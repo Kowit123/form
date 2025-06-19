@@ -72,7 +72,7 @@ y += 0.3;
 doc.text(`ข้าพเจ้า ขอเบิกค่าใช้จ่ายในการเดินทางไปราชการสำหรับ ( )ข้าพเจ้า ( )คณะเดินทาง ดังนี้`, 3, y);
 y += 1;
 doc.text(`1.ค่าเบี้ยเลี้ยง`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("Real_GrandTotal_Allowance_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
+doc.text(`รวมเป็นเงิน ${document.getElementById("Real_GrandTotal_Allowance_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
 y += 0.7;
 
 
@@ -80,7 +80,7 @@ let DetailOfAllowance1 = document.getElementById("real_allowance_cost_1").value.
 if (DetailOfAllowance1) {
   let persons1 = document.getElementById("real_NumberOfPersons_1").value.trim() || "0";
   let days1 = document.getElementById("real_NumberOfDate_1").value.trim() || "0";
-  doc.text(`ค่าเบี้ยเลี้ยง ${DetailOfAllowance1} บาท จำนวน ${persons1} คน ระยะเวลา ${days1} วัน)`, 5, y);
+  doc.text(`-ค่าเบี้ยเลี้ยง ${DetailOfAllowance1} บาท จำนวน ${persons1} คน ระยะเวลา ${days1} วัน`, 5, y);
   y += 0.7;
 }
 
@@ -95,7 +95,7 @@ y+= 0.3;
 
 
 doc.text(`2.ค่าที่พัก ${document.querySelector('input[name="radio_re"]:checked')?.value || ''}`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("Real_GrandTotal_Accommodation_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
+doc.text(`รวมเป็นเงิน ${document.getElementById("Real_GrandTotal_Accommodation_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
 y += 0.7;
 const Accommodation_Costrows = document.querySelectorAll("#Real_accommodation .Real_accommodation_1");
 Accommodation_Costrows.forEach((row) => {
@@ -105,14 +105,95 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (cost !== "0" || rooms !== "0" || days !== "0") {
-    doc.text(`ค่าที่พักราคา ${cost} บาท จำนวน ${rooms} ห้อง ระยะเวลา ${days} วัน`, 5, y);
+    doc.text(`-ค่าที่พักราคา ${cost} บาท จำนวน ${rooms} ห้อง ระยะเวลา ${days} วัน`, 5, y);
     y += 0.7;
   }
 });
 y += 0.3;
 
 doc.text(`3.ค่าพาหนะ`, 3, y);
+doc.text(`รวมเป็นเงิน ${document.getElementById("R_Transportation_expenses_result").textContent} บาท`, pageWidth-2, y, { align: 'right' });
 y += 0.7;
+
+const personalBox = document.querySelector("#R_personal_car_box");
+if (personalBox && personalBox.style.display !== "none") {
+  const inputs = personalBox.querySelectorAll("input");
+  const license = inputs[0].value.trim();
+  const driver = inputs[1].value.trim();
+  const distance = inputs[2].value.trim();
+  const total = document.getElementById("R_total_personal_car").textContent.trim();
+
+  const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+  const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
+
+  if (license || driver || distance) {
+    const text1 = `-รถยนต์ส่วนบุคคล 
+    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
+    const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const firstX = 5;
+    const indentX = 5;
+
+    lines.forEach((line, index) => {
+    const x = index === 0 ? firstX : indentX;
+    doc.text(line, x, y + index * 0.7);
+  });
+
+    y += lines.length * 0.7; // ปรับระยะ Y ตามจำนวนบรรทัด
+  }
+}
+
+  // ===== รถยนต์ราชการ =====
+  const reignBox = document.querySelector("#R_reign_car_box");
+  if (reignBox && reignBox.style.display !== "none") {
+    const inputs = reignBox.querySelectorAll("input");
+    const license = inputs[0].value.trim();
+    const driver = inputs[1].value.trim();
+    const distance = inputs[2].value.trim();
+    const total = document.getElementById("R_total_reign_car").textContent.trim();
+    const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+    if (license || driver || distance) {
+      const text1 = `-รถยนต์ของทางราชการ 
+      หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
+      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${total} บาท`
+      const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const firstX = 5;
+    const indentX = 5;
+
+    lines.forEach((line, index) => {
+    const x = index === 0 ? firstX : indentX;
+    doc.text(line, x, y + index * 0.7);
+  });
+      y += lines.length * 0.7;
+    }
+  }
+
+  // ===== รายการอื่น ๆ =====
+  const transportTypes = [
+    { id: "R_airplane", label: "เครื่องบิน" },
+    { id: "R_train", label: "รถไฟ" },
+    { id: "R_bus", label: "รถประจำทาง" },
+    { id: "R_vv", label: "พาหนะรับจ้าง" }
+  ];
+
+  for (const type of transportTypes) {
+    const box = document.querySelector(`#${type.id}_box`);
+    if (box && box.style.display !== "none") {
+      const inputs = box.querySelectorAll("input");
+      const detail = inputs[0].value.trim();
+      const amount = inputs[1].value.trim();
+      const amountFormatted = amount ? Number(amount.replace(/,/g, '')).toLocaleString() : "0";
+
+      if (detail || amount) {
+        doc.text(`-${type.label} 
+          ${detail || ""} เป็นเงิน ${amountFormatted} บาท`, 5, y);
+        y += 1.2;
+      }
+    }
+  }
+  y += 0.3;
+
+
 
 const lineHeight1 = 0.7;
 const smallGap1 = 0.3;
@@ -121,9 +202,10 @@ const register_costrows = document.querySelectorAll("#R_Register_detail .r_regis
 
 // นับจำนวนบรรทัดที่จะพิมพ์ (หัวข้อ 1 บรรทัด + รายละเอียดที่ไม่ว่าง)
 const linesCount1 = 1 + Array.from(register_costrows).filter(row => {
-  const detailInput = row.querySelector(".R_register_detail");
-  const costInput = row.querySelector(".R_register_cost");
-  return (detailInput?.value.trim() || costInput?.value.trim());
+  const detailInput = row.querySelector(".R_register_fee_detail_");
+  const costInput = row.querySelector(".R_register_fee_amount");
+  const R_register_fee_person = row.querySelector(".R_register_fee_person");
+  return (detailInput?.value.trim() || costInput?.value.trim() || R_register_fee_person?.value.trim());
 }).length;
 
 // ความสูงรวมที่ต้องการ
@@ -132,17 +214,19 @@ let groupHeight = linesCount1 * lineHeight1 + smallGap1;
 // เช็คพื้นที่ว่าพอไหม ถ้าไม่พอให้ขึ้นหน้าใหม่ก่อนพิมพ์ทั้งกลุ่ม
 y = checkAddPageGroup(doc, y, groupHeight);
 
-doc.text(`5.ค่าลงทะเบียน`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("R_register_cost_result").textContent} บาท`, pageWidth - 2, y, { align: 'right' });
+doc.text(`4.ค่าลงทะเบียน`, 3, y);
+doc.text(`รวมเป็นเงิน ${document.getElementById("R_register_cost_result").textContent} บาท`, pageWidth - 2, y, { align: 'right' });
 y += lineHeight1;
 
 register_costrows.forEach((row) => {
-  const detailInput = row.querySelector(".R_register_detail");
-  const costInput = row.querySelector(".R_register_cost");
+  const detailInput = row.querySelector(".R_register_fee_detail");
+  const costInput = row.querySelector(".R_register_fee_amount");
+  const R_register_fee_person = row.querySelector(".R_register_fee_person");
   const detail = detailInput?.value.trim() || "";
   const cost = costInput?.value.trim() || "";
+  const person = R_register_fee_person?.value.trim() || "";
   if (detail || cost) {
-    doc.text(`${detail} เป็นเงิน ${cost} บาท`, 5, y);
+    doc.text(`-${detail} ค่าลงทะเบียน ${cost} บาท จำนวน ${person} คน`, 5, y);
     y += lineHeight1;
   }
 });
@@ -169,18 +253,18 @@ const linesCount = 1 + Array.from(R_other_cost_resultrows).filter(row => {
 y = checkAddPageGroup(doc, y, groupHeight); // สมมติว่า checkAddPage รองรับ parameter ความสูงกลุ่ม
 
 // พิมพ์หัวข้อ
-doc.text(`6.ค่าใช้จ่ายอื่นๆ`, 3, y);
-doc.text(`เป็นเงิน ${document.getElementById("R_other_cost_result").textContent} บาท`, pageWidth-2, y, { align: 'right' });
+doc.text(`5.ค่าใช้จ่ายอื่นๆ`, 3, y);
+doc.text(`รวมเป็นเงิน ${document.getElementById("R_other_cost_result").textContent} บาท`, pageWidth-2, y, { align: 'right' });
 y += lineHeight;
 
 // พิมพ์รายละเอียด
 R_other_cost_resultrows.forEach((row) => {
   const detailInput = row.querySelector(".R_other_detail");
-  const costInput = row.querySelector(".R_other_cost");
+  const costInput = row.querySelector(".R_other_costs");
   const detail = (detailInput.value || "").trim();
   const cost = (costInput.value || "").trim();
   if (detail || cost) {
-    doc.text(`${detail} เป็นเงิน ${cost} บาท)`, 5, y);
+    doc.text(`-${detail} เป็นเงิน ${cost} บาท`, 5, y);
     y += lineHeight;
   }
 });

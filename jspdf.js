@@ -111,7 +111,7 @@ allLines.forEach((line, index) => {
 lineY += 0.3;
 const bLines = `1.ค่าเบี้ยเลี้ยง`;
 doc.text(bLines,3,lineY);     
-const b1Lines = `รวมเป็นเงินทั้งสิ้น ${allowanceTotal.toLocaleString()} บาท`;
+const b1Lines = `รวมเป็นเงิน ${allowanceTotal.toLocaleString()} บาท`;
 doc.text(b1Lines,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
@@ -134,7 +134,7 @@ lineY += 0.3;
 
 const cLines = `2.ค่าที่พัก  ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`;
 doc.text(cLines,3,lineY);     
-const c1Lines = `รวมเป็นเงินทั้งสิ้น ${document.getElementById("result_2").textContent} บาท`
+const c1Lines = `รวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`
 doc.text(c1Lines,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
@@ -156,7 +156,7 @@ lineY += 0.3;
 // แสดงใน PDF
 doc.text(`3. ค่าพาหนะ`, 3, lineY);
 const totalAll = document.getElementById("Transportation_expenses_result").textContent.trim();
-doc.text(`รวมเป็นเงินทั้งสิ้น ${totalAll || "0"} บาท`, pageWidth-2, lineY,{align:'right'});
+doc.text(`รวมเป็นเงิน ${totalAll || "0"} บาท`, pageWidth-2, lineY,{align:'right'});
 lineY += 0.7;
 
 
@@ -241,7 +241,7 @@ if (personalBox && personalBox.style.display !== "none") {
 
 const fLines1  = `4.ค่าลงทะเบียน`;
 doc.text(fLines1,3, lineY)
-doc.text(`รวมเป็นเงินทั้งสิ้น ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+doc.text(`รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
   const rows = document.querySelectorAll(".Registration_fee_cost");
@@ -265,7 +265,7 @@ lineY += 0.3;
 
 const gLines1  = `5.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
 doc.text(gLines1,3, lineY)
-doc.text(`รวมเป็นเงินทั้งสิ้น ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+doc.text(`รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
 const rows2 = document.querySelectorAll("#other-cost_detail .other_cost");
