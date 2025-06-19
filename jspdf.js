@@ -143,10 +143,11 @@ Accommodation_Costrows.forEach((row) => {
   const accommodation_cost = row.querySelector(".accommodation_cost")?.value.trim() || "0";
   const accommodation_person = row.querySelector(".accommodation_person")?.value.trim() || "0";
   const accommodation_day = row.querySelector(".accommodation_day")?.value.trim() || "0";
+  const accommodation_cost1 = accommodation_cost ? Number(accommodation_cost.replace(/,/g, '')).toLocaleString() : "-";
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    doc.text(`-ค่าที่พักราคา ${accommodation_cost} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
+    doc.text(`-ค่าที่พักราคา ${accommodation_cost1} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }
 });
