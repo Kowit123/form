@@ -310,7 +310,7 @@ if (nnoChecked) {
 }
 doc.setFont("THSarabunNew", "normal");
 doc.text(`จึงเรียนมาเพื่อโปรดพิจารณา`, 3, lineY);
-  lineY += 0.7;
+  lineY += 1;
 
 groupHeight = 3.1;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
