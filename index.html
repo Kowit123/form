@@ -17,8 +17,10 @@
     <script src="./font/THSarabunNew-normal.js"></script>
     <script src="./font/THSarabunNew-bold.js"></script>
     <!--flastpicker-->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!--web_name-->
     <title>แบบฟอร์มขออนุมัตเดินทางไปราชการ</title>
 </head>
@@ -444,13 +446,42 @@
                     <label for="thai-datepicker9">เดินทางไป วันที่ เวลา :</label>
                     <input id="thai-datepicker9" type="text" style="width: 46%;"  placeholder="ว/ด/ปี">
                     <input id="timepicker3" type="text" placeholder="เลือกเวลา">
+                    <div style="margin-top: 0.5rem; display: flex;" >
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO" id="GH" value="บ้านพัก"> บ้านพัก
+                        </label>
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO" id="GS" value="สำนักงาน"> สำนักงาน
+                        </label>
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO" id="GT" value="ประเทศไทย"> ประเทศไทย
+                        </label>
+                        <label>
+                        <input type="radio" name="OO" id="GF" value="ต่างประเทศ"> ต่างประเทศ
+                        </label>
+                    </div>
                     </div>
                     <div>
                     <label for="thai-datepicker10">เดินทางกลับ วันที่ เวลา :</label>                       
                     <input id="thai-datepicker10" type="text" style="width: 46%;"  placeholder="ว/ด/ปี">
                     <input id="timepicker4" type="text" placeholder="เลือกเวลา">
+                    <div style="margin-top: 0.5rem; display: flex;" >
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO2" id="GH2" value="บ้านพัก"> บ้านพัก
+                        </label>
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO2" id="GS2" value="สำนักงาน"> สำนักงาน
+                        </label>
+                        <label style="margin-right: 1em;">
+                        <input type="radio" name="OO2" id="GT2" value="ประเทศไทย"> ประเทศไทย
+                        </label>
+                        <label>
+                        <input type="radio" name="OO2" id="GF2" value="ต่างประเทศ"> ต่างประเทศ
+                        </label>
+                    </div>
                     </div>   
                 </div>
+
                 <p id="daysresult" style="display: none;"></p>
                 <hr class="solid">
                 <h2 style="display: block; text-align: center;">ผู้ร่วมเดินทาง</h2>
@@ -509,6 +540,13 @@
     <!--just label-->
     <h2 style="color: rgb(83, 83, 83); font-size: 1.5rem; margin: 1.2rem 0;">ค่าใช้จ่ายในการเดินทางไปราชการ</h2>
         <!--ค่าเบี้ยเลี้ยง-->
+        <div style="display: flex; margin-bottom: 2%;">
+            <p>ขอเบิกค่าใช้จ่ายในการเดินทางไปราชการสำหรับ</p>
+            <div style="display: flex; margin-left: 1%;">
+                <label><input type="radio" name="radio1" id="bb" value="ข้าพเจ้า">ข้าพเจ้า</label>
+                <label><input type="radio" name="radio1" id="bb2" value="คณะเดินทาง">คณะเดินทาง</label>
+            </div>
+        </div>
         <div class="Real_allowance">
             <div class="h_part">
                     <p>1.ค่าเบี้ยเลี้ยง</p>
@@ -631,31 +669,11 @@
             </div>
             <!--End ค่าพาหนะ-->
             <!--Endพาหนะรับจ้าง-->
-            <!--ค่าลงทะเบียน-->
-            <div class="R_Register">
-                <div class="h_part">
-                <div class="left_part">
-                    <p style="margin: 0; display: flex; align-items: center;">4. ค่าลงทะเบียน</p>
-                </div>
-                    <div class="cost_display">
-                        <div>
-                        <button class="add-btn" onclick="R_addRegisterLine()" style="background-color:#0004ff; margin: 0;">＋</button>
-                        </div>
-                        <div class="R_register_cost">
-                            <p style="margin: 0; ">เป็นจำนวนเงินทั้งหมด&nbsp;</p>
-                            <span id="R_register_cost_result" style="margin: 0;">0</span>
-                            <p style="margin: 0; ">&nbsp;บาท</p>                        
-                        </div>
-                    </div>
-                </div>   
-            </div> 
-            <div class="R_Register_detail" id="R_Register_detail" style="display: block;"></div>
-            <!--EndRegisterCost-->
             <!--other_cost-->
             <div class="R_Other">
                 <div class="h_part">
                 <div class="left_part">
-                    <p style="margin: 0; display: flex; align-items: center;">5. ค่าใช้จ่ายอื่นๆ</p>
+                    <p style="margin: 0; display: flex; align-items: center;">4. ค่าใช้จ่ายอื่นๆ</p>
                 </div>
                     <div class="cost_display">
                         <div>

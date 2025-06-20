@@ -1,4 +1,5 @@
 async function generate_reportPDF() {
+  let currentPage = 1
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -19,7 +20,11 @@ calculateDuration();
 const pageWidth = doc.internal.pageSize.getWidth();
 doc.text(`สัญญาเงินยืมเลขที่ ${document.getElementById("con_number").value}    วันที่ ${document.getElementById("thai-datepicker6").value}`,3,2,{align: 'left'});
 doc.text(
-  `ชื่อผู้ยืม ${document.getElementById("Borrower").value}    จำนวนเงิน ${parseFloat(document.getElementById("amount_borrow")?.value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท`,
+  `ชื่อผู้ยืม ${document.getElementById("Borrower").value}     จำนวนเงิน ${
+    parseFloat(
+      (document.getElementById("amount_borrow")?.value || "0").replace(/,/g, "")
+    ).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  } บาท`,
   3,
   2.7,
   { align: 'left' }
@@ -47,11 +52,35 @@ doc.text (`เรียน ${document.getElementById("dear_re").value}`,3, y);
 y += 1; 
 
 
+
+const radios = [
+    { id: "GH2", label: "บ้านพัก" },
+    { id: "GS2", label: "สำนักงาน" },
+    { id: "GT2", label: "ประเทศไทย" },
+    { id: "GF2", label: "ต่างประเทศ" }
+];
+let radioText = radios.map(r => {
+    const checked = document.getElementById(r.id).checked;
+    return `( ${checked ? "/" : ""} )${r.label}`;
+}).join(" ");
+
+const radios1 = [
+    { id: "GH", label: "บ้านพัก" },
+    { id: "GS", label: "สำนักงาน" },
+    { id: "GT", label: "ประเทศไทย" },
+    { id: "GF", label: "ต่างประเทศ" }
+];
+let radioText1 = radios1.map(r => {
+    const checked = document.getElementById(r.id).checked;
+    return `( ${checked ? "/" : ""} )${r.label}`;
+}).join(" ");
+
+
 // เนื้อหา
 const firstLineWidth = 13;
 const nextLinesWidth = 16;
 
-const descripts = `ตามคำสั่ง/บันทึกที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} ได้อนุมัติให้ ข้าพเจ้า ${document.getElementById("nrq_re").value} ตำแหน่ง ${document.getElementById("pst_re").value} สังกัด ${document.getElementById("pt_re").value} เดินทางไปปฏิบัติราชการเพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ออกเดินทางจาก ( )บ้านพัก ( )สำนักงาน ประเทศไทย ตั้งแต่วันที่ ${document.getElementById("thai-datepicker9").value} เวลา ${document.getElementById("timepicker3").value} น. และกลับถึง ( )บ้านพัก ( )สำนักงาน ประเทศไทย วันที่ ${document.getElementById("thai-datepicker10").value} เวลา ${document.getElementById("timepicker4").value} น. ${document.getElementById("daysresult").textContent}`;
+const descripts = `ตามคำสั่ง/บันทึกที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} ได้อนุมัติให้ ข้าพเจ้า ${document.getElementById("nrq_re").value} ตำแหน่ง ${document.getElementById("pst_re").value} สังกัด ${document.getElementById("pt_re").value} เดินทางไปปฏิบัติราชการเพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ออกเดินทางจาก ${radioText1} ตั้งแต่วันที่ ${document.getElementById("thai-datepicker9").value} เวลา ${document.getElementById("timepicker3").value} น. และกลับถึง ${radioText} วันที่ ${document.getElementById("thai-datepicker10").value} เวลา ${document.getElementById("timepicker4").value} น. ${document.getElementById("daysresult").textContent}`;
 
 const linesTemps = doc.splitTextToSize(descripts, firstLineWidth);
 
@@ -73,7 +102,16 @@ allLines.forEach((line, index) => {
 });
 y=lineY;
 y += 0.3;
-doc.text(`ข้าพเจ้า ขอเบิกค่าใช้จ่ายในการเดินทางไปราชการสำหรับ ( )ข้าพเจ้า ( )คณะเดินทาง ดังนี้`, 3, y);
+const radios2 = [
+    { id: "bb", label: "ข้าพเจ้า" },
+    { id: "bb2", label: "คณะเดินทาง" },
+];
+let radioText2 = radios2.map(r => {
+    const checked = document.getElementById(r.id).checked;
+    return `( ${checked ? "/" : ""} )${r.label}`;
+}).join(" ");
+
+doc.text(`ข้าพเจ้า ขอเบิกค่าใช้จ่ายในการเดินทางไปราชการสำหรับ ${radioText2} ดังนี้`, 3, y);
 y += 1;
 doc.text(`1.ค่าเบี้ยเลี้ยง`, 3, y);
 doc.text(`รวมเป็นเงิน ${document.getElementById("Real_GrandTotal_Allowance_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
@@ -204,68 +242,23 @@ if (personalBox && personalBox.style.display !== "none") {
 
 
 
-const lineHeight1 = 0.7;
-const smallGap1 = 0.3;
-
-const register_costrows = document.querySelectorAll("#R_Register_detail .r_register");
-
-// นับจำนวนบรรทัดที่จะพิมพ์ (หัวข้อ 1 บรรทัด + รายละเอียดที่ไม่ว่าง)
-const linesCount1 = 1 + Array.from(register_costrows).filter(row => {
-  const detailInput = row.querySelector(".R_register_fee_detail_");
-  const costInput = row.querySelector(".R_register_fee_amount");
-  const R_register_fee_person = row.querySelector(".R_register_fee_person");
-  return (detailInput?.value.trim() || costInput?.value.trim() || R_register_fee_person?.value.trim());
-}).length;
-
-// ความสูงรวมที่ต้องการ
-let groupHeight = linesCount1 * lineHeight1 + smallGap1;
-
-// เช็คพื้นที่ว่าพอไหม ถ้าไม่พอให้ขึ้นหน้าใหม่ก่อนพิมพ์ทั้งกลุ่ม
-y = checkAddPageGroup(doc, y, groupHeight);
-
-doc.text(`4.ค่าลงทะเบียน`, 3, y);
-doc.text(`รวมเป็นเงิน ${document.getElementById("R_register_cost_result").textContent} บาท`, pageWidth - 2, y, { align: 'right' });
-y += lineHeight1;
-
-register_costrows.forEach((row) => {
-  const detailInput = row.querySelector(".R_register_fee_detail");
-  const costInput = row.querySelector(".R_register_fee_amount");
-  const R_register_fee_person = row.querySelector(".R_register_fee_person");
-  const detail = detailInput?.value.trim() || "";
-  const cost = costInput?.value.trim() || "";
-  const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
-  const person = R_register_fee_person?.value.trim() || "";
-  if (detail || cost) {
-    doc.text(`-${detail} ค่าลงทะเบียน ${costFormatted} บาท จำนวน ${person} คน`, 5, y);
-    y += lineHeight1;
-  }
-});
-
-y += smallGap1;
-
-
-const lineHeight = 0.7;
-const smallGap = 0.3;
-
 const R_other_cost_resultrows = document.querySelectorAll("#R_other_detail .r_other");
 
-// คำนวณจำนวนบรรทัดที่จะพิมพ์ (บรรทัดหัวข้อ 1 บรรทัด + บรรทัด detail ที่ไม่ว่าง)
-const linesCount = 1 + Array.from(R_other_cost_resultrows).filter(row => {
+// นับจำนวนแถวที่มีข้อมูล detail หรือ cost
+const detailRowsCount = Array.from(R_other_cost_resultrows).filter(row => {
   const detailInput = row.querySelector(".R_other_detail");
   const costInput = row.querySelector(".R_other_costs");
   return (detailInput.value.trim() || costInput.value.trim());
 }).length;
 
-// คำนวณความสูงรวมของกลุ่มนี้
- groupHeight = linesCount * lineHeight + smallGap;
 
-// เช็คว่าพื้นที่ในหน้านี้พอไหม ถ้าไม่พอให้ขึ้นหน้าใหม่ก่อนพิมพ์
-y = checkAddPageGroup(doc, y, groupHeight); // สมมติว่า checkAddPage รองรับ parameter ความสูงกลุ่ม
+const groupHeight = (1 + detailRowsCount) * 0.7; // 1 คือบรรทัดหัวข้อ
+y = checkAddPageForGroup(doc, y, groupHeight);
 
 // พิมพ์หัวข้อ
-doc.text(`5.ค่าใช้จ่ายอื่นๆ`, 3, y);
+doc.text(`4.ค่าใช้จ่ายอื่นๆ`, 3, y);
 doc.text(`รวมเป็นเงิน ${document.getElementById("R_other_cost_result").textContent} บาท`, pageWidth-2, y, { align: 'right' });
-y += lineHeight;
+y += 0.7;
 
 // พิมพ์รายละเอียด
 R_other_cost_resultrows.forEach((row) => {
@@ -276,14 +269,13 @@ R_other_cost_resultrows.forEach((row) => {
   const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
   if (detail || cost) {
     doc.text(`-${detail} เป็นเงิน ${costFormatted} บาท`, 5, y);
-    y += lineHeight;
+    y += 0.7;
   }
 });
 
-y += smallGap;
+y += 0.3;
 
-groupHeight = 1.7;
-y = checkAddPageGroup(doc, y, groupHeight);
+
 doc.setFont("THSarabunNew", "bold");
 doc.text(`รวมทั้งสิ้น ${document.getElementById("R_GrandTotal").textContent} บาท`, pageWidth-2, y,{align: 'right'});
 y += 0.7;
@@ -291,13 +283,18 @@ doc.text(`จำนวนเงิน (ตัวอักษร)`, 3, y);
 doc.text(`${numberToThaiText(window.Grand)}`, pageWidth-2, y,{align: 'right'});
 y += 1;
 
-groupHeight = 0.7 * 3;
-y = checkAddPageGroup(doc, y, groupHeight);
+
+// --- กลุ่มลายเซ็นผู้ขอรับเงิน ---
+// --- กลุ่มลายเซ็นผู้ขอรับเงิน ---
+const groupSignatureLines = 4; // จำนวนบรรทัดข้อความ (รวมวันที่)
+const groupSignatureHeight = (groupSignatureLines * 0.7) + 1.6; // 0.7 ต่อบรรทัด + 1.6 (บรรทัดเว้น)
+y = checkAddPageForGroup(doc, y, groupSignatureHeight);
+
 doc.setFont("THSarabunNew", "normal");
 doc.text(`ข้าพเจ้าขอรับรองว่ารายการที่กล่าวมาข้างต้นเป็นความจริง และหลักฐานการจ่ายที่ส่งมาด้วย`,5,y);
 y += 0.7;
 doc.text(`จำนวน...........ฉบับ รวมทั้งจำนวนเงินที่ขอเบิกถูกต้องตามกฎหมายทุกประการ`,3,y);
-y+= 1;
+y += 1.6;
 
 const text1 = "ลงชื่อ...............................................ผู้ขอรับเงิน";
 const marginLeft = 10.75;
@@ -306,45 +303,48 @@ const pageWidthForSignature = doc.internal.pageSize.getWidth();
 const rangeWidth = pageWidthForSignature - marginLeft - marginRight;
 const centerX = marginLeft + rangeWidth / 2;
 doc.text(text1, centerX, y, { align: 'center' });
-y+= 0.7;
+y += 0.7;
 const text2_1 = `${document.getElementById("nrq_re").value}`;
 doc.text(text2_1, centerX-0.3, y, { align: 'center' });
-y+= 0.7;
+y += 0.7;
 const text3_1 = `${document.getElementById("pst_re").value}`;
 doc.text(text3_1, centerX-0.3, y, { align: 'center' });
-y+= 0.7;
+y += 0.7;
 const text4_1 = `${document.getElementById("thai-datepicker7").value}`;
 doc.text(text4_1, centerX-0.3, y, { align: 'center' });
-y+= 0.7;
+y += 0.7;
 
+// doc.addPage();
 
-doc.addPage();
+// --- กลุ่มกล่องลายเซ็นสองฝั่ง ---
+const groupBoxHeight = 7.5 + 1.7 + 0.7 + 0.7 + 0.7 + 1 + 1.4; 
+// 7.5 (กล่อง) + 1.7 (ข้อความหลังกล่อง) + 0.7*3 (ลายเซ็น/ชื่อ/ตำแหน่ง) + 1 (วันที่) + 1.4 (ข้อความท้าย)
+y = checkAddPageForGroup(doc, y, groupBoxHeight);
 
 doc.setLineWidth(0.03);
 // วาดกล่องซ้าย
-doc.rect(1.5, 3, 9, 6); // x, y, width, height
-doc.text("ได้ตรวจสอบหลักฐาน การเบิกจ่ายเงิน ที่แนบถูกต้องแล้ว", 1.85, 3.7);
-doc.text("เห็นควรอนุมัติให้เบิกจ่ายได้", 4, 4.3);
+doc.rect(1.5, y, 9, 6); // x, y, width, height
+doc.text("ได้ตรวจสอบหลักฐาน การเบิกจ่ายเงิน ที่แนบถูกต้องแล้ว", 1.85, y + 0.7);
+doc.text("เห็นควรอนุมัติให้เบิกจ่ายได้", 4, y + 1.4);
 
-doc.text("ลงชื่อ.....................................................", 3.2, 6.0);
-doc.text("(.....................................................)", 3.9, 6.7);
-doc.text("ตำแหน่ง....................................................", 2.7, 7.4);
-doc.text("วันที่.....................................................", 3.2, 8.1);
+doc.text("ลงชื่อ.....................................................", 3.2, y + 2.7);
+doc.text("(.....................................................)", 3.9, y + 3.4);
+doc.text("ตำแหน่ง....................................................", 2.7, y + 4.1);
+doc.text("วันที่.....................................................", 3.2, y + 4.8);
 
 // วาดกล่องขวา
-doc.rect(10.5, 3, 9, 6);
-doc.text("อนุมัติให้เบิกจ่ายได้", 13.5, 3.7);
+doc.rect(10.5, y, 9, 6);
+doc.text("อนุมัติให้เบิกจ่ายได้", 13.5, y + 0.7);
 
-doc.text("ลงชื่อ.....................................................", 12.2, 6.0);
-doc.text("(.....................................................)", 12.9, 6.7);
-doc.text("ตำแหน่ง......................................................", 11.7, 7.4);
-doc.text("วันที่......................................................", 12.2, 8.1);
+doc.text("ลงชื่อ.....................................................", 12.2, y + 2.7);
+doc.text("(.....................................................)", 12.9, y + 3.4);
+doc.text("ตำแหน่ง......................................................", 11.7, y + 4.1);
+doc.text("วันที่......................................................", 12.2, y + 4.8);
 
+y += 7.5; // ปรับตำแหน่ง Y ลงหลังจากวาดกล่อง
 
-let y2 = 10;
-
-doc.text(doc.splitTextToSize(`ได้รับเงินค่าใช้จ่ายในการเดินทางไปราชการ จำนวนเงิน ${document.getElementById("R_GrandTotal").textContent} บาท (${numberToThaiText(window.Grand)}) ไว้เป็นการถูกต้องแล้ว`,16.5),2,y2);
-y2 += 1;
+doc.text(doc.splitTextToSize(`ได้รับเงินค่าใช้จ่ายในการเดินทางไปราชการ จำนวนเงิน ${document.getElementById("R_GrandTotal").textContent} บาท (${numberToThaiText(window.Grand)}) ไว้เป็นการถูกต้องแล้ว`,17),2,y);
+y += 1.7;
 
 // ตั้งค่าความกว้างของ block ลายเซ็นแต่ละฝั่ง
 const blockWidth = 7; // หน่วย cm
@@ -359,67 +359,80 @@ function centerText(text, xStart, width, y) {
   doc.text(text, centeredX, y);
 }
 
-centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y2);
-centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y2);
-y2 += 0.7;
+centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y);
+centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y);
+y += 0.7;
 
-const nameText = document.getElementById("nrq_re")?.value || "(......................................................)";
-centerText(nameText, leftBlockX, blockWidth, y2);
-centerText(nameText, rightBlockX, blockWidth, y2);
-y2 += 0.7;
+const nameTextf =`${document.getElementById("nrq_re").value || "(....................................................)"}`;
+const nameText ="(....................................................)";
+centerText(nameTextf, leftBlockX, blockWidth, y);
+centerText(nameText, rightBlockX-0.2, blockWidth, y);
+y += 0.7;
 
-const positionText = document.getElementById("pst_re")?.value || "ตำแหน่ง....................................................";
-centerText(positionText, leftBlockX, blockWidth, y2);
-centerText(positionText, rightBlockX, blockWidth, y2);
-y2 += 0.7;
+const positionTextf =`${document.getElementById("pst_re").value || "ตำแหน่ง...................................................................."}`;
+const positionText ="ตำแหน่ง....................................................................";
+centerText(positionTextf, leftBlockX, blockWidth, y);
+centerText(positionText, rightBlockX-0.25, blockWidth, y);
+y += 0.7;
 
-centerText("วันที่.....................................................", leftBlockX, blockWidth, y2);
-centerText("วันที่......................................................", rightBlockX, blockWidth, y2);
-y2 += 1;
+centerText("วันที่.....................................................................", leftBlockX-0.02, blockWidth, y);
+centerText("วันที่.....................................................................", rightBlockX-0.02, blockWidth, y);
+y += 1;
 
+doc.text(`จากเงินตามสัญญายืมเงินเลขที่ ${document.getElementById("con_number")?.value || "......................."}  วันที่ ${document.getElementById("thai-datepicker6")?.value || "......................."}`,2,y)
 
-doc.text(`จากเงินตามสัญญายืมเงินเลขที่ ${document.getElementById("con_number")?.value || "......................."}  วันที่ ${document.getElementById("thai-datepicker6")?.value || "......................."}`,2,y2)
-
-y2 += 1.4;
+y += 1.4;
 
 const ps = `หมายเหตุ: ${document.getElementById("ps")?.value || ".........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................."}`;
-const linesps = doc.splitTextToSize(ps, 18); // ขนาดความกว้างในหน่วย pt หรือ mm
-doc.text(linesps, 2, y2);
-y2 += linesps.length * 0.7;
+const linesps = doc.splitTextToSize(ps, 18);
+const groupPsHeight = linesps.length * 0.7;
+y = checkAddPageForGroup(doc, y, groupPsHeight);
 
-doc.setFont("THSarabunNew", "bold");
-doc.text(`คำชี้แจง`,2, y2);
-y2 += 0.7;
-doc.setFont("THSarabunNew", "normal");
-const alert1 = `1. กรณีเดินทางเป็นหมู่คณะและจัดทำใบเบิกค่าใช้จ่ายรวมฉบับเดียวกัน หากระยะเวลาในการเริ่มต้น และสิ้นสุดการเดินทางของแต่ละบุคคลแตกต่างกัน ให้แสดงรายละเอียดของวันเวลาที่แตกต่างกัน ของบุคคลนั้นในช่องหมายเหต`;
-const alertLine1 = doc.splitTextToSize(alert1,18);
-doc.text(alertLine1, 2, y2)
-y2 += alertLine1.length * 0.7;
+doc.text(linesps, 2, y);
+y += linesps.length * 0.7;
+
+const alert1 = `1. กรณีเดินทางเป็นหมู่คณะและจัดทำใบเบิกค่าใช้จ่ายรวมฉบับเดียวกัน หากระยะเวลาในการเริ่มต้น และสิ้นสุดการเดินทางของแต่ละบุคคลแตกต่างกัน ให้แสดงรายละเอียดของวันเวลาที่แตกต่างกัน ของบุคคลนั้นในช่องหมายเหตุ`;
+const alertLine1 = doc.splitTextToSize(alert1, 18);
 
 const alert2 = `2. กรณียื่นขอเบิกเงินค่าใช้จ่ายรายบุคคล ให้ผู้ขอรับเงินเป็นผู้ลงลายมือชื่อผู้รับเงิน และวันเดือนปีที่รับเงิน กรณีมีการยืมเงินให้ระบุวันที่ที่ได้รับเงินยืม เลขที่สัญญายืม และวันที่อนุมัติเงินยืมด้วย`;
-const alertLine2 = doc.splitTextToSize(alert2,18);
-doc.text(alertLine2, 2, y2)
-y2 += alertLine2.length * 0.7;
+const alertLine2 = doc.splitTextToSize(alert2, 18);
 
 const alert3 = `3. กรณีที่ยื่นขอเบิกค่าใช้จ่ายรวมเป็นหมู่คณะ ผู้ขอรับเงินมิต้องลงลายมือชื่อในช่องผู้รับเงิน ทั้งนี้ให้ผู้มีสิทธิแต่ละคน ลงลายมือชื่อผู้รับเงินในหลักฐานการจ่ายเงิน ( ส่วนที่ 2 )`;
-const alertLine3 = doc.splitTextToSize(alert3,18);
-doc.text(alertLine3, 2, y2)
-y2 += alertLine3.length * 0.7;
+const alertLine3 = doc.splitTextToSize(alert3, 18);
 
+// คำนวณความสูงกลุ่ม "คำชี้แจง"
+const groupAlertHeight = 0.5 + (alertLine1.length * 0.5) + (alertLine2.length * 0.5) + (alertLine3.length * 0.5);
+
+y = checkAddPageForGroup(doc, y, groupAlertHeight);
+
+doc.setFont("THSarabunNew", "bold");
+doc.text(`คำชี้แจง`, 2, y);
+doc.setFontSize(12);
+y += 0.5;
+doc.setFont("THSarabunNew", "normal");
+doc.text(alertLine1, 2, y);
+y += alertLine1.length * 0.5;
+
+doc.text(alertLine2, 2, y);
+y += alertLine2.length * 0.5;
+
+doc.text(alertLine3, 2, y);
+y += alertLine3.length * 0.5;
+doc.setFontSize(16);
 
 if (call > 1) {
 doc.addPage('a4', 'landscape');
 
 const pageWidth2 = doc.internal.pageSize.getWidth();
 
-doc.text(`ส่วนที1`,pageWidth2-2,2, {align: 'right'});
+doc.text(`ส่วนที2`,pageWidth2-2,2, {align: 'right'});
 doc.text(`แบบ 8708`,pageWidth2-2,2.7,{align: 'right'});
 
 doc.setFont("THSarabunNew", "bold");
 doc.text(`หลักฐานการจ่ายเงินค่าใช้จ่ายในการเดินทางไปราชการ`,pageWidth2/2,2.7,{align: 'center'});
 doc.setFont("THSarabunNew", "normal");
 doc.text(`ชื่อส่วนราชการ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม  จังหวัด มหาสารคาม`,pageWidth2/2,3.4,{align: 'center'});
-doc.text(`ใบประกอบค่าใช้จ่ายในการเดินทางของ ${document.getElementById("nrq_re")?.value || "........................................."} ลงวันที่..........................................`,pageWidth2/2,4.1,{align: 'center'});
+doc.text(`ใบประกอบค่าใช้จ่ายในการเดินทางไปราชการ เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} วันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value}`,pageWidth2/2,4.1,{align: 'center'});
 
 const head = [
   [
@@ -495,7 +508,7 @@ const foot = [
       { content: `${document.getElementById("thisResult3").textContent}`, styles: { halign: 'right' } },
       { content: `${document.getElementById("thisResult4").textContent}`, styles: { halign: 'right' } },
       { content: `${document.getElementById("thisResultGran").textContent}`, styles: { halign: 'right' } },
-      { content: `ตามสัญญาเงินยืมเลขที่ ${document.getElementById("con_number")?.value || "................"} วันที่......................`, colSpan: 3 }
+      { content: `ตามสัญญาเงินยืมเลขที่ ${document.getElementById("con_number")?.value || "................"} วันที่ ${document.getElementById("thai-datepicker6")?.value || "................"}`, colSpan: 3 }
     ]
   ];
 
@@ -679,7 +692,7 @@ doc.addPage();
 let y4 = 2;
 doc.text(`ที่ มหาวิทยาลัยมหาสารคาม`,pageWidth-2,y4,{align: 'right'});
 y4 += 0.7;
-doc.text(`(ส่วนราชการเป็นผผู้เบิกให้)`,pageWidth-2,y4,{align: 'right'});
+doc.text(`(ส่วนราชการเป็นผู้เบิกให้)`,pageWidth-2,y4,{align: 'right'});
 y4 += 0.7;
 doc.setFont("THSarabunNew", "bold");
 doc.text(`ใบสำคัญรับเงิน`,pageWidth/2,y4,{align: 'center'});
@@ -774,8 +787,32 @@ centerText(positionText1, leftBlockX, blockWidth, y3);
 centerText(`ตำแหน่ง.....................................................`, rightBlockX-0.9, blockWidth, y3);
 y3 += 0.7;
 
-
+/**
+ * ตรวจสอบพื้นที่ว่างก่อนพิมพ์กลุ่มข้อความ
+ * @param {jsPDF} doc
+ * @param {number} y - ตำแหน่ง y ปัจจุบัน
+ * @param {number} groupHeight - ความสูงของกลุ่ม (cm)
+ * @param {number} margin - ระยะขอบล่าง (cm)
+ * @returns {number} y ใหม่หลังขึ้นหน้า (ถ้าจำเป็น)
+ */
+function checkAddPageForGroup(doc, y, groupHeight, margin = 2) {
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  if (y + groupHeight + margin > pageHeight) {
+    doc.addPage();
+    currentPage++;
+    // ใส่เลขหน้า (เริ่มจากหน้าสอง) ด้านบน
+    if (currentPage > 1) {
+      doc.setFont("THSarabunNew", "normal");
+      doc.text(`- ${currentPage} -`, pageWidth / 2, 1.2, { align: 'center' }); // y = 1.2 ด้านบน
+    }
+    return 2.5; // y ใหม่หลังขึ้นหน้า
+  }
+  return y;
+}
     doc.save("รายงานการเดินทาง.pdf");
+
+
 
 }
 
@@ -841,13 +878,4 @@ function numberToThaiText(number) {
   return bahtText;
 }
 
-// cut the page if it is overpage
-function checkAddPageGroup(doc, y, groupHeight) {
-  const pageHeight = doc.internal.pageSize.height;
-  const marginBottom = 2; // สมมติขอบล่าง
-  if (y + groupHeight > pageHeight - marginBottom) {
-    doc.addPage();
-    return 2.5; // สมมติระยะห่างบนหน้ากระดาษใหม่ (margin top)
-  }
-  return y;
-}
+

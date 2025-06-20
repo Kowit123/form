@@ -186,42 +186,6 @@ function removeRealAccommodationeRow(button) {
 }
 
 /* เพิ่มลบแถว ค่าลงทะเบียน */
-let Real_RegisterRow= 1;
-
-function R_addRegisterLine() {
-  Real_RegisterRow++;
-  const container = document.getElementById("R_Register_detail");
-  const div = document.createElement("div");
-    div.classList.add("r_register");
-
-  div.innerHTML = `
-<div class="R_register_fee_cost" style="display:grid; grid-template-columns: 50% 20% 25%; margin-bottom: 1%; width:100%; gap:2%; margin-top:1%;">
-  <div>
-    <input class="R_register_fee_detail" name="R_register_fee_detail" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
-  </div> 
-  <div>
-    <input class="R_register_fee_amount comma-number" name="R_register_fee_amount" type="text" placeholder="จำนวนเงิน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
-  </div>  
-  <div style="display: flex;">
-    <input class="R_register_fee_person" name="R_register_fee_person" type="number" placeholder="จำนวนคน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
-    <button class="remove-btn" onclick="R_removeRegisterLine(this)" style="margin: 0; display: flex; align-items: center; margin-left:3%; background-color:red; ">&minus;</button>
-  </div>  
-</div>
-  `;
-  container.appendChild(div);
-  R_updateRegisterTotal();
-}
-function R_removeRegisterLine(button) {
-  const containerAcc = button.closest(".r_register");
-  if (containerAcc) {
-    containerAcc.remove();
-    Real_RegisterRow--;
-  }
-  R_updateRegisterTotal();
-  grandTotal();
-}
-
-/* เพิ่มลบแถว ค่าลงทะเบียน */
 let Real_OtherRow= 1;
 
 function R_addOtherLine() {
@@ -331,35 +295,11 @@ document.getElementById("real_accommodation_cost_1").addEventListener('input', u
 document.getElementById("real_accommodation_person_1").addEventListener('input', updateRealAccommodationTotal);
 document.getElementById("real_accommodation_day_1").addEventListener('input', updateRealAccommodationTotal);
 
-
-
-function  R_updateRegisterTotal() {
-  const rows = document.querySelectorAll('.r_register');
-  let total = 0;
-
-  rows.forEach(row => {
-    const feeInput = row.querySelector('.R_register_fee_amount');
-    const personInput = row.querySelector('.R_register_fee_person');
-
-    const fee = parseNumber(feeInput?.value);
-    const person = parseNumber(personInput?.value);
-
-    if (!isNaN(fee) && !isNaN(person)) {
-      total += fee * person;
-    }
-  });
-
-  document.getElementById("R_register_cost_result").textContent = total.toLocaleString();
-  window.Registration_fee = total;
-  grandTotal();
-  return total;
-}
-
 function updateRealOthercostTotal() {
   const inputs = document.querySelectorAll('.R_other_costs');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseNumber(input.value); // ใช้ parseNumber เพื่อรองรับ comma และทศนิยม
     if (!isNaN(value)) {
       total += value;
     }
@@ -369,7 +309,6 @@ function updateRealOthercostTotal() {
   grandTotal();
   return total;
 }
-
 
 function grandTotal() {
   function parseNumber(id) {
@@ -383,10 +322,9 @@ function grandTotal() {
   const G_2 = parseNumber("Real_GrandTotal_Accommodation_Cost");
   const G_3 = parseNumber("R_distance-cost_result");
   const G_4 = parseNumber("R_Transportation_expenses_result");
-  const G_5 = parseNumber("R_register_cost_result");
   const G_6 = parseNumber("R_other_cost_result");
 
-  const total = G_1 + G_2 + G_3 + G_4 + G_5 + G_6;
+  const total = G_1 + G_2 + G_3 + G_4 + G_6;
   document.getElementById("R_GrandTotal").textContent = total.toLocaleString();
   window.Grand = total;
   return total;

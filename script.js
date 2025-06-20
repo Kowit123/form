@@ -86,16 +86,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const formatted = `${day} ${month} ${year}`;
     instance.thaidate.value = formatted;
   }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // ... flatpickr date code ...
 
   // flatpickr time (24 ชม.)
-  const t24 = ["timepicker1", "timepicker2", "timepicker3", "timepicker4"];
-  t24.forEach(id => {
-    flatpickr(`#${id}`, {
-      enableTime: true,
-      noCalendar: true,
-      dateFormat: "H:i",
-      time_24hr: true
-    });
+  ["timepicker3", "timepicker4"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      flatpickr(el, {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true
+      });
+    }
   });
 });
 
@@ -365,7 +371,7 @@ function updateothercostTotal() {
   const inputs = document.querySelectorAll('.otherCost');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseNumber(input.value); // ใช้ parseNumber เพื่อรองรับ comma และทศนิยม
     if (!isNaN(value)) {
       total += value;
     }
@@ -374,7 +380,6 @@ function updateothercostTotal() {
   window.other_cost = total;
   return total;
 }
-
 //รวมเงินทั้งหมด
 function updateGrandTotal() {
   const other = updateothercostTotal();

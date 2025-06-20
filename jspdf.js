@@ -483,7 +483,7 @@ function checkAddPageGroup(doc, lineY, groupHeight) {
     doc.addPage();
     return 2.5; // สมมติระยะห่างบนหน้ากระดาษใหม่ (margin top)
   }
-  return y;
+  return lineY;
 }
 
 
