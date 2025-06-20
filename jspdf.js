@@ -282,9 +282,11 @@ rows2.forEach((row,index) => {
   const detailInput = row.querySelector(".Other-cost_detail");
   const costInput = row.querySelector(".otherCost");
   const detail = detailInput?.value.trim() || "";
-  const cost = parseFloat(costInput?.value.trim() || 0).toLocaleString();
+  // ปรับตรงนี้ให้รองรับ , และค่าว่าง
+  const costRaw = costInput?.value.trim().replace(/,/g, '') || "0";
+  const cost = Number(costRaw).toLocaleString();
   console.log(`Row ${index + 1}:`, detail, cost);
-  if (detail || cost ) {
+  if (detail || costRaw !== "0") {
     doc.text(`-${detail} เป็นเงิน ${cost} บาท`,5, lineY);
     lineY += 0.7;
   }
