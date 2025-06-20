@@ -437,31 +437,31 @@ const head = [
 
 function generateBodyFromInputs() {
   const body = [];
-
+  
   for (let i = 1; i <= call; i++) {
     const name = document.getElementById(`name_re_${i}`)?.value || "";
     const position = document.getElementById(`position_re_${i}`)?.value || "";
-
+  
     const allowance = document.getElementById(`allowance_p2_${i}`)?.value
       ? Number(document.getElementById(`allowance_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
       : "";
-
+  
     const accommodation = document.getElementById(`accommodation_p2_${i}`)?.value
       ? Number(document.getElementById(`accommodation_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
       : "";
-
+  
     const vehicles = document.getElementById(`vehicles_p2_${i}`)?.value
       ? Number(document.getElementById(`vehicles_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
       : "";
-
+  
     const other = document.getElementById(`other_p2_${i}`)?.value
       ? Number(document.getElementById(`other_p2_${i}`).value.replace(/,/g, '')).toLocaleString()
       : "";
-
+  
     const total = document.getElementById(`total_p_${i}`)?.value
       ? Number(document.getElementById(`total_p_${i}`).value.replace(/,/g, '')).toLocaleString()
       : "";
-
+  
     const row = [
       i,              // ลำดับ
       name,
@@ -475,10 +475,9 @@ function generateBodyFromInputs() {
       "",             // วันที่รับเงิน
       ""              // หมายเหตุ
     ];
-
+  
     body.push(row);
   }
-
   return body;
 }
 

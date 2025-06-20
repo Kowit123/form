@@ -12,18 +12,18 @@ function addrow() {
     <div style="padding: 1%; padding-top: 0%;  width: 15%;">
     <input id="position_re_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="allowance_p2" id="allowance_p2_${call}" type="number"></div>
+    <input class="allowance_p2 comma-number" id="allowance_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="accommodation_p2" id="accommodation_p2_${call}" type="number"></div>
+    <input class="accommodation_p2 comma-number" id="accommodation_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="vehicles_p2" id="vehicles_p2_${call}" type="number"></div>
+    <input class="vehicles_p2 comma-number" id="vehicles_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="Registration_p2" id="Registration_p2_${call}" type="number"></div>
+    <input class="Registration_p2 comma-number" id="Registration_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="other_p2" id="other_p2_${call}" type="number"></div>
+    <input class="other_p2 comma-number" id="other_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="total_p2" id="total_p2_${call}" type="text" readonly></div>
-    <input class="total_p_1" id="total_p_${call}" type="text" readonly style="display: none;">
+    <input class="total_p2 comma-number" id="total_p2_${call}" type="text" readonly></div>
+    <input class="total_p_1 comma-number" id="total_p_${call}" type="text" readonly style="display: none;">
   `;
   container.appendChild(div);
     div.querySelectorAll("input").forEach(input => {
@@ -67,16 +67,17 @@ function updatecall() {
     // คำนวณรวมเฉพาะแถวนี้
     const rowTotal = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2 + day_Registration_p2;
     const cs = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2;
-    // แสดงผลในช่องรวมของแถวนี้
-    total_p2[i].value = rowTotal.toFixed(2);
-    total_p_1[i].value = cs.toFixed(2);
 
-    thisResultGran();
-    thisResult1();
-    thisResult2();
-    thisResult3();
-    thisResult4();
+    // แสดงผลในช่องรวมของแถวนี้ (พร้อม comma)
+    total_p2[i].value = rowTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    total_p_1[i].value = cs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+
+  thisResultGran();
+  thisResult1();
+  thisResult2();
+  thisResult3();
+  thisResult4();
 }
 document.getElementById("allowance_p2_1").addEventListener('input',updatecall);
 document.getElementById("accommodation_p2_1").addEventListener('input',updatecall);
@@ -88,7 +89,7 @@ function thisResultGran() {
   const inputs = document.querySelectorAll('.total_p_1');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseFloat(input.value.replace(/,/g, ''));
     if (!isNaN(value)) {
       total += value;
     }
@@ -101,7 +102,7 @@ function thisResult1() {
   const inputs = document.querySelectorAll('.allowance_p2');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseFloat(input.value.replace(/,/g, ''));
     if (!isNaN(value)) {
       total += value;
     }
@@ -113,7 +114,7 @@ function thisResult2() {
   const inputs = document.querySelectorAll('.accommodation_p2');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseFloat(input.value.replace(/,/g, ''));
     if (!isNaN(value)) {
       total += value;
     }
@@ -125,7 +126,7 @@ function thisResult3() {
   const inputs = document.querySelectorAll('.vehicles_p2');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseFloat(input.value.replace(/,/g, ''));
     if (!isNaN(value)) {
       total += value;
     }
@@ -137,7 +138,7 @@ function thisResult4() {
   const inputs = document.querySelectorAll('.other_p2');
   let total = 0;
   inputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseFloat(input.value.replace(/,/g, ''));
     if (!isNaN(value)) {
       total += value;
     }
@@ -145,7 +146,6 @@ function thisResult4() {
   document.getElementById("thisResult4").textContent = total.toLocaleString();
   return total;
 }
-
 /* เพิ่้ม ลด แถวค่าที่พัก */
 let real_accommodationRow = 1;
 
@@ -157,9 +157,9 @@ function addRealAccommodationRow() {
 
   div.innerHTML = `
     <div class="left_part">
-        <input class="real_accommodation_cost" id="real_accommodation_cost_${real_accommodationRow}" type="number" placeholder="ค่าที่พัก" oninput="grandTotal()">
-        <input class="real_accommodation_person" id="real_accommodation_person_${real_accommodationRow}" type="number" placeholder="จำนวนห้อง" oninput="grandTotal()">
-        <input class="real_accommodation_day" id="real_accommodation_day_${real_accommodationRow}" type="number" placeholder="จำนวนวัน" oninput="grandTotal()">
+        <input class="real_accommodation_cost comma-number" id="real_accommodation_cost_${real_accommodationRow}" type="text" placeholder="ค่าที่พัก" oninput="grandTotal()">
+        <input class="real_accommodation_person " id="real_accommodation_person_${real_accommodationRow}" type="number" placeholder="จำนวนห้อง" oninput="grandTotal()">
+        <input class="real_accommodation_day " id="real_accommodation_day_${real_accommodationRow}" type="number" placeholder="จำนวนวัน" oninput="grandTotal()">
         <button class="add-btn" onclick="removeRealAccommodationeRow(this)" style="text-align: center; margin: 0; background-color: red;">&minus;</button>
     </div> 
   `;
@@ -200,7 +200,7 @@ function R_addRegisterLine() {
     <input class="R_register_fee_detail" name="R_register_fee_detail" type="text" placeholder="รายละเอียดค่าลงทะเบียน" style="margin: 0; display: flex; align-items: center; width:100%;">
   </div> 
   <div>
-    <input class="R_register_fee_amount" name="R_register_fee_amount" type="number" placeholder="จำนวนเงิน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
+    <input class="R_register_fee_amount comma-number" name="R_register_fee_amount" type="text" placeholder="จำนวนเงิน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
   </div>  
   <div style="display: flex;">
     <input class="R_register_fee_person" name="R_register_fee_person" type="number" placeholder="จำนวนคน" oninput="R_updateRegisterTotal()" style="margin: 0; display: flex; align-items: center;width:100%;"> 
@@ -236,7 +236,7 @@ function R_addOtherLine() {
         <input class="R_other_detail" name="R_other_detail_${Real_OtherRow}" type="text" placeholder="รายละเอียดค่าใช้จ่ายอื่น" style = "margin: 0 ; width:96%;">
       </div>  
       <div style = "margin-right:1%; width:20%">
-        <input class="R_other_costs" name="R_other_costs" type="number" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
+        <input class="R_other_costs comma-number" name="R_other_costs" type="text" placeholder="จำนวนเงิน" oninput="updateRealOthercostTotal()" style = "margin: 0 ; width:94%;">
       </div>  
         <button class="remove-btn" onclick="R_removeOtherLine(this)" style="text-align: center; margin: 0 ; background-color:red;">&minus;</button>
       
@@ -522,8 +522,9 @@ function addEntry(id) {
       <input type="text" placeholder="รายละเอียด เช่น เดินทางไปประชุมที่ อ.เมือง อุดรธานี..." style="margin:0; margin-right:1%;">
 
       <input 
-        type="number" 
+        type="text" 
         id="distance-${uniqueId}"
+        class="comma-number"
         placeholder="ระยะทาง (กม.)" 
         style="margin:0; margin-right:1.5%;" 
         oninput="updateAmount(${uniqueId})">
@@ -615,7 +616,7 @@ totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
     });
 
     totalDisplay.textContent = total.toLocaleString();
-    updateGrandTotal();
+    grandTotal();
 }
 
 // ➤ ติดตามทุก input
@@ -644,4 +645,5 @@ document.addEventListener('input', function(e) {
 
 // เรียกคำนวณครั้งแรกเมื่อโหลดหน้า
 calculateTotal();
+grandTotal();
 });
