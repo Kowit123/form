@@ -253,22 +253,24 @@ doc.text(fLines1,3, lineY)
 doc.text(`รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
-  const rows = document.querySelectorAll(".Registration_fee_cost");
+const rows = document.querySelectorAll(".Registration_fee_cost");
 
-  rows.forEach(row => {
-    const detail = row.querySelector('.Registration_fee_detail')?.value || "-";
-    const fee = parseNumber(row.querySelector('.Registration-fee')?.value || 0);
-    const person = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
-    const total = fee * person;
+rows.forEach(row => {
+  const detail = row.querySelector('.Registration_fee_detail')?.value || "";
+  // รองรับ comma และแสดงผล fee แบบมี comma
+  const feeRaw = row.querySelector('.Registration-fee')?.value || "0";
+  const fee = Number(feeRaw.replace(/,/g, ''));
+  const feeFormatted = fee.toLocaleString();
+  const person = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
+  const total = fee * person;
 
-    grandTotal += total;
+  grandTotal += total;
 
-    const line = `-${detail} จำนวน ${fee} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
-    const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
-    doc.text(lines, 5, lineY);
-    lineY += lines.length * 0.7;
-  });
-
+  const line = `-${detail} จำนวน ${feeFormatted} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
+  const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
+  doc.text(lines, 5, lineY);
+  lineY += lines.length * 0.7;
+});
 lineY += 0.3;
 
 
@@ -297,7 +299,16 @@ lineY += 0.3;
 doc.text(`รวมค่าใช้จ่ายเป็นเงินประมาณ ${all_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 doc.text(`(${numberToThaiText(all_cost)})`,pageWidth-2, lineY, {align: 'right'});
-lineY += 1;
+lineY += 0.7;
+const nnoChecked = document.getElementById('nno')?.checked;
+if (nnoChecked) {
+  doc.setFont("THSarabunNew", "bold");
+  doc.text(`( / )โดยไม่ขออเบิกจ่ายจากคณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม`, 3, lineY);
+  lineY += 0.7;
+}
+doc.setFont("THSarabunNew", "normal");
+doc.text(`จึงเรียนมาเพื่อโปรดพิจารณา`, 3, lineY);
+  lineY += 0.7;
 
 groupHeight = 3.1;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
@@ -318,10 +329,12 @@ lineY+= 1;
 
 groupHeight = 7.3;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
-const last_paragraph = `โดยเบิกจ่ายจากงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี................หมวดเงินใช้สอยรหัส.................................เป็นเงิน ${all_cost.toLocaleString()} บาท (${numberToThaiText(all_cost)})`
+const last_paragraph = `ความเห็นงานการเงินโดยเบิกจ่ายจาก (  )เงินงบประมาณแผ่นดิน (  )งบประมาณเงินรายได้ (  )เงินรับฝาก`;
 const last = doc.splitTextToSize(last_paragraph, 16);
 doc.text(last,3, lineY);
-lineY += 1.4;
+lineY += 0.7;
+doc.text(`หมวดรายจ่าย..............................รหัสงบประมาณ..............................จำนวนเงิน ${document.getElementById("GrandTotal").textContent} บาท`,3, lineY);
+lineY += 0.7;
 doc.text(`ความคิดเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ......................................................................`,3, lineY);
 lineY += 0.7;
 doc.text(`ความเห็นจาก หัวหน้าสำนักงานเลขานุการฯ........................................................................................................`,3, lineY);
@@ -330,7 +343,7 @@ doc.text(`ความเห็นจาก หัวหน้าสำนัก
 lineY += 0.7;
 doc.text(`ความเห็นจาก รองคณบดีคณะวิศวกรรมศาสตร์ ฝ่ายบริหารฯ..............................................................................`,3, lineY);
 lineY += 0.7;
-doc.text(`ความเห็นจาก คณบดีคณะวิศวกรรมศาสตร์  ( )อนุมัติ      ( )ไม่อนุมัติ`,3, lineY);
+doc.text(`ความเห็นจาก คณบดีคณะวิศวกรรมศาสตร์  (  )อนุมัติ     (  )ไม่อนุมัติ`,3, lineY);
 lineY += 1;
 
 doc.text(`ลงชื่อ..............................................ผู้อนุมัติ`,pageWidth-2, lineY, {align: 'right'});
