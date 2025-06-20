@@ -155,7 +155,7 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    doc.text(`-ค่าที่พักราคา ${accommodation_cost1} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
+    doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }
 });
@@ -266,7 +266,7 @@ rows.forEach(row => {
 
   grandTotal += total;
 
-  const line = `-${detail} จำนวน ${feeFormatted} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
+  const line = `-${detail}  ${feeFormatted} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
   const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
   doc.text(lines, 5, lineY);
   lineY += lines.length * 0.7;
@@ -300,6 +300,8 @@ doc.text(`รวมค่าใช้จ่ายเป็นเงินปร�
 lineY += 0.7;
 doc.text(`(${numberToThaiText(all_cost)})`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
+groupHeight = 2.8;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const nnoChecked = document.getElementById('nno')?.checked;
 if (nnoChecked) {
   doc.setFont("THSarabunNew", "bold");
