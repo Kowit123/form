@@ -625,24 +625,6 @@ allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
 
-
-
-// ฟังก์ชันจัดรูปแบบตัวเลขให้มี comma
-function formatNumberWithCommas(value) {
-    value = value.replace(/,/g, '');
-    if (value === '' || isNaN(value)) return '';
-    return Number(value).toLocaleString('en-US');
-}
-
-// ดัก event input เฉพาะ input ที่มี class comma-number
-document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('comma-number')) {
-        // กรองให้เหลือแต่ตัวเลข
-        let raw = e.target.value.replace(/[^0-9]/g, '');
-        e.target.value = formatNumberWithCommas(raw);
-    }
-});
-
 // เรียกคำนวณครั้งแรกเมื่อโหลดหน้า
 calculateTotal();
 grandTotal();

@@ -1,3 +1,44 @@
+// ฟังก์ชันจัดรูปแบบตัวเลขให้มี comma และทศนิยม
+function formatNumberWithCommas(value) {
+    value = value.replace(/,/g, '');
+    if (value === '') return '';
+    // ถ้าเป็นจุดเดียวหรือจุดนำหน้า
+    if (value === '.' || value === '-.' || value === '-') return value;
+    // ถ้ามีจุดทศนิยม
+    if (value.indexOf('.') !== -1) {
+        const parts = value.split('.');
+        // ส่วนหน้าคือจำนวนเต็ม, ส่วนหลังคือทศนิยม
+        let intPart = parts[0];
+        let decPart = parts[1];
+        // ถ้าไม่มีตัวเลขหน้าจุด ให้ถือเป็น 0
+        intPart = intPart === '' ? '0' : intPart;
+        // ใส่ comma เฉพาะส่วนจำนวนเต็ม
+        intPart = Number(intPart).toLocaleString('en-US');
+        return decPart !== undefined ? intPart + '.' + decPart : intPart + '.';
+    }
+    // กรณีไม่มีจุด
+    return Number(value).toLocaleString('en-US');
+}
+
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('comma-number')) {
+        // กรองให้เหลือแต่ตัวเลขและจุดทศนิยม
+        let raw = e.target.value.replace(/[^0-9.]/g, '');
+        // ให้เหลือจุดทศนิยมแค่จุดเดียว
+        const parts = raw.split('.');
+        if (parts.length > 2) {
+            raw = parts[0] + '.' + parts.slice(1).join('');
+        }
+        // อย่า format ถ้าจบด้วยจุด (เช่น 123.)
+        if (raw.endsWith('.')) {
+            e.target.value = formatNumberWithCommas(raw);
+        } else {
+            e.target.value = formatNumberWithCommas(raw);
+        }
+    }
+});
+
+
 
 let allowanceTotal = 0;
 document.addEventListener("DOMContentLoaded", function () {
@@ -500,22 +541,5 @@ allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
 
-
-
-// ฟังก์ชันจัดรูปแบบตัวเลขให้มี comma
-function formatNumberWithCommas(value) {
-    value = value.replace(/,/g, '');
-    if (value === '' || isNaN(value)) return '';
-    return Number(value).toLocaleString('en-US');
-}
-
-// ดัก event input เฉพาะ input ที่มี class comma-number
-document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('comma-number')) {
-        // กรองให้เหลือแต่ตัวเลข
-        let raw = e.target.value.replace(/[^0-9]/g, '');
-        e.target.value = formatNumberWithCommas(raw);
-    }
-});
 
 });

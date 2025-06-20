@@ -18,7 +18,12 @@ calculateDuration();
 
 const pageWidth = doc.internal.pageSize.getWidth();
 doc.text(`สัญญาเงินยืมเลขที่ ${document.getElementById("con_number").value}    วันที่ ${document.getElementById("thai-datepicker6").value}`,3,2,{align: 'left'});
-doc.text(`ชื่อผู้ยืม ${document.getElementById("Borrower").value}    จำนวนเงิน ${parseFloat(document.getElementById("amount_borrow")?.value || 0).toLocaleString()} บาท`,3,2.7,{align: 'left'});
+doc.text(
+  `ชื่อผู้ยืม ${document.getElementById("Borrower").value}    จำนวนเงิน ${parseFloat(document.getElementById("amount_borrow")?.value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} บาท`,
+  3,
+  2.7,
+  { align: 'left' }
+);
 doc.text(`ส่วนที่1`,pageWidth-2,2, {align: 'right'});
 doc.text(`แบบ 8708`,pageWidth-2,2.7,{align: 'right'});
 
