@@ -897,7 +897,7 @@ doc.text(`เรียน  ${document.getElementById("dear_re").value}`,3,yy);
 yy+=1;
 
 // ...existing // ...existing code...
-const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ${document.getElementById("topic_re").value} เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน...........................................ตัวอักษร(..........................................................................)`;
+const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน...........................................ตัวอักษร(..........................................................................)`;
 
 // ตัดบรรทัดแรกที่ 16cm
 const nbFirstLineArr = doc.splitTextToSize(nb, 16);
