@@ -289,13 +289,16 @@ rows2.forEach((row,index) => {
   const cost = Number(costRaw).toLocaleString();
   console.log(`Row ${index + 1}:`, detail, cost);
   if (detail || costRaw !== "0") {
+    // ตรวจสอบก่อนเพิ่มแถวใหม่
+    lineY = checkAddPageGroup(doc, lineY, 0.7);
     doc.text(`-${detail} เป็นเงิน ${cost} บาท`,5, lineY);
     lineY += 0.7;
   }
 });
 lineY += 0.3;
 
-
+groupHeight = 0.7;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 doc.text(`รวมค่าใช้จ่ายเป็นเงินประมาณ ${all_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 doc.text(`(${numberToThaiText(all_cost)})`,pageWidth-2, lineY, {align: 'right'});
@@ -478,7 +481,7 @@ function numberToThaiText(number) {
 
 function checkAddPageGroup(doc, lineY, groupHeight) {
   const pageHeight = doc.internal.pageSize.height;
-  const marginBottom = 3; // สมมติขอบล่าง
+  const marginBottom = 1; // สมมติขอบล่าง
   if (lineY + groupHeight > pageHeight - marginBottom) {
     doc.addPage();
     return 2.5; // สมมติระยะห่างบนหน้ากระดาษใหม่ (margin top)

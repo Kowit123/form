@@ -421,7 +421,7 @@ const endDate = convertThaiFullDateToISO(endDateRaw);
 function updateAmount(uniqueId) {
   const distanceInput = document.getElementById(`distance-${uniqueId}`);
   const amountInput = document.getElementById(`amount-${uniqueId}`);
-  const distance = parseFloat(distanceInput.value);
+  const distance = parseNumber(distanceInput.value); // ใช้ parseNumber เพื่อรองรับ comma
 
   if (!isNaN(distance)) {
     amountInput.value = (distance * 4).toFixed(2);
@@ -432,8 +432,7 @@ function updateAmount(uniqueId) {
   calculateTotalAmount();
 }
 
-
-  function removeDateSection(id) {
+function removeDateSection(id) {
   const section = document.getElementById(`date-section-${id}`);
   if (section) section.remove();
 }
@@ -442,12 +441,12 @@ function calculateTotalAmount() {
   let total = 0;
   const amountInputs = document.querySelectorAll('input[placeholder="จำนวนเงิน (บาท)"]');
   amountInputs.forEach(input => {
-    const value = parseFloat(input.value);
+    const value = parseNumber(input.value); // ใช้ parseNumber เพื่อรองรับ comma
     if (!isNaN(value)) {
       total += value;
     }
   });
-  document.getElementById("k").textContent = total.toLocaleString();
+  document.getElementById("k").textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function addEntry(id) {
@@ -468,7 +467,8 @@ function addEntry(id) {
         oninput="updateAmount(${uniqueId})">
 
       <input 
-        type="number" 
+      class="comma-number"
+        type="text" 
         id="amount-${uniqueId}"
         placeholder="จำนวนเงิน (บาท)" 
         style="margin:0; margin-right:1.5%;" 
