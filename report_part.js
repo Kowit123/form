@@ -637,18 +637,20 @@ doc.setFont("THSarabunNew", "normal");
   const allData = [];
 
   allSections.forEach((section) => {
-    const date = section.querySelector('.date-header input').value || 'ไม่ระบุ';
+    const date = section.querySelector('.date-header input')?.value || 'ไม่ระบุ';
     const entries = section.querySelectorAll('.entries > div');
-
+  
     entries.forEach((entry) => {
       const inputs = entry.querySelectorAll('input');
-      const detail = inputs[0].value || '-';
-      const distance = inputs[1].value ? Number(inputs[1].value.replace(/,/g, '')).toLocaleString() : '-';
-      const amount = inputs[2].value
+      const detail = inputs[0]?.value || '-';
+      const distance = inputs[1]?.value
+        ? Number(inputs[1].value.replace(/,/g, '')).toLocaleString() + ' กม.'
+        : '-';
+      const amount = inputs[2]?.value
         ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         : '-';
-
-      allData.push([date, detail, (distance + ` กม.`), amount]);
+  
+      allData.push([date, detail, distance, amount]);
     });
   });
 
