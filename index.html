@@ -389,7 +389,7 @@
                     <input id="dear_re" type="text"> 
                 </div>
 
-                <p style="display: block; margin: 0;">ผู้ขออนุมัติ</p>
+                <p style="display: block; margin: 0;">ผู้ขออนุมัติ:</p>
                 <div class="wrq_re" style="display: flex; justify-content: space-between;">
                     <div class="wrq_re1" style="width: 30%;">
                         <label for="rebd1">ชื่อ-นามสกุล</label>
@@ -403,6 +403,12 @@
                         <label for="">สังกัด</label>
                         <input type="text" id="pt_re">
                     </div>
+                </div>
+
+                <p style="display: inline; margin: 0;">ผู้ร่วมเดินทาง</p><button class="remove-btn" style="background-color: blue; margin: 0; margin-left: 1%;" onclick="addrow()">&plus;</button>                    <button class="remove-btn" style="background-color: red; margin: 0;" onclick="removerow()">
+                    &minus;
+                    </button>
+                <div class="gw_re" id="gw_re" style="margin-bottom: 1rem; margin-top: 1%;">
                 </div>
 
                 <div class="w_re">
@@ -484,7 +490,7 @@
 
                 <p id="daysresult" style="display: none;"></p>
                 <hr class="solid">
-                <h2 style="display: block; text-align: center;">ผู้ร่วมเดินทาง</h2>
+                <h2 style="display: block; text-align: center;">รายละเอียดค่าใช้จ่ายรายบุคคล</h2>
                 <div class="re_cost" id="re_cost" style="display: block;">
                     <div class="t_re_cost">
                         <div style="padding: 1%; padding-top: 3%;"><p>ชื่อ-นามสกุล</p>
@@ -511,15 +517,15 @@
                     <p id="thisResult4" style="display: none;">0</p>
                     <p id="thisResultGran" style="display: none;">0</p>
                 </div>
-                <div style="text-align: center;">
-                    <button class="remove-btn" style="background-color: red; margin: 0;" onclick="removerow()">
-                    &minus;
-                    </button>
-                    <button class="remove-btn" style="background-color: blue; margin: 0;" onclick="addrow()">
-                    &plus;
-                    </button>
-                    </div>
                 </div>
+                    <div class="a12" style="display: flex; width: 100%; ">
+                        <input class="summary-label" id="summary-label" type="text" placeholder="รวมเป็นเงิน" value="รวมเป็นเงิน" readonly style="width: 39%; margin-left: 1%; text-align: center;">
+                        <input class="summary-allowance" id="summary-allowance" type="text" min="0" placeholder="ค่าเบี้ยเลี้ยง" style="width: 9.5%; text-align: center;" readonly>
+                        <input class="summary-accommodation" id="summary-accommodation" type="text" min="0" placeholder="ค่าที่พัก" style="width: 9.5%; text-align: center;" readonly>
+                        <input class="summary-vehicle" id="summary-vehicle" type="text" min="0" placeholder="ค่าพาหนะ" style="width: 9.5%; text-align: center;" readonly>
+                        <input class="summary-other" id="summary-other" type="text" min="0" placeholder="ค่าใช้จ่ายอื่นๆ" style="width: 9.5%; text-align: center;" readonly>
+                        <input class="summary-total" id="summary-total" type="text" readonly placeholder="รวมทั้งหมด" style="width: 9.5%; text-align: center;" readonly>            
+                    </div>
                 <hr class="solid">
                 <!--ส่วนของรายงานค่าใช้จ่ายที่ใช้จริงในการเดินทาง-->
 

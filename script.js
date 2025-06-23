@@ -43,7 +43,7 @@ document.addEventListener('input', function(e) {
 let allowanceTotal = 0;
 document.addEventListener("DOMContentLoaded", function () {
   // flatpickr date (แปลง พ.ศ.)
-  const ids = ["thai-datepicker1", "thai-datepicker2", "thai-datepicker3", "thai-datepicker4", "thai-datepicker5", "thai-datepicker6", "thai-datepicker7", "thai-datepicker8", "thai-datepicker9", "thai-datepicker10", "thai-datepicker11"];
+  const ids = ["thai-datepicker1", "thai-datepicker2", "thai-datepicker3", "thai-datepicker4", "thai-datepicker5", "thai-datepicker6", "thai-datepicker7", "thai-datepicker8", "thai-datepicker9", "thai-datepicker10"];
 
   const thaiMonths = [
     "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
       onReady: (_, __, instance) => {
         convertToBE(instance);
         setTimeout(() => {
-          instance.thaidate.setAttribute("placeholder", originalPlaceholder);
+          thaidate.setAttribute("placeholder", originalPlaceholder);
         }, 0);
       },
       formatDate: (date, format, locale) => {

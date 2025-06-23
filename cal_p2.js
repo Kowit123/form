@@ -5,6 +5,22 @@ function addrow() {
   const container = document.getElementById("re_cost");
   const div = document.createElement("div");
   div.className = "t_re_cost";
+  const container1 = document.getElementById("gw_re");
+  const div1 = document.createElement("div");
+  div1.className = "gwd_re";
+  // เปลี่ยน id ให้มีเลขต่อท้ายเพื่อแยกแต่ละแถว
+  div1.innerHTML = `
+    <div class="wrq_re1" style="width: 30%;">
+        <input id="n_re_${call}" type="text" placeholder="ชื่อ-นามสกุล">
+    </div>
+    <div class="wrq_re2" style="width: 30%;">
+        <input type="text" id="p_re_${call}" placeholder="ตำแหน่ง">
+    </div>
+    <div class="wrq_re3" style="width: 30%;">
+        <input type="text" id="t_re_${call}"  placeholder="สังกัด">
+    </div>
+  `;
+  container1.appendChild(div1);
 
   div.innerHTML = `
     <div style="padding: 1%; padding-top: 0%;">
@@ -18,23 +34,51 @@ function addrow() {
     <div style="width: 10%; padding-top: 0%;">
     <input class="vehicles_p2 comma-number" id="vehicles_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
-    <input class="Registration_p2 comma-number" id="Registration_p2_${call}" type="text"></div>
-    <div style="width: 10%; padding-top: 0%;">
     <input class="other_p2 comma-number" id="other_p2_${call}" type="text"></div>
     <div style="width: 10%; padding-top: 0%;">
     <input class="total_p2 comma-number" id="total_p2_${call}" type="text" readonly></div>
     <input class="total_p_1 comma-number" id="total_p_${call}" type="text" readonly style="display: none;">
   `;
   container.appendChild(div);
-    div.querySelectorAll("input").forEach(input => {
+
+  // --- เพิ่มการ sync ข้อมูลข้าม input ---
+  // ชื่อ-นามสกุล
+  const input1 = document.getElementById(`name_re_${call}`);
+  const input2 = document.getElementById(`n_re_${call}`);
+  if (input1 && input2) {
+    input1.addEventListener('input', () => {
+      input2.value = input1.value;
+    });
+    input2.addEventListener('input', () => {
+      input1.value = input2.value;
+    });
+  }
+  // ตำแหน่ง
+  const pos1 = document.getElementById(`position_re_${call}`);
+  const pos2 = document.getElementById(`p_re_${call}`);
+  if (pos1 && pos2) {
+    pos1.addEventListener('input', () => {
+      pos2.value = pos1.value;
+    });
+    pos2.addEventListener('input', () => {
+      pos1.value = pos2.value;
+    });
+  }
+  // สังกัด
+  const dep1 = document.getElementById(`t_re_${call}`);
+  const dep2 = document.getElementById(`t_re_${call}`); // ถ้ามีอีก input ให้แก้ id ตรงนี้
+  // ถ้าต้องการ sync สังกัดข้าม div เพิ่ม logic ตรงนี้
+
+  div.querySelectorAll("input").forEach(input => {
     input.addEventListener("input", updatecall);
   });
   updatecall();
-
 }
 
 function removerow() {
     if (call > 1) { // ไม่ให้ลบแถวแรก
+      const container1 = document.getElementById("gw_re");
+      container1.removeChild(container1.lastElementChild);      
       const container = document.getElementById("re_cost");
       container.removeChild(container.lastElementChild);
       call--;
@@ -52,7 +96,6 @@ function updatecall() {
   const allowance_p2 = document.querySelectorAll(".allowance_p2");
   const accommodation_p2 = document.querySelectorAll(".accommodation_p2");
   const vehicles_p2 = document.querySelectorAll(".vehicles_p2");
-  const Registration_p2 = document.querySelectorAll(".Registration_p2");
   const other_p2 = document.querySelectorAll(".other_p2");
   const total_p2 = document.querySelectorAll(".total_p2");
   const total_p_1 = document.querySelectorAll(".total_p_1");
@@ -61,11 +104,10 @@ function updatecall() {
     const price_allowance_p2 = parseNumber(allowance_p2[i].value) || 0;
     const count_accommodation_p2 = parseNumber(accommodation_p2[i].value) || 0;
     const day_vehicles_p2 = parseNumber(vehicles_p2[i].value) || 0;
-    const day_Registration_p2 = parseNumber(Registration_p2[i].value) || 0;
     const price_other_p2 = parseNumber(other_p2[i].value) || 0;
 
     // คำนวณรวมเฉพาะแถวนี้
-    const rowTotal = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2 + day_Registration_p2;
+    const rowTotal = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2;
     const cs = price_allowance_p2 + count_accommodation_p2 + day_vehicles_p2 + price_other_p2;
 
     // แสดงผลในช่องรวมของแถวนี้ (พร้อม comma)
@@ -78,6 +120,7 @@ function updatecall() {
   thisResult2();
   thisResult3();
   thisResult4();
+  updateSummaryInputs();
 }
 document.getElementById("allowance_p2_1").addEventListener('input',updatecall);
 document.getElementById("accommodation_p2_1").addEventListener('input',updatecall);
@@ -570,3 +613,29 @@ allInputs.forEach(input => {
 calculateTotal();
 grandTotal();
 });
+
+window.addEventListener('DOMContentLoaded', function () {
+    // ดึงค่าจาก <p>
+    const r1 = document.getElementById('thisResult1').textContent || '0';
+    const r2 = document.getElementById('thisResult2').textContent || '0';
+    const r3 = document.getElementById('thisResult3').textContent || '0';
+    const r4 = document.getElementById('thisResult4').textContent || '0';
+    const rGran = document.getElementById('thisResultGran').textContent || '0';
+
+    // ใส่ค่าใน input
+    document.getElementById('summary-allowance').value = r1;
+    document.getElementById('summary-accommodation').value = r2;
+    document.getElementById('summary-vehicle').value = r3;
+    document.getElementById('summary-other').value = r4;
+    document.getElementById('summary-total').value = rGran;
+});
+
+function updateSummaryInputs() {
+    document.getElementById('summary-allowance').value = document.getElementById('thisResult1').textContent || '0';
+    document.getElementById('summary-accommodation').value = document.getElementById('thisResult2').textContent || '0';
+    document.getElementById('summary-vehicle').value = document.getElementById('thisResult3').textContent || '0';
+    document.getElementById('summary-other').value = document.getElementById('thisResult4').textContent || '0';
+    document.getElementById('summary-total').value = document.getElementById('thisResultGran').textContent || '0';
+}
+
+// ...existing code...

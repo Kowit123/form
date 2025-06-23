@@ -543,3 +543,17 @@ p {
 input[type="radio"] {
   all: revert;
 }
+
+.gwd_re {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.a12 {
+     display: flex;
+     justify-content: space-between;
+    input{
+        margin-bottom: 0;
+    }
+}
