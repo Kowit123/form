@@ -439,7 +439,7 @@ function removeDateSection(id) {
 
 function calculateTotalAmount() {
   let total = 0;
-  const amountInputs = document.querySelectorAll('input[placeholder="จำนวนเงิน (บาท)"]');
+  const amountInputs = document.querySelectorAll('#form-container1 input[placeholder="จำนวนเงิน (บาท)"]');
   amountInputs.forEach(input => {
     const value = parseNumber(input.value); // ใช้ parseNumber เพื่อรองรับ comma
     if (!isNaN(value)) {
@@ -519,21 +519,20 @@ function parseNumber(val) {
 }
 
 function calculateTotal() {
+   const container = document.getElementById("container2");
     let total = 0;
 
     // รถยนต์ส่วนบุคคล × 8
-const personalCarInput = document.querySelector('#R_personal_car_box input.comma-number');
-console.log(personalCarInput); // ตรวจสอบค่าที่อ่านได้
-console.log(personalCarInput.value);
-let personalCarAmount = 0;
-if (personalCarInput) {
-    personalCarAmount = parseNumber(personalCarInput.value) * 8;
-    total += personalCarAmount;
-}
-totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+    const personalCarInput = container.querySelector('#R_personal_car_box input.comma-number');
+    let personalCarAmount = 0;
+    if (personalCarInput) {
+        personalCarAmount = parseNumber(personalCarInput.value) * 8;
+        total += personalCarAmount;
+    }
+    totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
     // รถยนต์ราชการ × 8
-    const reignCarInput = document.querySelector('#R_reign_car_box input.comma-number');
+    const reignCarInput = container.querySelector('#R_reign_car_box input.comma-number');
     let reignCarAmount = 0;
     if (reignCarInput) {
         reignCarAmount = parseNumber(reignCarInput.value) * 8;
@@ -541,9 +540,13 @@ totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
     }
     totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
-    // input-box อื่นๆ
-    const allBoxes = document.querySelectorAll('.input-box:not(#R_personal_car_box):not(#R_reign_car_box)');
+    // input-box อื่นๆ (ไม่นับรถยนต์ส่วนบุคคล/ราชการ)
+    const allBoxes = container.querySelectorAll('.input-box');
     allBoxes.forEach(box => {
+        if (
+            box.id === "R_personal_car_box" ||
+            box.id === "R_reign_car_box"
+        ) return;
         const numberInputs = box.querySelectorAll('input.comma-number');
         numberInputs.forEach(input => {
             const value = parseNumber(input.value);

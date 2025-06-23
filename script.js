@@ -503,9 +503,10 @@ function parseNumber(val) {
 
 function calculateTotal() {
     let total = 0;
+    const container = document.getElementById("container");
 
     // รถยนต์ส่วนบุคคล × 8
-const personalCarInput = document.querySelector('#personal_car_box input.comma-number');
+const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
 console.log(personalCarInput); // ตรวจสอบค่าที่อ่านได้
 console.log(personalCarInput.value);
 let personalCarAmount = 0;
@@ -516,7 +517,7 @@ if (personalCarInput) {
 totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
     // รถยนต์ราชการ × 8
-    const reignCarInput = document.querySelector('#reign_car_box input.comma-number');
+    const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
     let reignCarAmount = 0;
     if (reignCarInput) {
         reignCarAmount = parseNumber(reignCarInput.value) * 8;
@@ -525,7 +526,7 @@ totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
     totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
     // input-box อื่นๆ
-    const allBoxes = document.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
+    const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
     allBoxes.forEach(box => {
         const numberInputs = box.querySelectorAll('input.comma-number');
         numberInputs.forEach(input => {
