@@ -563,7 +563,7 @@ doc.autoTable({
     lineWidth: 0.02,
     lineColor: [0, 0, 0]
   },
-  startY: 4.8, // หน่วย pt (ประมาณ 2cm)
+  startY: 5.3, // หน่วย pt (ประมาณ 2cm)
   pageSize: 'a4',
   orientation: 'landscape',
   pageBreak: 'avoid',
