@@ -17,7 +17,7 @@ function addrow() {
         <input type="text" id="p_re_${call}" placeholder="ตำแหน่ง">
     </div>
     <div class="wrq_re3" style="width: 30%;">
-        <input type="text" id="t_re_${call}"  placeholder="สังกัด">
+        <input type="text" id="t_re_${call}"  placeholder="สังกัด" value="คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม">
     </div>
   `;
   container1.appendChild(div1);
