@@ -428,7 +428,7 @@ doc.addPage('a4', 'landscape');
 
 const pageWidth2 = doc.internal.pageSize.getWidth();
 
-doc.text(`ส่วนที2`,pageWidth2-2,2, {align: 'right'});
+doc.text(`ส่วนที่2`,pageWidth2-2,2, {align: 'right'});
 doc.text(`แบบ 8708`,pageWidth2-2,2.7,{align: 'right'});
 
 doc.setFont("THSarabunNew", "bold");
@@ -593,11 +593,11 @@ const rangeWidth1 = pageWidthForSignature1 - marginLeft1 - marginRight1;
 const centerX1 = marginLeft1 + rangeWidth1 / 2;
 doc.text(text2, centerX1, y+0.75, { align: 'center' });
 y+= 0.7;
-doc.text(`${document.getElementById("nrq_re")?.value ||"(......................................................)"}`, centerX1, y+0.75, { align: 'center' });
+doc.text("(.......................................................)", centerX1-0.2, y+0.75, { align: 'center' });
 y+= 0.7;
-doc.text(`${document.getElementById("pst_re")?.value ||"ตำแหน่ง........................................................"}`, centerX1, y+0.75, { align: 'center' });
+doc.text("ตำแหน่ง.........................................................", centerX1-0.7, y+0.75, { align: 'center' });
 y+= 0.7;
-doc.text("วันที่......................................................", centerX1-0.6, y+0.75, { align: 'center' });
+doc.text("วันที่.........................................................", centerX1-0.4, y+0.75, { align: 'center' });
 y+= 0.7;
 
 y2 = y-2;
@@ -734,7 +734,7 @@ doc.text(`รวมทั้งสิ้น(ตัวอักษร)   ${number
 y3 += finalY2-2.3;
 doc.text(`ข้าพเจ้า ${document.getElementById("nrq_re").value}  ตำแหน่ง ${document.getElementById("pst_re").value}`,1.5,y3)
 y3 += 0.7;
-doc.text(`สังกัด ${document.getElementById("pt_re").value}`,1.5,y3)
+doc.text(`สังกัด กอง ${document.getElementById("pt_re").value}`,1.5,y3)
 y3 += 0.7;
 doc.text(`ขอรับรองว่ารายจ่ายข้างต้นนี้ ไม่อาจเรียกใบเสร็จรับเงินจากผู้รับได้ และข้าพเจ้าได้จ่ายในงานของราชการโดยแท้`,1.5,y3)
 y3 += 2.1;
@@ -759,7 +759,7 @@ doc.text(`วันที่...................................`,pageWidth/2,y4,
 y4 += 0.7;
 doc.text(`ข้าพเจ้า ${document.getElementById("nrq_re").value}`,1.5,y4);
 y4 += 0.7;
-doc.text(`บ้านเลขที่............................................................................................................................................................................`,1.5,y4);
+doc.text(`บ้านเลขที่ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม ตำบลขามเรียง อำเภอกันทรวิชัย จังหวัดมหาสารคาม`,1.5,y4);
 y4 += 0.7;
 doc.text(`ได้รับเงินจาก คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม ดังรายการต่อไปนี้`,1.5,y4);
 y4 += 0.7;
@@ -827,12 +827,13 @@ const foot2 = [
   });
 
 const finalY3 = doc.lastAutoTable.finalY
+y3 = finalY3 + 0.7;
 doc.text(
   `จำนวนเงิน(ตัวอักษร)   ${numberToThaiText(Number((document.getElementById("k").textContent || "0").replace(/,/g, "")))}`,
   1.5,
-  finalY3 + 0.7
+  y3
 );
-y3 += finalY3+ 0.7;
+y3 += 1.4;
 centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y3);
 centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y3);
 y3 += 0.7;

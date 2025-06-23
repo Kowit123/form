@@ -308,7 +308,7 @@ lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const nnoChecked = document.getElementById('nno')?.checked;
 if (nnoChecked) {
   doc.setFont("THSarabunNew", "bold");
-  doc.text(`( / )โดยไม่ขออเบิกจ่ายจากคณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม`, 3, lineY);
+  doc.text(`( / )โดยไม่ขอเบิกจ่ายจากคณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม`, 3, lineY);
   lineY += 0.7;
 }
 doc.setFont("THSarabunNew", "normal");
@@ -332,13 +332,15 @@ const text3_1 = `${document.getElementById("requesting_position").value}`;
 doc.text(text3_1, centerX-0.3, lineY, { align: 'center' });
 lineY+= 1;
 
-groupHeight = 7.3;
+groupHeight = 8;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const last_paragraph = `ความเห็นงานการเงินโดยเบิกจ่ายจาก (  )เงินงบประมาณแผ่นดิน (  )งบประมาณเงินรายได้ (  )เงินรับฝาก`;
 const last = doc.splitTextToSize(last_paragraph, 16);
 doc.text(last,3, lineY);
 lineY += 0.7;
 doc.text(`หมวดรายจ่าย..............................รหัสงบประมาณ..............................จำนวนเงิน ${document.getElementById("GrandTotal").textContent} บาท`,3, lineY);
+lineY += 0.7;
+doc.text(`จำนวนเงิน(ตัวอักษร) ${numberToThaiText(all_cost)} `,3, lineY);
 lineY += 0.7;
 doc.text(`ความคิดเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ......................................................................`,3, lineY);
 lineY += 0.7;
