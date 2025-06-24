@@ -889,7 +889,7 @@ doc.setFont("THSarabunNew", "normal");
 doc.text(`ส่วนราชการ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม โทรศัพท์ 043-754316  ภายใน 3007`,3,yy)
 yy+=0.7;
 doc.text(`ที่ อว 0605.14/..........`,3,yy);
-doc.text(`วันที่ ${document.getElementById("thai-datepicker6").value}`,pageWidth/2,yy);
+doc.text(`วันที่ ${document.getElementById("thai-datepicker7").value}`,pageWidth/2,yy);
  yy+=0.7;
 doc.text(`เรื่อง  ขออนุมัติเบิกเงินค่าลงทะเเบียน`,3,yy);
 yy+=1;
