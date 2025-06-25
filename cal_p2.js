@@ -464,10 +464,14 @@ const endDate = convertThaiFullDateToISO(endDateRaw);
 function updateAmount(uniqueId) {
   const distanceInput = document.getElementById(`distance-${uniqueId}`);
   const amountInput = document.getElementById(`amount-${uniqueId}`);
-  const distance = parseNumber(distanceInput.value); // ใช้ parseNumber เพื่อรองรับ comma
+  const multiplierCheckbox = document.getElementById(`multiplier-checkbox-${uniqueId}`);
+  const distance = parseNumber(distanceInput.value);
+
+  // ถ้ามี checkbox และถูกติ๊ก ใช้ *4, ถ้าไม่ติ๊กหรือไม่มี checkbox ใช้ *1
+  const multiplier = (multiplierCheckbox && multiplierCheckbox.checked) ? 4 : 1;
 
   if (!isNaN(distance)) {
-    amountInput.value = (distance * 4).toFixed(2);
+    amountInput.value = (distance * multiplier).toFixed(2);
   } else {
     amountInput.value = '';
   }
@@ -498,31 +502,38 @@ function addEntry(id) {
   const uniqueId = Date.now(); // ใช้สำหรับอ้างอิงเฉพาะแต่ละ input
 
   entry.innerHTML = `
-    <div style="display:grid; grid-template-columns: 60% 15.5% 15.5% auto; margin-bottom:1%;">
-      <input type="text" placeholder="รายละเอียด เช่น เดินทางไปประชุมที่ อ.เมือง อุดรธานี..." style="margin:0; margin-right:1%;">
-
-      <input 
-        type="text" 
-        id="distance-${uniqueId}"
-        class="comma-number"
-        placeholder="ระยะทาง (กม.)" 
-        style="margin:0; margin-right:1.5%;" 
-        oninput="updateAmount(${uniqueId})">
-
-      <input 
-      class="comma-number"
-        type="text" 
-        id="amount-${uniqueId}"
-        placeholder="จำนวนเงิน (บาท)" 
-        style="margin:0; margin-right:1.5%;" 
-        readonly>
-
-      <button 
-        class="remove-btn" 
-        onclick="this.parentElement.remove(); calculateTotalAmount();" 
-        style="background-color:rgb(223, 3, 3);margin:1%;">
-        🗑
-      </button>
+    <div style="margin-bottom:1%;">
+      <label>
+        <input 
+          type="checkbox" 
+          id="multiplier-checkbox-${uniqueId}" 
+          onchange="updateAmount(${uniqueId})"
+          style="margin-right:4px;"
+        > รถยนต์ส่วนบุคคล × 4 บาท/กม.
+      </label>
+      <div style="display:grid; grid-template-columns: 60% 15.5% 15.5% 9%; align-items:center; ">
+        <input type="text" placeholder="รายละเอียด เช่น เดินทางไปประชุมที่ อ.เมือง อุดรธานี..." style="margin:0; margin-right:1%;">
+        <input 
+          type="text" 
+          id="distance-${uniqueId}"
+          class="comma-number"
+          placeholder="ระยะทาง (กม.)" 
+          style="margin:0; margin-right:1%;" 
+          oninput="updateAmount(${uniqueId})">
+        <input 
+          class="comma-number"
+          type="text" 
+          id="amount-${uniqueId}"
+          placeholder="จำนวนเงิน (บาท)" 
+          style="margin:0; margin-right:1%;" 
+          readonly>
+        <button 
+          class="remove-btn" 
+          onclick="this.parentElement.parentElement.parentElement.remove(); calculateTotalAmount();" 
+          style="background-color:rgb(223, 3, 3);margin:1%;">
+          🗑
+        </button>
+      </div>
     </div>  
   `;
 

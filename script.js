@@ -417,59 +417,47 @@ pc2.addEventListener('input',updateGrandTotal);
 dc2.addEventListener('input',updateGrandTotal);
 
 
-
-
-
-
-
-const checkbox = document.getElementById('personal_car');
-const inputDiv = document.getElementById('personal_car_detail');
-
-checkbox.addEventListener('change', function() {
-  if (this.checked) {
-    inputDiv.style.display = 'grid';
-    } else {
-      inputDiv.style.display = 'none';
-    }
-    });
-
-
 //ของหน้า2
-  const input1 = document.getElementById("nrq_re");
-  const input2 = document.getElementById("name_re_1");
-
+  //ของหน้า2
+const input1 = document.getElementById("nrq_re");
+const input2 = document.getElementById("name_re_1");
+if (input1 && input2) {
   input1.addEventListener("input", function () {
     input2.value = input1.value;
   });
+}
 
-  const pst_re = document.getElementById("pst_re");
-  const position_re_1 = document.getElementById("position_re_1");
-
+const pst_re = document.getElementById("pst_re");
+const position_re_1 = document.getElementById("position_re_1");
+if (pst_re && position_re_1) {
   pst_re.addEventListener("input", function () {
     position_re_1.value = pst_re.value;
   });
+}
 
-  const input1_1 = document.getElementById("requesting_name");
-  const input2_1 = document.getElementById("name_1");
-
+const input1_1 = document.getElementById("requesting_name");
+const input2_1 = document.getElementById("name_1");
+if (input1_1 && input2_1) {
   input1_1.addEventListener("input", function () {
     input2_1.value = input1_1.value;
   });
+}
 
-  const requesting_position = document.getElementById("requesting_position");
-  const position = document.getElementById("position_1");
-
+const requesting_position = document.getElementById("requesting_position");
+const position = document.getElementById("position_1");
+if (requesting_position && position) {
   requesting_position.addEventListener("input", function () {
     position.value = requesting_position.value;
   });
+}
 
-
-  const requesting_part = document.getElementById("requesting_part");
-  const department_1 = document.getElementById("department_1");
-
+const requesting_part = document.getElementById("requesting_part");
+const department_1 = document.getElementById("department_1");
+if (requesting_part && department_1) {
   requesting_part.addEventListener("input", function () {
     department_1.value = requesting_part.value;
   });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -479,11 +467,14 @@ checkboxess.forEach(checkbox => {
   checkbox.addEventListener('change', () => {
     const id = checkbox.dataset.id;
     const box = document.getElementById(id + '_box');
+    const boxx = document.getElementById("reason_personal_car");
 
     if (checkbox.checked) {
       box.style.display = 'flex';
+      boxx.style.display = 'flex';
     } else {
       box.style.display = 'none';
+      boxx.style.display = 'none';
       // เคลียร์ input ข้างใน
       const input = box.querySelectorAll('input');
       input.forEach(input => input.value = '');

@@ -253,13 +253,21 @@
                     </div>
                 </form>
                     <div id="personal_car_box" class="input-box" style="display: none;">
-                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
-                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
-                        <p style="margin: 0;">เป็นจำนวนเงิน</p>
-                        <span id="total_personal_car">&nbsp;0</span>
-                    <p style="margin: 0;">&nbsp;บาท</p> 
-                    </div> 
-                    </div>   
+                        <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:
+                            <input type="text" placeholder="หมายเลขทะเบียนรถ" style="margin: 0; margin-left: 5%;">
+                            <input type="text" placeholder="พนักงานขับรถ" style="margin: 0;">
+                            <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;">
+                        </label>
+                        <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
+                            <p style="margin: 0;">เป็นจำนวนเงิน</p>
+                            <span id="total_personal_car">&nbsp;0</span>
+                            <p style="margin: 0;">&nbsp;บาท</p> 
+                        </div> 
+                    </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 1%; display: none; width: 100%;" id="reason_personal_car">
+                            <p style="margin-right: 1%;">เนื่องจาก:</p>
+                            <input type="text"  placeholder="สาเหตุในการขอใช้รถยนต์ส่วนบุคคลในการเดินทางไปราชการ" style="width: 95%;" id="reason_personal_car_" >
+                        </div>  
 
                     <div id="reign_car_box" class="input-box" style="display: none;">
                         <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
@@ -642,7 +650,7 @@
                         <label for="R_personal_car">พาหนะรับจ้าง</label>
                     </div>
                 </form>
-                <div id="R_personal_car_box" class="input-box" style="display: none;">
+                <div id="R_personal_car_box"  class="input-box" style="display: none;">
                     <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 5%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 15%;"></label>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 19%; justify-content: flex-end;">
                         <p style="margin: 0;">เป็นจำนวนเงิน</p>

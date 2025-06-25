@@ -409,6 +409,106 @@ doc.addPage();
       },
     });
   }
+
+
+const checkbox = document.getElementById('personal_car');
+  if (checkbox && checkbox.checked) {
+      doc.addPage();
+      doc.addImage(imgData, 'PNG', 3, 1.5, 1.5, 1.6);
+      doc.setFont("THSarabunNew", "bold");
+      doc.setFontSize(26);
+      doc.text('บันทึกข้อความ', pageWidth/2, 2.5, {align:'center'});
+      doc.setFontSize(16);
+      doc.text('ส่วนราชการ', 3, 4.7);
+      doc.setFont("THSarabunNew", "normal");
+      doc.text(`คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม โทรศัพท์ 043-754316  ภายใน 3007`, 5.3, 4.7);
+      doc.setFont("THSarabunNew", "bold");
+      doc.text('ที่', 3, 5.4);
+      doc.text('วันที่', 10.5, 5.4);
+      doc.setFont("THSarabunNew", "normal");
+      doc.text(`อว 0605.14/............`, 3.5, 5.4);
+      doc.text(`${datepicker1}`, 11.5, 5.4);
+      doc.setFont("THSarabunNew", "bold");
+      doc.text('เรื่อง', 3, 6.1);
+      doc.setFont("THSarabunNew", "normal");
+      doc.text(`ขออนุมัติเดินทางไปราชการโดยรถยนต์ส่วนบุคคล`, 4, 6.1);
+      doc.setFont("THSarabunNew", "bold");
+      doc.text('เรียน', 3, 6.8);
+      doc.setFont("THSarabunNew", "normal");
+      doc.text(`คณบดีคณะวิศวกรรมศาสตร์`, 4, 6.8);
+      let y12 = 7.5;
+
+const mainParagraph = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ระหว่างวันที่ ${thai_datepicker4} ถึงวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`;
+
+const mainParagraphLines = doc.splitTextToSize(mainParagraph, firstLineWidth);
+
+const mainParagraphFirstLine = mainParagraphLines[0];
+
+const mainParagraphRemainingText = mainParagraph.substring(mainParagraphFirstLine.length).trim();
+
+const mainParagraphRemainingLines = doc.splitTextToSize(mainParagraphRemainingText, nextLinesWidth);
+
+const mainParagraphAllLines = [mainParagraphFirstLine, ...mainParagraphRemainingLines];
+
+let mainParagraphY12 = y12;
+mainParagraphAllLines.forEach((line, index) => {
+  const x = index === 0 ? 5.5 : 3;
+  doc.text(line, x, mainParagraphY12);
+  mainParagraphY12 += 0.7;
+});
+
+doc.text(`ดังนั้นจึงขออนุมัติงบประมาณในการเดินทางดังต่อไปนี้`, 3, mainParagraphY12);
+mainParagraphY12 += 0.7;
+if (personalBox && personalBox.style.display !== "none") {
+  const inputs = personalBox.querySelectorAll("input");
+  const license = inputs[0].value.trim();
+  const driver = inputs[1].value.trim();
+  const distance = inputs[2].value.trim();
+  const total = document.getElementById("total_personal_car").textContent.trim();
+
+  const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+  const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
+
+if (license || driver || distance) {
+    const text1 = `-รถยนต์ส่วนบุคคล 
+    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. X 4 เป็นเงิน ${totalFormatted} บาท`;
+    const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const firstX = 5;
+    const indentX = 5;
+
+    lines.forEach((line, index) => {
+    const x = index === 0 ? firstX : indentX;
+    doc.text(line, x, mainParagraphY12 + index * 0.7);
+  });
+
+    mainParagraphY12 += lines.length * 0.7; // ปรับระยะ Y ตามจำนวนบรรทัด
+  }
+  doc.text(`รวมทั้งสิ้น ${totalFormatted} บาท`, pageWidth - 2, mainParagraphY12, { align: 'right' });
+    // ...existing code...
+  doc.text(`(${numberToThaiText(total.replace(/,/g, ''))})`, pageWidth - 2, mainParagraphY12 + 0.7, { align: 'right' });
+  // ...existing code...
+}
+mainParagraphY12 += 2.1;
+doc.text(`จึงเรียนมาเพื่อโปรดพิจารณา`, 3, mainParagraphY12);
+mainParagraphY12 += 1;
+doc.text(`ลงชื่อ...............................................ผู้ขอรับเงิน`, pageWidth - 3, mainParagraphY12, { align: 'right' });
+mainParagraphY12 += 0.7;
+doc.text(`${document.getElementById("requesting_name").value}`, pageWidth - 5, mainParagraphY12, { align: 'right' });
+mainParagraphY12 += 0.7;
+doc.text(`${document.getElementById("requesting_position").value}`, pageWidth - 5, mainParagraphY12, { align: 'right' });
+  }
+
+
+
+
+
+
+
+
+
+
+
 doc.save("document.pdf");
 }
 

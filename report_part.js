@@ -642,12 +642,12 @@ doc.setFont("THSarabunNew", "normal");
   
     entries.forEach((entry) => {
       const inputs = entry.querySelectorAll('input');
-      const detail = inputs[0]?.value || '-';
-      const distance = inputs[1]?.value
-        ? Number(inputs[1].value.replace(/,/g, '')).toLocaleString() + ' กม.'
+      const detail = inputs[1]?.value || '-';
+      const distance = inputs[2]?.value
+        ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString() + ' กม.'
         : '-';
       const amount = inputs[2]?.value
-        ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        ? Number(inputs[3].value.replace(/,/g, '')).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         : '-';
   
       allData.push([date, detail, distance, amount]);
@@ -775,13 +775,15 @@ y4 += 0.7;
     const date = section.querySelector('.date-header input').value || 'ไม่ระบุ';
     const entries = section.querySelectorAll('.entries > div');
 
-    entries.forEach((entry) => {
-      const inputs = entry.querySelectorAll('input');
-      const detail = inputs[0].value.trim() || '-';
-      const amount = inputs[2].value ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString() : '-';
+entries.forEach((entry) => {
+  const inputs = entry.querySelectorAll('input');
+  const detail = inputs[1]?.value?.trim() || '-';
+  const amount = (inputs[3].value)
+    ? Number(inputs[3].value.replace(/,/g, '')).toLocaleString()
+    : '-';
 
-      allData1.push([date, detail, amount,]);
-    });
+  allData1.push([date, detail, amount]);
+});
   });
 
 const foot2 = [
