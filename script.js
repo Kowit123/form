@@ -563,3 +563,45 @@ allInputs.forEach(input => {
 
 
 });
+document.addEventListener('DOMContentLoaded', function() {
+    // เลือก radio "อบรม/สัมมนา"
+    const seminarRadio = document.querySelector('input[name="qqe"][value="อบรม/สัมมนา"]');
+    // เลือก radio "เหมาจ่าย"
+    const maoRadio = document.querySelector('input[name="fav_language"][value="เหมาจ่าย"]');
+
+    // ฟังก์ชันสำหรับจัดการสถานะ disabled
+    function handleSeminarChange() {
+        if (seminarRadio.checked) {
+            maoRadio.checked = false;
+            maoRadio.disabled = true;
+        } else {
+            maoRadio.disabled = false;
+        }
+    }
+
+    // เมื่อมีการเปลี่ยนแปลง radio group qqe
+    document.querySelectorAll('input[name="qqe"]').forEach(radio => {
+        radio.addEventListener('change', handleSeminarChange);
+    });
+
+    // เรียกครั้งแรกเพื่อ sync สถานะ
+    handleSeminarChange();
+
+    const reasonAirplaneBox = document.getElementById("reason_airplane");
+const airplaneCheckbox = document.querySelector('input[name="topicT"][data-id="airplane"]');
+
+if (airplaneCheckbox && reasonAirplaneBox) {
+  airplaneCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+      reasonAirplaneBox.style.display = 'flex';
+    } else {
+      reasonAirplaneBox.style.display = 'none';
+      // ล้างค่า input ข้างใน reason_airplane
+      const inputs = reasonAirplaneBox.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+    }
+  });
+  // ซ่อนกล่องตอนโหลดหน้า
+  reasonAirplaneBox.style.display = airplaneCheckbox.checked ? 'flex' : 'none';
+}
+});

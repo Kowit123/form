@@ -79,7 +79,7 @@
       let y = 5.1; // จุดเริ่มต้น
       const topicLines = doc.splitTextToSize(topic, 16);
       doc.text(topicLines, 4, y);
-      y += topicLines.length * 0.6;
+      y += topicLines.length * 1.2;
       //เรียน1
       doc.setFont("THSarabunNew", "bold");
       doc.text('เรียน', 3, y);
@@ -87,7 +87,7 @@
       const dearLines = doc.splitTextToSize(dear, 16);
       doc.setFont("THSarabunNew", "normal");
       doc.text(dearLines, 4, y);
-      y += dearLines.length * 0.6;
+      y += dearLines.length * 1.2;
 
       //นื้อหา1
 const firstLineWidth = 13;
@@ -326,10 +326,10 @@ const centerX = marginLeft + rangeWidth / 2;
 doc.text(text1, centerX, lineY, { align: 'center' });
 lineY+= 0.7;
 const text2_1 = `${document.getElementById("requesting_name").value}`;
-doc.text(text2_1, centerX-0.3, lineY, { align: 'center' });
+doc.text(text2_1, centerX, lineY, { align: 'center' });
 lineY+= 0.7;
 const text3_1 = `${document.getElementById("requesting_position").value}`;
-doc.text(text3_1, centerX-0.3, lineY, { align: 'center' });
+doc.text(text3_1, centerX, lineY, { align: 'center' });
 lineY+= 1;
 
 groupHeight = 8;
@@ -433,10 +433,10 @@ const checkbox = document.getElementById('personal_car');
       doc.setFont("THSarabunNew", "normal");
       doc.text(`ขออนุมัติเดินทางไปราชการโดยรถยนต์ส่วนบุคคล`, 4, 6.1);
       doc.setFont("THSarabunNew", "bold");
-      doc.text('เรียน', 3, 6.8);
+      doc.text('เรียน', 3, 7.5);
       doc.setFont("THSarabunNew", "normal");
-      doc.text(`คณบดีคณะวิศวกรรมศาสตร์`, 4, 6.8);
-      let y12 = 7.5;
+      doc.text(`คณบดีคณะวิศวกรรมศาสตร์`, 4, 7.5);
+      let y12 = 8.2;
 
 const mainParagraph = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ระหว่างวันที่ ${thai_datepicker4} ถึงวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`;
 
@@ -490,13 +490,14 @@ if (license || driver || distance) {
   // ...existing code...
 }
 mainParagraphY12 += 2.1;
-doc.text(`จึงเรียนมาเพื่อโปรดพิจารณา`, 3, mainParagraphY12);
-mainParagraphY12 += 1;
-doc.text(`ลงชื่อ...............................................ผู้ขอรับเงิน`, pageWidth - 3, mainParagraphY12, { align: 'right' });
-mainParagraphY12 += 0.7;
-doc.text(`${document.getElementById("requesting_name").value}`, pageWidth - 5, mainParagraphY12, { align: 'right' });
-mainParagraphY12 += 0.7;
-doc.text(`${document.getElementById("requesting_position").value}`, pageWidth - 5, mainParagraphY12, { align: 'right' });
+const text123 = "ลงชื่อ..........................................................";
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
+doc.text(text123, centerX, mainParagraphY12, { align: 'center' });
+mainParagraphY12+= 0.7;
+doc.text(text2_1, centerX, mainParagraphY12, { align: 'center' });
+mainParagraphY12+= 0.7;
+doc.text(text3_1, centerX, mainParagraphY12, { align: 'center' });
+mainParagraphY12+= 1;
   }
 
 
