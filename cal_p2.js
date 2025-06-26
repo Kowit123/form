@@ -659,3 +659,29 @@ function updateSummaryInputs() {
 }
 
 // ...existing code...
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // เลือก radio "อบรม/สัมมนา"
+    const seminarRadio = document.querySelector('input[name="qqee"][value="อบรม/สัมมนา"]');
+    // เลือก radio "เหมาจ่าย"
+    const maoRadio = document.querySelector('input[name="radio_re"][value="เหมาจ่าย"]');
+
+    // ฟังก์ชันสำหรับจัดการสถานะ disabled
+    function handleSeminarChange() {
+        if (seminarRadio.checked) {
+            maoRadio.checked = false;
+            maoRadio.disabled = true;
+        } else {
+            maoRadio.disabled = false;
+        }
+    }
+
+    // เมื่อมีการเปลี่ยนแปลง radio group qqe
+    document.querySelectorAll('input[name="qqee"]').forEach(radio => {
+        radio.addEventListener('change', handleSeminarChange);
+    });
+
+    // เรียกครั้งแรกเพื่อ sync สถานะ
+    handleSeminarChange();
+});
