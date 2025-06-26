@@ -576,20 +576,29 @@ function calculateTotal() {
    const container = document.getElementById("container2");
     let total = 0;
 
-    // รถยนต์ส่วนบุคคล × 8
     const personalCarInput = container.querySelector('#R_personal_car_box input.comma-number');
+    const personalCarCheckbox = container.querySelector('#R_personal_car_box input[type="checkbox"]');
     let personalCarAmount = 0;
     if (personalCarInput) {
-        personalCarAmount = parseNumber(personalCarInput.value) * 8;
+        let multiplier = 4;
+        if (personalCarCheckbox && personalCarCheckbox.checked) {
+            multiplier = 8; // *4*2
+        }
+        personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
         total += personalCarAmount;
     }
     totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-    // รถยนต์ราชการ × 8
+    // รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
     const reignCarInput = container.querySelector('#R_reign_car_box input.comma-number');
+    const reignCarCheckbox = container.querySelector('#R_reign_car_box input[type="checkbox"]');
     let reignCarAmount = 0;
     if (reignCarInput) {
-        reignCarAmount = parseNumber(reignCarInput.value) * 8;
+        let multiplier = 4;
+        if (reignCarCheckbox && reignCarCheckbox.checked) {
+            multiplier = 8;
+        }
+        reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
         total += reignCarAmount;
     }
     totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();

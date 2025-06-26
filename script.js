@@ -461,20 +461,35 @@ if (requesting_part && department_1) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
+const boxx = document.getElementById("reason_personal_car");
+const personalCarCheckbox = document.querySelector('input[name="topicT"][data-id="personal_car"]');
+
+if (personalCarCheckbox && boxx) {
+  personalCarCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+      boxx.style.display = 'flex';
+    } else {
+      boxx.style.display = 'none';
+      // ถ้าต้องการล้างค่า input ข้างใน reason_personal_car ด้วย
+      const inputs = boxx.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+    }
+  });
+  // ซ่อนกล่องตอนโหลดหน้า
+  boxx.style.display = personalCarCheckbox.checked ? 'flex' : 'none';
+}
+
 const checkboxess = document.querySelectorAll('input[name="topicT"]');
 
 checkboxess.forEach(checkbox => {
   checkbox.addEventListener('change', () => {
     const id = checkbox.dataset.id;
     const box = document.getElementById(id + '_box');
-    const boxx = document.getElementById("reason_personal_car");
 
     if (checkbox.checked) {
       box.style.display = 'flex';
-      boxx.style.display = 'flex';
     } else {
       box.style.display = 'none';
-      boxx.style.display = 'none';
       // เคลียร์ input ข้างใน
       const input = box.querySelectorAll('input');
       input.forEach(input => input.value = '');
@@ -498,23 +513,31 @@ function calculateTotal() {
 
     // รถยนต์ส่วนบุคคล × 8
 const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
-console.log(personalCarInput); // ตรวจสอบค่าที่อ่านได้
-console.log(personalCarInput.value);
+const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
 let personalCarAmount = 0;
 if (personalCarInput) {
-    personalCarAmount = parseNumber(personalCarInput.value) * 8;
+    let multiplier = 4;
+    if (personalCarCheckbox && personalCarCheckbox.checked) {
+        multiplier = 8; // *4*2 เมื่อคลิก checkbox
+    }
+    personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
     total += personalCarAmount;
 }
 totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-    // รถยนต์ราชการ × 8
-    const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
-    let reignCarAmount = 0;
-    if (reignCarInput) {
-        reignCarAmount = parseNumber(reignCarInput.value) * 8;
-        total += reignCarAmount;
+// รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
+const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
+const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
+let reignCarAmount = 0;
+if (reignCarInput) {
+    let multiplier = 4;
+    if (reignCarCheckbox && reignCarCheckbox.checked) {
+        multiplier = 8;
     }
-    totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+    reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
+    total += reignCarAmount;
+}
+totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
     // input-box อื่นๆ
     const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');

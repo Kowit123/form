@@ -935,18 +935,19 @@ yy+=1;
 doc.text(`จึงเรียนมาเพื่อโปรดพิจารณาการอนุมัติเบิกจ่ายเงิน`,3,yy);
 yy += 1.7;
 
-const text21 = "ลงชื่อ..................................................................";
-const marginLeft1 = 10.5;
-const marginRight1 = 0;
-const pageWidthForSignature1 = doc.internal.pageSize.getWidth();
-const rangeWidth1 = pageWidthForSignature1 - marginLeft1 - marginRight1;
-const centerX1 = marginLeft1 + rangeWidth1 / 2;
-doc.text(text21, centerX1, yy+0.75, { align: 'center' });
-yy+= 0.7;
-doc.text(`${document.getElementById("nrq_re").value || "(....................................................)"}`, centerX1, yy+0.75, { align: 'center' });
-yy+= 0.7;
-doc.text(`${document.getElementById("pst_re").value || "ตำแหน่ง...................................................................."}`, centerX1, yy+0.75, { align: 'center' });
-yy+= 0.7;
+
+
+doc.text(text1, centerX, y, { align: 'center' });
+y += 0.7;
+
+doc.text(text2_1, centerX-0.3, y, { align: 'center' });
+y += 0.7;
+
+doc.text(text3_1, centerX-0.3, y, { align: 'center' });
+y += 0.7;
+
+doc.text(text4_1, centerX-0.3, y, { align: 'center' });
+y += 0.7;
 
 
 
