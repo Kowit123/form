@@ -155,7 +155,7 @@ Accommodation_Costrows.forEach((row) => {
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (cost !== "0" || rooms !== "0" || days !== "0") {
     const costH = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
-    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} ห้อง ระยะเวลา ${days} วัน`, 5, y);
+    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} คน ระยะเวลา ${days} วัน`, 5, y);
     y += 0.7;
   }
 });

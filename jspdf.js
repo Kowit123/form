@@ -155,7 +155,7 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} ห้อง ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
+    doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} คน ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }
 });
@@ -490,15 +490,15 @@ if (license || driver || distance) {
   // ...existing code...
 }
 mainParagraphY12 += 2.1;
-const text123 = "ลงชื่อ..........................................................";
-lineY = checkAddPageGroup(doc, lineY, groupHeight);
+const text123 = "ลงชื่อ....................................................ผู้ขอรับเงิน";
 doc.text(text123, centerX, mainParagraphY12, { align: 'center' });
 mainParagraphY12+= 0.7;
 doc.text(text2_1, centerX, mainParagraphY12, { align: 'center' });
 mainParagraphY12+= 0.7;
 doc.text(text3_1, centerX, mainParagraphY12, { align: 'center' });
 mainParagraphY12+= 1;
-  }
+
+}
 
 
 

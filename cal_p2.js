@@ -201,7 +201,7 @@ function addRealAccommodationRow() {
   div.innerHTML = `
     <div class="left_part">
         <input class="real_accommodation_cost comma-number" id="real_accommodation_cost_${real_accommodationRow}" type="text" placeholder="ค่าที่พัก" oninput="grandTotal()">
-        <input class="real_accommodation_person " id="real_accommodation_person_${real_accommodationRow}" type="number" placeholder="จำนวนห้อง" oninput="grandTotal()">
+        <input class="real_accommodation_person " id="real_accommodation_person_${real_accommodationRow}" type="number" placeholder="จำนวนคน" oninput="grandTotal()">
         <input class="real_accommodation_day " id="real_accommodation_day_${real_accommodationRow}" type="number" placeholder="จำนวนวัน" oninput="grandTotal()">
         <button class="add-btn" onclick="removeRealAccommodationeRow(this)" style="text-align: center; margin: 0; background-color: red;">&minus;</button>
     </div> 
