@@ -671,3 +671,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // เรียกครั้งแรกเพื่อ sync สถานะ
     handleSeminarChange();
 });
+
+function removeDateSection(id) {
+  const section = document.getElementById(`date-section-${id}`);
+  if (section) {
+    section.remove();
+  }
+}
