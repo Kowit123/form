@@ -461,45 +461,30 @@ const endDate = convertThaiFullDateToISO(endDateRaw);
   }
 
   // ฟังก์ชันคำนวณจำนวนเงินจากระยะทาง
+// ...existing code...
 function updateAmount(uniqueId) {
   const distanceInput = document.getElementById(`distance-${uniqueId}`);
   const amountInput = document.getElementById(`amount-${uniqueId}`);
   const multiplierCheckbox = document.getElementById(`multiplier-checkbox-${uniqueId}`);
   const distance = parseNumber(distanceInput.value);
 
-  // ถ้ามี checkbox และถูกติ๊ก ใช้ *4, ถ้าไม่ติ๊กหรือไม่มี checkbox ใช้ *1
-  const multiplier = (multiplierCheckbox && multiplierCheckbox.checked) ? 4 : 1;
-
-  if (!isNaN(distance)) {
-    amountInput.value = (distance * multiplier).toFixed(2);
+  if (multiplierCheckbox && multiplierCheckbox.checked) {
+    // ถ้าติ๊ก checkbox: คำนวณและ readonly
+    amountInput.value = !isNaN(distance) ? (distance * 4).toFixed(2) : '';
+    amountInput.readOnly = true;
   } else {
-    amountInput.value = '';
+    // ไม่ติ๊ก: ให้กรอกเอง
+    amountInput.readOnly = false;
   }
 
   calculateTotalAmount();
 }
-
-function removeDateSection(id) {
-  const section = document.getElementById(`date-section-${id}`);
-  if (section) section.remove();
-}
-
-function calculateTotalAmount() {
-  let total = 0;
-  const amountInputs = document.querySelectorAll('#form-container1 input[placeholder="จำนวนเงิน (บาท)"]');
-  amountInputs.forEach(input => {
-    const value = parseNumber(input.value); // ใช้ parseNumber เพื่อรองรับ comma
-    if (!isNaN(value)) {
-      total += value;
-    }
-  });
-  document.getElementById("k").textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
+// ...existing code...
 
 function addEntry(id) {
   const entriesDiv = document.getElementById(`entries-${id}`);
   const entry = document.createElement("div");
-  const uniqueId = Date.now(); // ใช้สำหรับอ้างอิงเฉพาะแต่ละ input
+  const uniqueId = Date.now();
 
   entry.innerHTML = `
     <div style="margin-bottom:1%;">
@@ -525,8 +510,9 @@ function addEntry(id) {
           type="text" 
           id="amount-${uniqueId}"
           placeholder="จำนวนเงิน (บาท)" 
-          style="margin:0; margin-right:1%;" 
-          readonly>
+          style="margin:0; margin-right:1%;"
+          oninput="calculateTotalAmount()"
+        >
         <button 
           class="remove-btn" 
           onclick="this.parentElement.parentElement.parentElement.remove(); calculateTotalAmount();" 
@@ -539,7 +525,7 @@ function addEntry(id) {
 
   entriesDiv.appendChild(entry);
 }
-
+// ...existing code...
 
 
 document.addEventListener('DOMContentLoaded', function () {
