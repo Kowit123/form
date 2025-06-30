@@ -97,36 +97,25 @@ if (typeof wordcut !== "undefined") {
   wordcut.init();
 }
 
-// --- ฟังก์ชันตัดคำแบบใช้ wordcut ---
-function splitThaiWords(text) {
-  if (typeof wordcut !== "undefined") {
-    return wordcut.cutIntoArray(text);
-  }
-  // fallback แบบง่าย (ไม่แนะนำเท่าไหร่)
-  return text.replace(/([,\.])/g, ' $1 ').split(/\s+/).filter(Boolean);
-}
-
 // --- เตรียมข้อความ ---
 const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
 
-// --- แบ่งข้อความเป็นบรรทัด ---
-const tempLines = doc.splitTextToSize(aLines, firstLineWidth);
-const firstLine = tempLines[0];
-const remainingText = aLines.substring(firstLine.length).trim();
+const linesTemp = doc.splitTextToSize(aLines, firstLineWidth);
+
+const firstLine = linesTemp[0];
+
+const remainingText = aLines.substring(firstLine.length).trim(); // ตัดช่องว่างหน้าออก
+
+// ตัดข้อความส่วนที่เหลือด้วยความกว้าง 16
 const remainingLines = doc.splitTextToSize(remainingText, nextLinesWidth);
+
+// รวมกัน
 const allLines = [firstLine, ...remainingLines];
 
-// --- วาดข้อความจัดกระจายทีละบรรทัด ---
 let lineY = y;
 allLines.forEach((line, index) => {
   const x = index === 0 ? 5.5 : 3;
-  const lineWidth = index === 0 ? firstLineWidth : nextLinesWidth;
-
-  // ตัดคำและจัดรูปแบบจัดกระจาย
-  const words = splitThaiWords(line);
-  const distributedLine = words.join(' ');
-  drawThaiDistributed(doc, distributedLine, x, lineY, lineWidth);
-
+  doc.text(line, x, lineY);
   lineY += 0.7;
 });
 lineY += 0.3;
@@ -280,8 +269,6 @@ rows.forEach(row => {
   const person = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
   const total = fee * person;
 
-  grandTotal += total;
-
   const line = `-${detail}  ${feeFormatted} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
   const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
   doc.text(lines, 5, lineY);
@@ -374,6 +361,7 @@ lineY += 0.7;
 doc.text(`(..............................................)`,pageWidth-3, lineY, {align: 'right'});
 lineY += 0.7;
 
+const entryCount1 = document.querySelectorAll(".entry12").length;
 if (entryCount1 > 1) {
 doc.addPage();
 
@@ -426,7 +414,6 @@ doc.addPage();
     });
   }
 
-
 const checkbox = document.getElementById('personal_car');
   if (checkbox && checkbox.checked) {
       doc.addPage();
@@ -469,10 +456,8 @@ const mainParagraphAllLines = [mainParagraphFirstLine, ...mainParagraphRemaining
 let mainParagraphY12 = y12;
 mainParagraphAllLines.forEach((line, index) => {
   const x = index === 0 ? 5.5 : 3;
-  // ตัดคำก่อนส่งเข้า drawThaiDistributed
-  const words = splitThaiWords(line);
-  const distributedText = words.join(' ');
-  drawThaiDistributed(doc, distributedText, x, mainParagraphY12, index === 0 ? firstLineWidth : nextLinesWidth);
+  // Simply draw the text without complex word splitting
+  doc.text(line, x, mainParagraphY12);
   mainParagraphY12 += 0.7;
 });
 
@@ -533,7 +518,7 @@ doc.save("เอกสารขออนุมัติเดินทางไ�
 /**
  * วาดข้อความแบบ "จัดกระจาย (Justify)" สำหรับข้อความภาษาไทย
  * @param {jsPDF} doc - เอกสาร jsPDF
- * @param {string} text - ข้อความที่ต้องการวาด
+ * @param {string} text - ข้อควา
  * @param {number} x - ตำแหน่ง X เริ่มต้น
  * @param {number} y - ตำแหน่ง Y เริ่มต้น
  * @param {number} width - ความกว้างของพื้นที่ให้จัดข้อความ

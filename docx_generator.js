@@ -1,31 +1,21 @@
-// Import docx library
-// Make sure to include: <script src="https://unpkg.com/docx@8.2.3/build/index.js"></script>
-
 async function generateDOCX() {
-  // Check if docx library is available in different possible locations
-  let docxLib = null;
-  
-  if (typeof docx !== 'undefined') {
-    docxLib = docx;
-    console.log('Using global docx object');
-  } else if (typeof window.docx !== 'undefined') {
-    docxLib = window.docx;
-    console.log('Using window.docx object');
-  } else {
-    console.error('docx library is not loaded. Please check the script tag.');
-    console.log('Available global objects:', Object.keys(window).filter(key => key.includes('docx')));
-    alert('เกิดข้อผิดพลาด: ไม่สามารถโหลดไลบรารี docx ได้ กรุณารีเฟรชหน้าเว็บและลองใหม่อีกครั้ง');
-    return;
-  }
+  // Import required components from docx library
+  const {
+    Document,
+    Packer,
+    Paragraph,
+    TextRun,
+    AlignmentType,
+    Table,
+    TableRow,
+    TableCell,
+    WidthType,
+    PageBreak
+  } = docx;
 
-  const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, PageBreak } = docxLib;
-
-  // Check if TH Sarabun New fonts are available
-  if (typeof THSarabunNew_normal === 'undefined' || typeof THSarabunNew_bold === 'undefined') {
-    console.error('TH Sarabun New fonts are not loaded. Please check the font script tags.');
-    alert('เกิดข้อผิดพลาด: ไม่สามารถโหลดฟอนต์ TH Sarabun New ได้ กรุณารีเฟรชหน้าเว็บและลองใหม่อีกครั้ง');
-    return;
-  }
+  // Import TH Sarabun New fonts
+  const THSarabunNewNormal = await import('./font/THSarabunNew-normal.js');
+  const THSarabunNewBold = await import('./font/THSarabunNew-bold.js');
 
   // Get form data
   const agency = document.getElementById("agency").value;
@@ -49,7 +39,6 @@ async function generateDOCX() {
   const other_cost = window.other_cost || 0;
   const all_cost = window.all_cost || 0;
 
-  // Helper function to convert number to Thai text
   function numberToThaiText(number) {
     const numberText = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
     const positionText = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
@@ -111,308 +100,435 @@ async function generateDOCX() {
     return bahtText;
   }
 
-  // Helper function to convert base64 string to Uint8Array
-  function base64ToUint8Array(base64String) {
-    const binaryString = atob(base64String);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes;
-  }
-
-  // Helper function to create TextRun with TH Sarabun New font
-  function createThaiTextRun(text, options = {}) {
-    return new TextRun({
-      text: text,
-      font: "TH Sarabun New",
-      size: options.size || 32, // 16pt = 32 half-points
-      bold: options.bold || false,
-      ...options
-    });
-  }
-
-  // Helper function to create paragraph with Thai distributed alignment
-  function createThaiParagraph(children, options = {}) {
-    return new Paragraph({
-      children: children,
-      alignment: options.alignment || AlignmentType.JUSTIFIED, // Thai distributed alignment
-      ...options
-    });
-  }
-
-  // Create document sections
-  const sections = [];
-
-  // Main document content
-  const mainContent = [
+  // Create document content
+  const children = [
     // Header
-    createThaiParagraph([
-      createThaiTextRun("บันทึกข้อความ", { bold: true, size: 48 }),
-    ], { alignment: AlignmentType.CENTER, spacing: { after: 400 } }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "บันทึกข้อความ",
+          bold: true,
+          size: 52,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 400 },
+    }),
 
     // Agency
-    createThaiParagraph([
-      createThaiTextRun("ส่วนราชการ", { bold: true }),
-      createThaiTextRun(` ${agency}`),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ส่วนราชการ",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: ` ${agency}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
     // Document number and date
-    createThaiParagraph([
-      createThaiTextRun("ที่", { bold: true }),
-      createThaiTextRun(` ${bookNum}`),
-      createThaiTextRun("                    วันที่", { bold: true }),
-      createThaiTextRun(` ${datepicker1}`),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ที่",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: ` ${bookNum}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: "    วันที่",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: ` ${datepicker1}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
     // Topic
-    createThaiParagraph([
-      createThaiTextRun("เรื่อง", { bold: true }),
-      createThaiTextRun(` ${topic}`),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "เรื่อง",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: ` ${topic}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
     // Dear
-    createThaiParagraph([
-      createThaiTextRun("เรียน", { bold: true }),
-      createThaiTextRun(` ${dear}`),
-    ], { spacing: { after: 400 } }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "เรียน",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: ` ${dear}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 400 },
+    }),
 
     // Main content
-    createThaiParagraph([
-      createThaiTextRun(`ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`),
-    ], { spacing: { after: 400 } }),
-
-    // Allowance section
-    new Table({
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun("1. ค่าเบี้ยเลี้ยง", { bold: true })])],
-            }),
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`รวมเป็นเงิน ${allowanceTotal.toLocaleString()} บาท`)], { alignment: AlignmentType.RIGHT })],
-            }),
-          ],
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`,
+          size: 32,
+          font: "TH Sarabun New",
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: {
-        top: { style: "none", size: 0, color: "FFFFFF" },
-        bottom: { style: "none", size: 0, color: "FFFFFF" },
-        left: { style: "none", size: 0, color: "FFFFFF" },
-        right: { style: "none", size: 0, color: "FFFFFF" },
-        insideHorizontal: { style: "none", size: 0, color: "FFFFFF" },
-        insideVertical: { style: "none", size: 0, color: "FFFFFF" },
-      },
+      spacing: { after: 400 },
     }),
 
-    // Accommodation section
-    new Table({
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`2. ค่าที่พัก ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`, { bold: true })])],
-            }),
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`รวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`)], { alignment: AlignmentType.RIGHT })],
-            }),
-          ],
+    // Allowance
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "1. ค่าเบี้ยเลี้ยง",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: `    รวมเป็นเงิน ${accommodationTotal.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: {
-        top: { style: "none", size: 0, color: "FFFFFF" },
-        bottom: { style: "none", size: 0, color: "FFFFFF" },
-        left: { style: "none", size: 0, color: "FFFFFF" },
-        right: { style: "none", size: 0, color: "FFFFFF" },
-        insideHorizontal: { style: "none", size: 0, color: "FFFFFF" },
-        insideVertical: { style: "none", size: 0, color: "FFFFFF" },
-      },
+      spacing: { after: 200 },
     }),
 
-    // Transportation section
-    new Table({
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun("3. ค่าพาหนะ", { bold: true })])],
-            }),
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`รวมเป็นเงิน ${document.getElementById("Transportation_expenses_result").textContent.trim() || "0"} บาท`)], { alignment: AlignmentType.RIGHT })],
-            }),
-          ],
+    // Accommodation
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `2. ค่าที่พัก ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`,
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: `    รวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: {
-        top: { style: "none", size: 0, color: "FFFFFF" },
-        bottom: { style: "none", size: 0, color: "FFFFFF" },
-        left: { style: "none", size: 0, color: "FFFFFF" },
-        right: { style: "none", size: 0, color: "FFFFFF" },
-        insideHorizontal: { style: "none", size: 0, color: "FFFFFF" },
-        insideVertical: { style: "none", size: 0, color: "FFFFFF" },
-      },
+      spacing: { after: 200 },
     }),
 
-    // Registration fee section
-    new Table({
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun("4. ค่าลงทะเบียน", { bold: true })])],
-            }),
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`)], { alignment: AlignmentType.RIGHT })],
-            }),
-          ],
+    // Transportation
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "3. ค่าพาหนะ",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: `    รวมเป็นเงิน ${document.getElementById("Transportation_expenses_result").textContent.trim() || "0"} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: {
-        top: { style: "none", size: 0, color: "FFFFFF" },
-        bottom: { style: "none", size: 0, color: "FFFFFF" },
-        left: { style: "none", size: 0, color: "FFFFFF" },
-        right: { style: "none", size: 0, color: "FFFFFF" },
-        insideHorizontal: { style: "none", size: 0, color: "FFFFFF" },
-        insideVertical: { style: "none", size: 0, color: "FFFFFF" },
-      },
+      spacing: { after: 200 },
     }),
 
-    // Other costs section
-    new Table({
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun("5. ค่าใช้จ่ายอื่นๆ", { bold: true })])],
-            }),
-            new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(`รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`)], { alignment: AlignmentType.RIGHT })],
-            }),
-          ],
+    // Registration fee
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "4. ค่าลงทะเบียน",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: `    รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: {
-        top: { style: "none", size: 0, color: "FFFFFF" },
-        bottom: { style: "none", size: 0, color: "FFFFFF" },
-        left: { style: "none", size: 0, color: "FFFFFF" },
-        right: { style: "none", size: 0, color: "FFFFFF" },
-        insideHorizontal: { style: "none", size: 0, color: "FFFFFF" },
-        insideVertical: { style: "none", size: 0, color: "FFFFFF" },
-      },
+      spacing: { after: 200 },
     }),
 
-    // Total cost
-    createThaiParagraph([
-      createThaiTextRun(`รวมค่าใช้จ่ายเป็นเงินประมาณ ${all_cost.toLocaleString()} บาท`),
-    ], { alignment: AlignmentType.RIGHT }),
+    // Other expenses
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "5. ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ",
+          bold: true,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+        new TextRun({
+          text: `    รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun(`(${numberToThaiText(all_cost)})`),
-    ], { alignment: AlignmentType.RIGHT, spacing: { after: 400 } }),
+    // Total
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมค่าใช้จ่ายเป็นเงินประมาณ ${all_cost.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
+      spacing: { after: 200 },
+    }),
 
-    // Conclusion
-    createThaiParagraph([
-      createThaiTextRun("จึงเรียนมาเพื่อโปรดพิจารณา"),
-    ], { spacing: { after: 600 } }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `(${numberToThaiText(all_cost)})`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
+      spacing: { after: 400 },
+    }),
+
+    // Request consideration
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "จึงเรียนมาเพื่อโปรดพิจารณา",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 600 },
+    }),
 
     // Signature
-    createThaiParagraph([
-      createThaiTextRun("ลงชื่อ...............................................ผู้ขอรับเงิน"),
-    ], { alignment: AlignmentType.CENTER }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ลงชื่อ...............................................ผู้ขอรับเงิน",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun(requesting_name),
-    ], { alignment: AlignmentType.CENTER }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: requesting_name,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun(requesting_position),
-    ], { alignment: AlignmentType.CENTER, spacing: { after: 600 } }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: requesting_position,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.CENTER,
+      spacing: { after: 400 },
+    }),
 
     // Financial section
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นงานการเงินโดยเบิกจ่ายจาก (  )เงินงบประมาณแผ่นดิน (  )งบประมาณเงินรายได้ (  )เงินรับฝาก"),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความเห็นงานการเงินโดยเบิกจ่ายจาก (  )เงินงบประมาณแผ่นดิน (  )งบประมาณเงินรายได้ (  )เงินรับฝาก",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun(`หมวดรายจ่าย..............................รหัสงบประมาณ..............................จำนวนเงิน ${document.getElementById("GrandTotal").textContent} บาท`),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `หมวดรายจ่าย..............................รหัสงบประมาณ..............................จำนวนเงิน ${document.getElementById("GrandTotal").textContent} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun(`จำนวนเงิน(ตัวอักษร) ${numberToThaiText(all_cost)}`),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `จำนวนเงิน(ตัวอักษร) ${numberToThaiText(all_cost)}`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    // Approval sections
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ......................................................................"),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความคิดเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ......................................................................",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นจาก หัวหน้าสำนักงานเลขานุการฯ........................................................................................................"),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความเห็นจาก หัวหน้าสำนักงานเลขานุการฯ........................................................................................................",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นจาก หัวหน้าสำนักวิชาฯ/หัวหน้าส่วนงานฯ............................................................................................"),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความเห็นจาก หัวหน้าสำนักวิชาฯ/หัวหน้าส่วนงานฯ............................................................................................",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นจาก รองคณบดีคณะวิศวกรรมศาสตร์ ฝ่ายบริหารฯ.............................................................................."),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความเห็นจาก รองคณบดีคณะวิศวกรรมศาสตร์ ฝ่ายบริหารฯ..............................................................................",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("ความเห็นจาก คณบดีคณะวิศวกรรมศาสตร์  (  )อนุมัติ     (  )ไม่อนุมัติ"),
-    ]),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ความเห็นจาก คณบดีคณะวิศวกรรมศาสตร์  (  )อนุมัติ     (  )ไม่อนุมัติ",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      spacing: { after: 400 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("ลงชื่อ..............................................ผู้อนุมัติ"),
-    ], { alignment: AlignmentType.RIGHT }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "ลงชื่อ..............................................ผู้อนุมัติ",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
+      spacing: { after: 200 },
+    }),
 
-    createThaiParagraph([
-      createThaiTextRun("(..............................................)"),
-    ], { alignment: AlignmentType.RIGHT }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "(..............................................)",
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
+      spacing: { after: 200 },
+    }),
   ];
 
-  sections.push(...mainContent);
-
-  // Add participants table if needed
+  // Add travel companions table if needed
   const entryCount1 = document.querySelectorAll(".entry12").length;
   if (entryCount1 > 1) {
-    sections.push(
+    children.push(new PageBreak());
+    
+    children.push(
       new Paragraph({
-        children: [new PageBreak()],
-      }),
-      createThaiParagraph([
-        createThaiTextRun("รายชื่อผู้ร่วมเดินทาง", { bold: true, size: 48 }),
-      ], { alignment: AlignmentType.CENTER, spacing: { after: 400 } })
+        children: [
+          new TextRun({
+            text: "รายชื่อผู้ร่วมเดินทาง",
+            bold: true,
+            size: 52,
+            font: "TH Sarabun New",
+          }),
+        ],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 400 },
+      })
     );
 
-    // Create participants table
+    const entries = document.querySelectorAll(".entry12");
     const tableRows = [
       new TableRow({
         children: [
           new TableCell({
-            children: [createThaiParagraph([createThaiTextRun("ชื่อ-นามสกุล", { bold: true })])],
-            width: { size: 33, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: "ชื่อ-นามสกุล", bold: true, size: 32, font: "TH Sarabun New" })] })],
+            width: { size: 4000, type: WidthType.DXA },
           }),
           new TableCell({
-            children: [createThaiParagraph([createThaiTextRun("ตำแหน่ง", { bold: true })])],
-            width: { size: 33, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: "ตำแหน่ง", bold: true, size: 32, font: "TH Sarabun New" })] })],
+            width: { size: 4000, type: WidthType.DXA },
           }),
           new TableCell({
-            children: [createThaiParagraph([createThaiTextRun("หน่วยงาน", { bold: true })])],
-            width: { size: 34, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: "หน่วยงาน", bold: true, size: 32, font: "TH Sarabun New" })] })],
+            width: { size: 4000, type: WidthType.DXA },
           }),
         ],
       }),
     ];
 
-    // Add participant data
-    const entries = document.querySelectorAll(".entry12");
     entries.forEach(entry => {
       const name = entry.querySelector("input[name^='name_']").value;
       const pos = entry.querySelector("input[name^='position_']").value;
@@ -422,127 +538,59 @@ async function generateDOCX() {
         new TableRow({
           children: [
             new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(name)])],
+              children: [new Paragraph({ children: [new TextRun({ text: name, size: 32, font: "TH Sarabun New" })] })],
             }),
             new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(pos)])],
+              children: [new Paragraph({ children: [new TextRun({ text: pos, size: 32, font: "TH Sarabun New" })] })],
             }),
             new TableCell({
-              children: [createThaiParagraph([createThaiTextRun(dept)])],
+              children: [new Paragraph({ children: [new TextRun({ text: dept, size: 32, font: "TH Sarabun New" })] })],
             }),
           ],
         })
       );
     });
 
-    sections.push(
+    children.push(
       new Table({
-        width: {
-          size: 100,
-          type: WidthType.PERCENTAGE,
-        },
         rows: tableRows,
+        width: { size: 100, type: WidthType.PERCENTAGE },
       })
     );
   }
 
-  // Add personal car approval page if needed
-  const checkbox = document.getElementById('personal_car');
-  if (checkbox && checkbox.checked) {
-    sections.push(
-      new Paragraph({
-        children: [new PageBreak()],
-      }),
-      createThaiParagraph([
-        createThaiTextRun("บันทึกข้อความ", { bold: true, size: 32 }),
-      ], { alignment: AlignmentType.CENTER, spacing: { after: 400 } }),
-      createThaiParagraph([
-        createThaiTextRun("ส่วนราชการ", { bold: true }),
-        createThaiTextRun(" คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม โทรศัพท์ 043-754316  ภายใน 3007"),
-      ]),
-      createThaiParagraph([
-        createThaiTextRun("ที่", { bold: true }),
-        createThaiTextRun(" อว 0605.14/............"),
-        createThaiTextRun("                    วันที่", { bold: true }),
-        createThaiTextRun(` ${datepicker1}`),
-      ]),
-      createThaiParagraph([
-        createThaiTextRun("เรื่อง", { bold: true }),
-        createThaiTextRun(" ขออนุมัติเดินทางไปราชการโดยรถยนต์ส่วนบุคคล"),
-      ]),
-      createThaiParagraph([
-        createThaiTextRun("เรียน", { bold: true }),
-        createThaiTextRun(" คณบดีคณะวิศวกรรมศาสตร์"),
-      ], { spacing: { after: 400 } }),
-      createThaiParagraph([
-        createThaiTextRun(`ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ระหว่างวันที่ ${thai_datepicker4} ถึงวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`),
-      ], { spacing: { after: 400 } }),
-      createThaiParagraph([
-        createThaiTextRun("ดังนั้นจึงขออนุมัติงบประมาณในการเดินทางดังต่อไปนี้"),
-      ], { spacing: { after: 400 } }),
-      createThaiParagraph([
-        createThaiTextRun("ลงชื่อ....................................................ผู้ขอรับเงิน"),
-      ], { alignment: AlignmentType.CENTER }),
-      createThaiParagraph([
-        createThaiTextRun(requesting_name),
-      ], { alignment: AlignmentType.CENTER }),
-      createThaiParagraph([
-        createThaiTextRun(requesting_position),
-      ], { alignment: AlignmentType.CENTER, spacing: { after: 400 } })
-    );
-  }
-
-  // Create document with TH Sarabun New font
+  // Create document
   const doc = new Document({
     sections: [{
-      properties: {
-        page: {
-          size: {
-            width: 11906, // A4 width in twips
-            height: 16838, // A4 height in twips
-          },
-          margin: {
-            top: 1440, // 1 inch
-            right: 1440,
-            bottom: 1440,
-            left: 1440,
-          },
-        },
-      },
-      children: sections,
+      properties: {},
+      children: children,
     }],
-    styles: {
-      default: {
-        document: {
-          run: {
-            font: "TH Sarabun New",
-            size: 32, // 16pt = 32 half-points
-          },
-        },
-      },
-    },
     fonts: [
       {
         name: "TH Sarabun New",
         family: "TH Sarabun New",
-        type: "normal",
-        data: base64ToUint8Array(THSarabunNew_normal),
-      },
-      {
-        name: "TH Sarabun New",
-        family: "TH Sarabun New",
-        type: "bold",
-        data: base64ToUint8Array(THSarabunNew_bold),
+        characterSet: 1,
+        pitch: 0,
+        panose: "00000000000000000000",
+        embed: {
+          normal: THSarabunNewNormal.default,
+          bold: THSarabunNewBold.default,
+        },
       },
     ],
   });
 
   // Generate and download the document
-  const blob = await Packer.toBlob(doc);
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'เอกสารขออนุมัติเดินทางไปราชการ.docx';
-  link.click();
-  window.URL.revokeObjectURL(url);
+  try {
+    const blob = await Packer.toBlob(doc);
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'เอกสารขออนุมัติเดินทางไปราชการ.docx';
+    link.click();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error generating DOCX:', error);
+    alert('เกิดข้อผิดพลาดในการสร้างไฟล์ DOCX');
+  }
 } 
