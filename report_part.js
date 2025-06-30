@@ -646,7 +646,7 @@ doc.setFont("THSarabunNew", "normal");
       const distance = inputs[2]?.value
         ? Number(inputs[2].value.replace(/,/g, '')).toLocaleString() + ' กม.'
         : '-';
-      const amount = inputs[2]?.value
+      const amount = inputs[3]?.value
         ? Number(inputs[3].value.replace(/,/g, '')).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         : '-';
   

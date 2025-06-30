@@ -682,3 +682,30 @@ function removeDateSection(id) {
     section.remove();
   }
 }
+
+// Sum all amount-<uniqueId> fields and display the result
+function calculateTotalAmount() {
+  let total = 0;
+  // Select all inputs whose id starts with 'amount-'
+  const amountInputs = document.querySelectorAll('input[id^="amount-"]');
+  amountInputs.forEach(input => {
+    const value = parseFloat((input.value || '').replace(/,/g, ''));
+    if (!isNaN(value)) {
+      total += value;
+    }
+  });
+  // Display the result in the element with id 'R_distance-cost_result'
+  document.getElementById("k").textContent = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const resultEl = document.getElementById('R_distance-cost_result');
+  if (resultEl) {
+    resultEl.textContent = total.toLocaleString();
+  }
+  grandTotal && grandTotal(); // update grand total if function exists
+  return total;
+}
+
+entries.forEach((entry) => {
+  const inputs = entry.querySelectorAll('input');
+  console.log(inputs, Array.from(inputs).map(i => i.value));
+  // ...rest of your code
+});
