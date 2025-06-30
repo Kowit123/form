@@ -115,7 +115,7 @@ function getAllEntryData1() {
 const participants = getAllEntryData1();
 const participantText = participants.length > 0
   ? ` พร้อมด้วย\n` + participants.map((p, i) =>
-      `${i + 1}. ${p.name} ตำแหน่ง ${p.position} ${p.department ? "หน่วยงาน " + p.department : ""}\n`
+      `${i + 1}. ${p.name} ตำแหน่ง ${p.position} }\n`
     ).join('')
   : '';
 

@@ -898,31 +898,32 @@ yy+=1;
 doc.text(`เรียน  ${document.getElementById("dear_re").value}`,3,yy);
 yy+=1;
 
-const kt = document.getElementById(`s`)?.value
-? Number(document.getElementById(`s`).value.replace(/,/g, '')).toLocaleString()
-: "";
+const sValue = document.getElementById("s").value.replace(/,/g, '');
+
 // ...existing // ...existing code...
-const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน ${document.getElementById("s").value} ตัวอักษร ( ${numberToThaiText(kt)} )`;
+const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน ${document.getElementById("s").value} ตัวอักษร ( ${numberToThaiText(sValue)} )`;
 
 // ตัดบรรทัดแรกที่ 16cm
-const nbFirstLineArr = doc.splitTextToSize(nb, 16);
-const nbFirstLine = nbFirstLineArr[0] || "";
-const nbRestText = nb.substring(nbFirstLine.length).trim();
+const linesTemp = doc.splitTextToSize(nb, firstLineWidth);
 
-// ตัดบรรทัดถัดไปที่ 18cm
-const nbOtherLines = doc.splitTextToSize(nbRestText, 18);
+const firstLine1 = linesTemp[0];
 
-// พิมพ์บรรทัดแรกที่ x=5, ถัดไป x=3
-let nbY = yy;
-if (nbFirstLine) {
-  doc.text(nbFirstLine, 5, nbY);
-  nbY += 0.7;
-}
-nbOtherLines.forEach(line => {
-  doc.text(line, 3, nbY);
-  nbY += 0.7;
+const remainingText1 = nb.substring(firstLine1.length).trim(); // ตัดช่องว่างหน้าออก
+
+// ตัดข้อความส่วนที่เหลือด้วยความกว้าง 16
+const remainingLines1 = doc.splitTextToSize(remainingText1, nextLinesWidth);
+
+// รวมกัน
+const allLines1 = [firstLine1, ...remainingLines1];
+
+let lineY1 = yy;
+allLines1.forEach((line, index) => {
+  const x = index === 0 ? 5.5 : 3;
+  doc.text(line, x, lineY1);
+  lineY1 += 0.7;
 });
-yy = nbY;
+
+yy = lineY1;
 // ...existing code...
 doc.text(`โดยเบิกค่าใช้จ่ายจากเงินงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี......................`,3,yy);
 
