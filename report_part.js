@@ -898,8 +898,11 @@ yy+=1;
 doc.text(`เรียน  ${document.getElementById("dear_re").value}`,3,yy);
 yy+=1;
 
+const kt = document.getElementById(`k`)?.value
+? Number(document.getElementById(`k`).value.replace(/,/g, '')).toLocaleString()
+: "";
 // ...existing // ...existing code...
-const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน...........................................ตัวอักษร(..........................................................................)`;
+const nb = `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน ${document.getElementById("s").value} ตัวอักษร ( ${numberToThaiText(kt)} )`;
 
 // ตัดบรรทัดแรกที่ 16cm
 const nbFirstLineArr = doc.splitTextToSize(nb, 16);
@@ -921,7 +924,7 @@ nbOtherLines.forEach(line => {
 });
 yy = nbY;
 // ...existing code...
-doc.text(`โดยเบิกค่าใช้จ่ายจากเงินงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี..................`,3,yy);
+doc.text(`โดยเบิกค่าใช้จ่ายจากเงินงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี......................`,3,yy);
 
 yy += 0.7;
 doc.text(`แผนงานที่1  ขยายโอกาสและพัฒนาการศึกษา`,3,yy);
