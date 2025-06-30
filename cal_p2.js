@@ -73,6 +73,7 @@ function addrow() {
     input.addEventListener("input", updatecall);
   });
   updatecall();
+  return false;
 }
 
 function removerow() {
@@ -216,6 +217,7 @@ function addRealAccommodationRow() {
 
   // เรียก update รวมทันทีหลังเพิ่มแถวใหม่
   updateRealAccommodationTotal();
+  return false;
 }
 
 function removeRealAccommodationeRow(button) {
@@ -251,6 +253,7 @@ function R_addOtherLine() {
   `;
   container.appendChild(div);
   updateRealOthercostTotal();
+  return false;
 }
 function R_removeOtherLine(button) {
   const containerAcc = button.closest(".r_other");
@@ -458,6 +461,7 @@ const endDate = convertThaiFullDateToISO(endDateRaw);
     `;
     form_container1.appendChild(div);
     dateId++;
+    return false;
   }
 
   // ฟังก์ชันคำนวณจำนวนเงินจากระยะทาง

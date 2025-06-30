@@ -28,8 +28,8 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="#option1" onclick="switchForm()">แบบฟอร์มขออนุมัติเดินทางไปราชการ</a>
-        <a href="#option2" onclick="switchForm2()">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</a>
+        <a href="#option1" onclick="switchForm(event)">แบบฟอร์มขออนุมัติเดินทางไปราชการ</a>
+        <a href="#option2" onclick="switchForm2(event)">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</a>
         <a href="คู่มือการใช้งานเว็บไซต์.pdf" target="_blank">📄 คู่มือการใช้งาน</a>
     </nav>
     <!--top_tag-->
@@ -231,7 +231,7 @@
                 </div>    
                 <form id="List" class="Transportation-expenses_List" style="margin-top: 1%;">
                     <div style="margin-right: 4.6%;">
-                        <input type="checkbox" data-id="airplane" name="topicT" value="เครื่องบิน">
+                        <input  type="checkbox" data-id="airplane" name="topicT" value="เครื่องบิน">
                         <label for="airplane">เครื่องบิน</label><br>
                     </div>
                     <div>
@@ -295,7 +295,7 @@
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 1%; display: none; width: 100%;" id="reason_airplane">
                         <p style="margin-right: 1%;">เนื่องจาก:</p>
-                        <input type="text" placeholder="สาเหตุในการขอใช้เครื่องบินในการเดินทางไปราชการ" style="width: 95%; margin-left: 2%;" id="reason_airplane_input">
+                        <input id="rea" type="text" placeholder="สาเหตุในการขอใช้เครื่องบินในการเดินทางไปราชการ" style="width: 95%; margin-left: 2%;" id="reason_airplane_input">
                     </div>
                     <div id="train_box" class="input-box" style="display: none;">
                         <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">รถไฟ:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>

@@ -5,6 +5,23 @@
     line-height: 1.6;
     font-weight: bold;
 }
+
+/* ป้องกันการรีเฟรชจาก CSS animations */
+* {
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+/* ป้องกันการรีเฟรชจาก transitions */
+* {
+    transition: none !important;
+}
+
+/* ป้องกันการรีเฟรชจาก hover effects */
+*:hover {
+    transition: none !important;
+}
+
 body {
     font-family: 'Noto Sans Thai', sans-serif;
     background-color: #dfbe03;

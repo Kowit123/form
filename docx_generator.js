@@ -13,10 +13,6 @@ async function generateDOCX() {
     PageBreak
   } = docx;
 
-  // Import TH Sarabun New fonts
-  const THSarabunNewNormal = await import('./font/THSarabunNew-normal.js');
-  const THSarabunNewBold = await import('./font/THSarabunNew-bold.js');
-
   // Get form data
   const agency = document.getElementById("agency").value;
   const bookNum = document.getElementById("bookNum").value;
@@ -216,16 +212,23 @@ async function generateDOCX() {
       children: [
         new TextRun({
           text: "1. ค่าเบี้ยเลี้ยง",
-          bold: true,
-          size: 32,
-          font: "TH Sarabun New",
-        }),
-        new TextRun({
-          text: `    รวมเป็นเงิน ${accommodationTotal.toLocaleString()} บาท`,
           size: 32,
           font: "TH Sarabun New",
         }),
       ],
+      alignment: AlignmentType.LEFT,
+      spacing: { after: 200 },
+    }),
+
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมเป็นเงิน ${accommodationTotal.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
       spacing: { after: 200 },
     }),
 
@@ -234,16 +237,23 @@ async function generateDOCX() {
       children: [
         new TextRun({
           text: `2. ค่าที่พัก ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`,
-          bold: true,
-          size: 32,
-          font: "TH Sarabun New",
-        }),
-        new TextRun({
-          text: `    รวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`,
           size: 32,
           font: "TH Sarabun New",
         }),
       ],
+      alignment: AlignmentType.LEFT,
+      spacing: { after: 200 },
+    }),
+
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
       spacing: { after: 200 },
     }),
 
@@ -252,16 +262,23 @@ async function generateDOCX() {
       children: [
         new TextRun({
           text: "3. ค่าพาหนะ",
-          bold: true,
-          size: 32,
-          font: "TH Sarabun New",
-        }),
-        new TextRun({
-          text: `    รวมเป็นเงิน ${document.getElementById("Transportation_expenses_result").textContent.trim() || "0"} บาท`,
           size: 32,
           font: "TH Sarabun New",
         }),
       ],
+      alignment: AlignmentType.LEFT,
+      spacing: { after: 200 },
+    }),
+
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมเป็นเงิน ${document.getElementById("Transportation_expenses_result").textContent.trim() || "0"} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
       spacing: { after: 200 },
     }),
 
@@ -270,16 +287,23 @@ async function generateDOCX() {
       children: [
         new TextRun({
           text: "4. ค่าลงทะเบียน",
-          bold: true,
-          size: 32,
-          font: "TH Sarabun New",
-        }),
-        new TextRun({
-          text: `    รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,
           size: 32,
           font: "TH Sarabun New",
         }),
       ],
+      alignment: AlignmentType.LEFT,
+      spacing: { after: 200 },
+    }),
+
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
       spacing: { after: 200 },
     }),
 
@@ -288,16 +312,23 @@ async function generateDOCX() {
       children: [
         new TextRun({
           text: "5. ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ",
-          bold: true,
-          size: 32,
-          font: "TH Sarabun New",
-        }),
-        new TextRun({
-          text: `    รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,
           size: 32,
           font: "TH Sarabun New",
         }),
       ],
+      alignment: AlignmentType.LEFT,
+      spacing: { after: 200 },
+    }),
+
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: `รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,
+          size: 32,
+          font: "TH Sarabun New",
+        }),
+      ],
+      alignment: AlignmentType.RIGHT,
       spacing: { after: 200 },
     }),
 
@@ -565,19 +596,6 @@ async function generateDOCX() {
       properties: {},
       children: children,
     }],
-    fonts: [
-      {
-        name: "TH Sarabun New",
-        family: "TH Sarabun New",
-        characterSet: 1,
-        pitch: 0,
-        panose: "00000000000000000000",
-        embed: {
-          normal: THSarabunNewNormal.default,
-          bold: THSarabunNewBold.default,
-        },
-      },
-    ],
   });
 
   // Generate and download the document

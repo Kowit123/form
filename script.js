@@ -20,6 +20,58 @@ function formatNumberWithCommas(value) {
     return Number(value).toLocaleString('en-US');
 }
 
+// ป้องกันการรีเฟรชหน้าเว็บจากปุ่มและลิงก์ต่างๆ
+document.addEventListener('DOMContentLoaded', function() {
+    // ป้องกันการรีเฟรชจากปุ่มที่มี onclick
+    const buttonsWithOnclick = document.querySelectorAll('button[onclick]');
+    buttonsWithOnclick.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // ไม่ต้อง preventDefault เพราะ onclick จะทำงานอยู่แล้ว
+            // เพียงแค่ป้องกันการส่ง form หรือการรีเฟรช
+            e.stopPropagation();
+        });
+    });
+
+    // ป้องกันการรีเฟรชจากลิงก์ที่มี onclick
+    const linksWithOnclick = document.querySelectorAll('a[onclick]');
+    linksWithOnclick.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // ไม่ต้อง preventDefault เพราะ onclick จะทำงานอยู่แล้ว
+            // เพียงแค่ป้องกันการส่ง form หรือการรีเฟรช
+            e.stopPropagation();
+        });
+    });
+
+    // ป้องกันการรีเฟรชจาก form (ถ้ามี)
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    // ป้องกันการรีเฟรชจาก browser events
+    window.addEventListener('beforeunload', function(e) {
+        // ไม่ต้องทำอะไร เพียงแค่ป้องกันการรีเฟรช
+    });
+
+    // ป้องกันการรีเฟรชจาก keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // ป้องกัน Ctrl+R, F5, Ctrl+F5
+        if ((e.ctrlKey && e.key === 'r') || e.key === 'F5' || (e.ctrlKey && e.key === 'F5')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // ป้องกันการรีเฟรชจาก context menu
+    document.addEventListener('contextmenu', function(e) {
+        // ไม่ต้อง preventDefault เพราะอาจต้องการ context menu
+        // เพียงแค่ป้องกันการรีเฟรช
+    });
+});
+
 document.addEventListener('input', function(e) {
     if (e.target.classList.contains('comma-number')) {
         // กรองให้เหลือแต่ตัวเลขและจุดทศนิยม
@@ -37,8 +89,6 @@ document.addEventListener('input', function(e) {
         }
     }
 });
-
-
 
 let allowanceTotal = 0;
 document.addEventListener("DOMContentLoaded", function () {
@@ -123,6 +173,7 @@ function addEntry1() {
     </div>
   `;
   container.appendChild(div1);
+  return false;
 }
 function removeEntry(button) {
   const container = button.closest(".entry12")
@@ -132,8 +183,6 @@ function removeEntry(button) {
   }
 }
 
-
-
 //Allowance
 const mc1 = document.getElementById('mc_1');
 const pc1 = document.getElementById('pc_1');
@@ -142,7 +191,6 @@ const mc2 = document.getElementById('mc_2');
 const pc2 = document.getElementById('pc_2');
 const dc2 = document.getElementById('dc_2');
 const result = document.getElementById('result');
-
 
 function parseNumber(val) {
     if (!val) return 0;
@@ -167,8 +215,6 @@ dc1.addEventListener('input',calculateAllowance);
 mc2.addEventListener('input',calculateAllowance);
 pc2.addEventListener('input',calculateAllowance);
 dc2.addEventListener('input',calculateAllowance);
-
-
 
 /*ค่าที่พัก*/
 // เพิ่ม-ลบแถว
@@ -196,6 +242,7 @@ function addAccommodationLine() {
   `;
   container.appendChild(div);
   bindAccommodationEvents(); 
+  return false;
 }
 function removeAccommodationline(button) {
   const container = button.closest(".all");
@@ -226,7 +273,6 @@ function updateAccommodationTotal() {
   let total = totalAcc;
   return total;
 }
-
 
   const prices = document.querySelectorAll(".accommodation_cost");
   const counts = document.querySelectorAll(".accommodation_person");
@@ -270,7 +316,6 @@ function bindAccommodationEvents() {
   days.forEach(input => input.addEventListener("input", attachInputListeners));
 }
 
-
 /*ค่าลงทะเบียน*/
 // เพิ่ม-ลบแถว
 let Registration = 1;
@@ -298,6 +343,7 @@ function addRegistrationfeeLine() {
   container.appendChild(div);
   updateRegistration_fee_Total();
   attachInputListeners();
+  return false;
 }
 function removeRegistration_feeline(button) {
   const feeline = button.closest(".fee_detail");
@@ -355,6 +401,7 @@ function addothercostLine() {
   updateothercostTotal();
   attachInputListeners();
   updateGrandTotal();
+  return false;
 }
 function removeothercostline(button) {
   const costLine = button.closest(".other_cost");
@@ -415,7 +462,6 @@ dc1.addEventListener('input',updateGrandTotal);
 mc2.addEventListener('input',updateGrandTotal);
 pc2.addEventListener('input',updateGrandTotal);
 dc2.addEventListener('input',updateGrandTotal);
-
 
 //ของหน้า2
   //ของหน้า2
