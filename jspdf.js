@@ -97,30 +97,27 @@ if (typeof wordcut !== "undefined") {
   wordcut.init();
 }
 
-
 function getAllEntryData1() {
   const entries = document.querySelectorAll(".entry12");
   const data = [];
-
-entries.forEach((entry) => {
+  entries.forEach((entry, idx) => {
+    if (idx === 0) return; // skip first
     const name = entry.querySelector('input[name^="name_"]')?.value || "";
     const position = entry.querySelector('input[name^="position_"]')?.value || "";
     const department = entry.querySelector('input[name^="department_"]')?.value || "";
-
     if (name || position || department) {
-      data.push(`${name} ตำแหน่ง ${position} หน่วยงาน ${department}`);
+      data.push({ name, position, department });
     }
   });
-
   return data;
 }
 
 const participants = getAllEntryData1();
 const participantText = participants.length > 0
-  ? ` พร้อมด้วย ${participants.join(', ')}`
+  ? ` พร้อมด้วย\n` + participants.map((p, i) =>
+      `${i + 1}. ${p.name} ตำแหน่ง ${p.position} ${p.department ? "หน่วยงาน " + p.department : ""}\n`
+    ).join('')
   : '';
-
-  
 
 
 
