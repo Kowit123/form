@@ -1,5 +1,4 @@
-
-    async function generatePDF() {
+async function generatePDF() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({
         orientation: 'portrait',
@@ -93,28 +92,45 @@
 const firstLineWidth = 13;
 const nextLinesWidth = 16;
 
-// ข้อความเต็ม
+// --- โหลดและเตรียม wordcut ---
+if (typeof wordcut !== "undefined") {
+  wordcut.init();
+}
+
+// --- ฟังก์ชันตัดคำแบบใช้ wordcut ---
+function splitThaiWords(text) {
+  if (typeof wordcut !== "undefined") {
+    return wordcut.cutIntoArray(text);
+  }
+  // fallback แบบง่าย (ไม่แนะนำเท่าไหร่)
+  return text.replace(/([,\.])/g, ' $1 ').split(/\s+/).filter(Boolean);
+}
+
+// --- เตรียมข้อความ ---
 const aLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
 
-const linesTemp = doc.splitTextToSize(aLines, firstLineWidth);
-
-const firstLine = linesTemp[0];
-
-const remainingText = aLines.substring(firstLine.length).trim(); // ตัดช่องว่างหน้าออก
-
-// ตัดข้อความส่วนที่เหลือด้วยความกว้าง 16
+// --- แบ่งข้อความเป็นบรรทัด ---
+const tempLines = doc.splitTextToSize(aLines, firstLineWidth);
+const firstLine = tempLines[0];
+const remainingText = aLines.substring(firstLine.length).trim();
 const remainingLines = doc.splitTextToSize(remainingText, nextLinesWidth);
-
-// รวมกัน
 const allLines = [firstLine, ...remainingLines];
 
+// --- วาดข้อความจัดกระจายทีละบรรทัด ---
 let lineY = y;
 allLines.forEach((line, index) => {
   const x = index === 0 ? 5.5 : 3;
-  doc.text(line, x, lineY);
+  const lineWidth = index === 0 ? firstLineWidth : nextLinesWidth;
+
+  // ตัดคำและจัดรูปแบบจัดกระจาย
+  const words = splitThaiWords(line);
+  const distributedLine = words.join(' ');
+  drawThaiDistributed(doc, distributedLine, x, lineY, lineWidth);
+
   lineY += 0.7;
 });
 lineY += 0.3;
+
 const bLines = `1.ค่าเบี้ยเลี้ยง`;
 doc.text(bLines,3,lineY);     
 const b1Lines = `รวมเป็นเงิน ${allowanceTotal.toLocaleString()} บาท`;
@@ -453,7 +469,10 @@ const mainParagraphAllLines = [mainParagraphFirstLine, ...mainParagraphRemaining
 let mainParagraphY12 = y12;
 mainParagraphAllLines.forEach((line, index) => {
   const x = index === 0 ? 5.5 : 3;
-  doc.text(line, x, mainParagraphY12);
+  // ตัดคำก่อนส่งเข้า drawThaiDistributed
+  const words = splitThaiWords(line);
+  const distributedText = words.join(' ');
+  drawThaiDistributed(doc, distributedText, x, mainParagraphY12, index === 0 ? firstLineWidth : nextLinesWidth);
   mainParagraphY12 += 0.7;
 });
 
@@ -485,9 +504,7 @@ if (license || driver || distance) {
     mainParagraphY12 += lines.length * 0.7; // ปรับระยะ Y ตามจำนวนบรรทัด
   }
   doc.text(`รวมทั้งสิ้น ${totalFormatted} บาท`, pageWidth - 2, mainParagraphY12, { align: 'right' });
-    // ...existing code...
-  doc.text(`(${numberToThaiText(total.replace(/,/g, ''))})`, pageWidth - 2, mainParagraphY12 + 0.7, { align: 'right' });
-  // ...existing code...
+    doc.text(`(${numberToThaiText(total.replace(/,/g, ''))})`, pageWidth - 2, mainParagraphY12 + 0.7, { align: 'right' });
 }
 mainParagraphY12 += 2.1;
 const text123 = "ลงชื่อ....................................................ผู้ขอรับเงิน";
@@ -513,11 +530,38 @@ mainParagraphY12+= 1;
 doc.save("เอกสารขออนุมัติเดินทางไปราชการ.pdf");
 }
 
+/**
+ * วาดข้อความแบบ "จัดกระจาย (Justify)" สำหรับข้อความภาษาไทย
+ * @param {jsPDF} doc - เอกสาร jsPDF
+ * @param {string} text - ข้อความที่ต้องการวาด
+ * @param {number} x - ตำแหน่ง X เริ่มต้น
+ * @param {number} y - ตำแหน่ง Y เริ่มต้น
+ * @param {number} width - ความกว้างของพื้นที่ให้จัดข้อความ
+ */
+function drawThaiDistributed(doc, text, x, y, width) {
+  const words = text.trim().split(/\s+/); // แยกคำ (หลังจาก wordcut แล้ว)
+  
+  // วัดความกว้างรวมของทุกคำ (ไม่รวมช่องว่าง)
+  const wordWidths = words.map(word => doc.getTextWidth(word));
+  const totalWordsWidth = wordWidths.reduce((sum, w) => sum + w, 0);
+  const spaceCount = words.length - 1;
 
+  // หากมีแค่คำเดียวหรือความกว้างรวมมากกว่าพื้นที่ → พิมพ์ปกติ
+  if (spaceCount <= 0 || totalWordsWidth >= width) {
+    doc.text(text, x, y);
+    return;
+  }
 
+  // คำนวณระยะห่างระหว่างคำ
+  const spacing = (width - totalWordsWidth) / spaceCount;
 
-
-
+  // วาดคำทีละคำ โดยขยับ x ตามระยะ
+  let currentX = x;
+  words.forEach((word, index) => {
+    doc.text(word, currentX, y);
+    currentX += wordWidths[index] + spacing;
+  });
+}
 
 
 function numberToThaiText(number) {

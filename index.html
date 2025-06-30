@@ -160,7 +160,7 @@
         <!--cost_part-->
         <!--label-->
         <h2 style="color: rgb(83, 83, 83); font-size: 1.5rem; margin: 1.2rem 0;">ประมาณค่าใช้จ่ายในการเดินทางไปราชการ</h2>
-        <!--ค่าเบี้ยเลี้ง-->
+        <!--ค่าเบี้ยเลี้ยง-->
         <div class="allowance">
             <div class="F_line" style="display: flex; justify-content: space-between;">
             <label>1.ค่าเบี้ยเลี้ยง</label>
@@ -755,7 +755,8 @@
 </div>
 <div style="text-align: center; width: 100%; display: flex; justify-content: center;">
         <div id="bttd" style="margin-bottom: 7rem; width: 100%; text-align: center;">
-            <button class="pdfbtt" type="button" onclick="generatePDF()">ดาวโหลดเอกสาร</button>
+            <button class="pdfbtt" type="button" onclick="generatePDF()">ดาวโหลดเอกสาร PDF</button>
+            <button class="pdfbtt" type="button" onclick="generateDOCX()" style="margin-left: 10px; background-color: #217346;">ดาวโหลดเอกสาร DOCX</button>
         </div>
         <div id="bttd1" class="n_display" style="margin-bottom: 7rem; width: 100%; align-items: center;">
             <button class="pdfbtt1" type="button" onclick="generate_reportPDF()">ดาวโหลดเอกสาร</button>
@@ -766,5 +767,17 @@
     <script src="report_part.js"></script>
     <script src="switrch_form.js"></script>
     <script src="cal_p2.js"></script>
+    <script src="wordcut.min.js"></script>
+    <!--docx library-->
+    <script src="docx-library.js"></script>
+    <script>
+        // Check if docx library loaded properly
+        if (typeof docx !== 'undefined') {
+            console.log('docx library loaded successfully');
+        } else {
+            console.error('docx library failed to load');
+        }
+    </script>
+    <script src="docx_generator.js"></script>
 </body>
 </html>
