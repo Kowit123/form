@@ -178,7 +178,7 @@ if (personalBox && personalBox.style.display !== "none") {
 
   if (license || driver || distance) {
     const text1 = `-รถยนต์ส่วนบุคคล 
-    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ
+    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นผู้ขับรถ
     ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
     const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
@@ -713,7 +713,7 @@ if (personalBoxc && personalBoxc.style.display !== "none") {
   let driver = inputs[1]?.value?.trim() || "";
   let travelText = `เดินทางโดย รถยนต์ส่วนบุคคล`;
   if (license) travelText += ` หมายเลขทะเบียน ${license}`;
-  if (driver) travelText += ` โดยมี ${driver} เป็นพนักงานขับรถ`;
+  if (driver) travelText += ` โดยมี ${driver} เป็นผู้ขับรถ`;
   doc.text(travelText, 1.5, y3);
   y3 += 0.7;
 }
