@@ -304,9 +304,26 @@ rows.forEach(row => {
 });
 lineY += 0.3;
 
+// Check if reign_car checkbox is checked before printing driver compensation
+const reignCarCheckbox = document.querySelector('input[name="topicT"][data-id="reign_car"]');
+if (reignCarCheckbox && reignCarCheckbox.checked) {
+  groupHeight = 2.8;
+  lineY = checkAddPageGroup(doc, lineY, groupHeight);
+  const gbx1Lines1  = `5.ค่าตอบแทนพนักงานขับรถ`;
+  doc.text(gbx1Lines1,3, lineY)
+  doc.text(`รวมเป็นเงิน ${reign_car4412_result.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+  lineY += 0.7;
+  const gbx1Lines2  = `ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx1").value} บาท X ${document.getElementById("ggx2").value} วัน `;
+  doc.text(gbx1Lines2,3, lineY)
+  lineY += 0.7;
+}
+lineY += 0.3;
+
 groupHeight = 2.1;
 lineY = checkAddPageGroup(doc, lineY, groupHeight);
-const gLines1  = `5.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
+// Check if reign_car checkbox is checked to determine section number
+const sectionNumber = (reignCarCheckbox && reignCarCheckbox.checked) ? '6' : '5';
+const gLines1  = `${sectionNumber}.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
 doc.text(gLines1,3, lineY)
 doc.text(`รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
