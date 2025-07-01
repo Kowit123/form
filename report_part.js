@@ -151,7 +151,7 @@ doc.text(`2.ค่าที่พัก ${document.querySelector('input[name="ra
 doc.text(`รวมเป็นเงิน ${document.getElementById("Real_GrandTotal_Accommodation_Cost").textContent} บาท`, pageWidth-2, y,{align: 'right'});
 y += 0.7;
 const Accommodation_Costrows = document.querySelectorAll("#Real_accommodation .Real_accommodation_1");
-Accommodation_Costrows.forEach((row) => {
+Accommodation_Costrows.forEach((row, idx) => {
   const cost = row.querySelector(".real_accommodation_cost")?.value.trim() || "0";
   const rooms = row.querySelector(".real_accommodation_person")?.value.trim() || "0";
   const days = row.querySelector(".real_accommodation_day")?.value.trim() || "0";
@@ -159,7 +159,8 @@ Accommodation_Costrows.forEach((row) => {
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (cost !== "0" || rooms !== "0" || days !== "0") {
     const costH = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
-    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} คน ระยะเวลา ${days} วัน`, 5, y);
+    const unit = idx === 0 ? "ห้อง" : "คน";
+    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} ${unit} ระยะเวลา ${days} วัน`, 5, y);
     y += 0.7;
   }
 });
