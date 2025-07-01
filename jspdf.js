@@ -239,6 +239,7 @@ if (personalBox && personalBox.style.display !== "none") {
     if (license || driver || distance) {
       const text1 = `-รถยนต์ของทางราชการ 
       หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
+      ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx1").value} บาท X ${document.getElementById("ggx2").value} วัน
       ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${total} บาท`
       const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
@@ -277,7 +278,8 @@ if (personalBox && personalBox.style.display !== "none") {
   }
   lineY += 0.3;
 
-
+groupHeight = 2.1;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const fLines1  = `4.ค่าลงทะเบียน`;
 doc.text(fLines1,3, lineY)
 doc.text(`รวมเป็นเงิน ${Registration_fee.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
@@ -301,7 +303,8 @@ rows.forEach(row => {
 });
 lineY += 0.3;
 
-
+groupHeight = 2.1;
+lineY = checkAddPageGroup(doc, lineY, groupHeight);
 const gLines1  = `5.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
 doc.text(gLines1,3, lineY)
 doc.text(`รวมเป็นเงิน ${other_cost.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
