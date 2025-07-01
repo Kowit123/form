@@ -261,27 +261,48 @@ const detailRowsCount = Array.from(R_other_cost_resultrows).filter(row => {
 }).length;
 
 
-const groupHeight = (1 + detailRowsCount) * 0.7; // 1 คือบรรทัดหัวข้อ
+let groupHeight = (1 + detailRowsCount) * 0.7; // 1 คือบรรทัดหัวข้อ
 y = checkAddPageForGroup(doc, y, groupHeight);
 
+const reignCarCheckbox = document.querySelector('input[name="type"][data-id="R_reign_car"]');
+if (reignCarCheckbox && reignCarCheckbox.checked) {
+  groupHeight = 2.8;
+  y = checkAddPageGroup(doc, y, groupHeight);
+  const gbx1Lines1  = `4.ค่าตอบแทนพนักงานขับรถ`;
+  doc.text(gbx1Lines1,3, y)
+  doc.text(`รวมเป็นเงิน ${document.getElementById("reign_car4413_result").textContent} บาท`,pageWidth-2, y, {align: 'right'});
+  y += 0.7;
+  const gbx1Lines2  = `ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx12").value} บาท X ${document.getElementById("ggx22").value} วัน `;
+  doc.text(gbx1Lines2,3, y)
+  y += 0.7;
+}
+y += 0.3;
 // พิมพ์หัวข้อ
-doc.text(`4.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`, 3, y);
-doc.text(`รวมเป็นเงิน ${document.getElementById("R_other_cost_result").textContent} บาท`, pageWidth-2, y, { align: 'right' });
+groupHeight = 2.1;
+y = checkAddPageGroup(doc, y, groupHeight);
+// Check if reign_car checkbox is checked to determine section number
+const sectionNumber = (reignCarCheckbox && reignCarCheckbox.checked) ? '5' : '4';
+const gLines1  = `${sectionNumber}.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ`;
+doc.text(gLines1,3, y)
+doc.text(`รวมเป็นเงิน ${document.getElementById("R_other_cost_result").textContent} บาท`,pageWidth-2, y, {align: 'right'});
 y += 0.7;
 
-// พิมพ์รายละเอียด
-R_other_cost_resultrows.forEach((row) => {
+const rows2 = document.querySelectorAll("#R_other_detail .r_other");
+rows2.forEach((row,index) => {
   const detailInput = row.querySelector(".R_other_detail");
   const costInput = row.querySelector(".R_other_costs");
-  const detail = (detailInput.value || "").trim();
-  const cost = (costInput.value || "").trim();
-  const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
-  if (detail || cost) {
-    doc.text(`-${detail} เป็นเงิน ${costFormatted} บาท`, 5, y);
+  const detail = detailInput?.value.trim() || "";
+  // ปรับตรงนี้ให้รองรับ , และค่าว่าง
+  const costRaw = costInput?.value.trim().replace(/,/g, '') || "0";
+  const cost = Number(costRaw).toLocaleString();
+  console.log(`Row ${index + 1}:`, detail, cost);
+  if (detail || costRaw !== "0") {
+    // ตรวจสอบก่อนเพิ่มแถวใหม่
+    y = checkAddPageGroup(doc, y, 0.7);
+    doc.text(`-${detail} เป็นเงิน ${cost} บาท`,5, y);
     y += 0.7;
   }
 });
-
 y += 0.3;
 
 

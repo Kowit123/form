@@ -311,7 +311,7 @@ if (reignCarCheckbox && reignCarCheckbox.checked) {
   lineY = checkAddPageGroup(doc, lineY, groupHeight);
   const gbx1Lines1  = `5.ค่าตอบแทนพนักงานขับรถ`;
   doc.text(gbx1Lines1,3, lineY)
-  doc.text(`รวมเป็นเงิน ${reign_car4412_result.toLocaleString()} บาท`,pageWidth-2, lineY, {align: 'right'});
+  doc.text(`รวมเป็นเงิน ${document.getElementById("reign_car4412_result").textContent} บาท`,pageWidth-2, lineY, {align: 'right'});
   lineY += 0.7;
   const gbx1Lines2  = `ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx1").value} บาท X ${document.getElementById("ggx2").value} วัน `;
   doc.text(gbx1Lines2,3, lineY)
