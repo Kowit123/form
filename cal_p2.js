@@ -368,9 +368,10 @@ function grandTotal() {
   const G_2 = parseNumber("Real_GrandTotal_Accommodation_Cost");
   const G_3 = parseNumber("R_distance-cost_result");
   const G_4 = parseNumber("R_Transportation_expenses_result");
+  const G_5 = parseNumber("reign_car4413_result");
   const G_6 = parseNumber("R_other_cost_result");
 
-  const total = G_1 + G_2 + G_3 + G_4 + G_6;
+  const total = G_1 + G_2 + G_3 + G_4 + G_5 + G_6;
   document.getElementById("R_GrandTotal").textContent = total.toLocaleString();
   window.Grand = total;
   return total;
@@ -589,23 +590,9 @@ function calculateTotal() {
             multiplier = 8;
         }
         reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
+        total += reignCarAmount;
     }
-
-    // ค่าตอบแทนพนักงานขับรถ (reign_car4413)
-    let driverCompAmount = 0;
-    const driverBox = document.getElementById('reign_car4413');
-    if (driverBox) {
-      const inputs = driverBox.querySelectorAll('input');
-      if (inputs.length >= 2) {
-        const idx0 = parseNumber(inputs[0].value);
-        const idx1 = parseNumber(inputs[1].value);
-        driverCompAmount = idx0 * idx1;
-      }
-    }
-    // รวมสองส่วนนี้ใน R_total_reign_car
-    const reignCarTotal = reignCarAmount + driverCompAmount;
-    totalReignCarDisplay.textContent = reignCarTotal.toLocaleString();
-    total += reignCarTotal;
+    totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
     // input-box อื่นๆ (ไม่นับรถยนต์ส่วนบุคคล/ราชการ)
     const allBoxes = container.querySelectorAll('.input-box');
@@ -632,16 +619,6 @@ const allInputs = document.querySelectorAll('.input-box input');
 allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
-
-// เพิ่ม listener สำหรับ reign_car4413
-const driverBox = document.getElementById('reign_car4413');
-if (driverBox) {
-  const inputs = driverBox.querySelectorAll('input');
-  if (inputs.length >= 2) {
-    inputs[0].addEventListener('input', calculateTotal);
-    inputs[1].addEventListener('input', calculateTotal);
-  }
-}
 
 // เรียกคำนวณครั้งแรกเมื่อโหลดหน้า
 calculateTotal();
