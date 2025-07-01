@@ -41,12 +41,16 @@ doc.text(`วันที่ ${document.getElementById("thai-datepicker7").value
 
 
 let y = 6.1;
-const topic_re = doc.splitTextToSize(`เรื่อง ${document.getElementById("topic_re").value}`, 16);
-doc.setFont("THSarabunNew", "normal");
+const topic_re = doc.splitTextToSize(`เรื่อง`, 16);
+doc.setFont("THSarabunNew", "bold");
 doc.text(topic_re, 3, y);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`        ${document.getElementById("topic_re").value}`,3,y)
 y += topic_re.length * 0.7;
-
-doc.text (`เรียน ${document.getElementById("dear_re").value}`,3, y);
+doc.setFont("THSarabunNew", "bold");
+doc.text (`เรียน`,3, y);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`        ${document.getElementById("dear_re").value}`,3, y)
 y += 1; 
 
 
@@ -733,7 +737,7 @@ if (reignBoxc && reignBoxc.style.display !== "none") {
 y3 += 0.7;
 const kValue = Number((document.getElementById("k").textContent || "0").replace(/,/g, ''));
 doc.text(`รวมทั้งสิ้น(ตัวอักษร)   ${numberToThaiText(kValue)}`, 1.5, y3);
-y3 += finalY2-2.3;
+y3 += 2.1;
 doc.text(`ข้าพเจ้า ${document.getElementById("nrq_re").value}  ตำแหน่ง ${document.getElementById("pst_re").value}`,1.5,y3)
 y3 += 0.7;
 doc.text(`สังกัด กอง ${document.getElementById("pt_re").value}`,1.5,y3)
@@ -887,15 +891,29 @@ doc.text('บันทึกข้อความ', pageWidth/2, 2.5, {align:'ce
 
 let yy=2.5+0.7+0.7;
 doc.setFontSize(16);
+doc.setFont("THSarabunNew", "bold");
+doc.text(`ส่วนราชการ`,3,yy)
 doc.setFont("THSarabunNew", "normal");
-doc.text(`ส่วนราชการ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม โทรศัพท์ 043-754316  ภายใน 3007`,3,yy)
+doc.text(`                  คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม โทรศัพท์ 043-754316  ภายใน 3007`,3,yy)
 yy+=0.7;
-doc.text(`ที่ อว 0605.14/..........`,3,yy);
-doc.text(`วันที่ ${document.getElementById("thai-datepicker7").value}`,pageWidth/2,yy);
+doc.setFont("THSarabunNew", "bold");
+doc.text(`ที่`,3,yy);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`    อว 0605.14/..........`,3,yy)
+doc.setFont("THSarabunNew", "bold");
+doc.text(`วันที่`,pageWidth/2,yy);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`      ${document.getElementById("thai-datepicker7").value}`,pageWidth/2,yy)
  yy+=0.7;
-doc.text(`เรื่อง  ขออนุมัติเบิกเงินค่าลงทะเเบียน`,3,yy);
+ doc.setFont("THSarabunNew", "bold");
+doc.text(`เรื่อง`,3,yy);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`        ขออนุมัติเบิกเงินค่าลงทะเเบียน`,3,yy)
 yy+=1;
-doc.text(`เรียน  ${document.getElementById("dear_re").value}`,3,yy);
+doc.setFont("THSarabunNew", "bold");
+doc.text(`เรียน`,3,yy);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`        ${document.getElementById("dear_re").value}`,3,yy)
 yy+=1;
 
 const sValue = document.getElementById("s").value.replace(/,/g, '');
