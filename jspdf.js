@@ -630,11 +630,12 @@ mainParagraphY22+= 1;
 }
 
 
+const pdfBlob = doc.output("blob");
+const blobUrl = URL.createObjectURL(pdfBlob);
+window.open(blobUrl, "_blank");
 
 
-
-
-doc.save("เอกสารขออนุมัติเดินทางไปราชการ.pdf");
+// doc.save("เอกสารขออนุมัติเดินทางไปราชการ.pdf");
 }
 
 /**

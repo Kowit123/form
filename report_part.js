@@ -1010,6 +1010,9 @@ yy += 0.7;
 
 
 
+const pdfBlob = doc.output("blob");
+const blobUrl = URL.createObjectURL(pdfBlob);
+window.open(blobUrl, "_blank");
 
 
 
@@ -1025,8 +1028,7 @@ yy += 0.7;
 
 
 
-
-    doc.save("รายงานการเดินทางไปราชการ.pdf");
+    // doc.save("รายงานการเดินทางไปราชการ.pdf");
 
 
 
