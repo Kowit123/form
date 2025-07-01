@@ -505,6 +505,23 @@ if (requesting_part && department_1) {
   });
 }
 
+const Box = document.getElementById("reign_car4412");
+const reign_car4412 = document.querySelector('input[name="topicT"][dataid="reign_car"]');
+if (reign_car4412 && Box) {
+  reign_car4412.addEventListener('change', function () {
+    if (this.checked) {
+      Box.style.display = 'flex';
+    } else {
+      Box.style.display = 'none';
+      // ล้างค่า input ข้างใน reason_airplane
+      const inputs = Box.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+    }
+  });
+  // ซ่อนกล่องตอนโหลดหน้า
+  Box.style.display = reign_car4412.checked ? 'flex' : 'none';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
 const boxx = document.getElementById("reason_personal_car");
@@ -572,6 +589,7 @@ if (personalCarInput) {
 totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
 // รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
+const reignCar4412 = document.getElementById("reign_car4412");
 const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
 const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
 let reignCarAmount = 0;
@@ -633,7 +651,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // เรียกครั้งแรกเพื่อ sync สถานะ
     handleSeminarChange();
 
-    const reasonAirplaneBox = document.getElementById("reason_airplane");
 const airplaneCheckbox = document.querySelector('input[name="topicT"][data-id="airplane"]');
 
 if (airplaneCheckbox && reasonAirplaneBox) {
@@ -650,4 +667,5 @@ if (airplaneCheckbox && reasonAirplaneBox) {
   // ซ่อนกล่องตอนโหลดหน้า
   reasonAirplaneBox.style.display = airplaneCheckbox.checked ? 'flex' : 'none';
 }
+
 });

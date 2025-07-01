@@ -176,7 +176,7 @@ doc.text(c1Lines,pageWidth-2, lineY, {align: 'right'});
 lineY += 0.7;
 
 const Accommodation_Costrows = document.querySelectorAll("#accommodation .all");
-Accommodation_Costrows.forEach((row) => {
+Accommodation_Costrows.forEach((row, idx) => {
   const accommodation_cost = row.querySelector(".accommodation_cost")?.value.trim() || "0";
   const accommodation_person = row.querySelector(".accommodation_person")?.value.trim() || "0";
   const accommodation_day = row.querySelector(".accommodation_day")?.value.trim() || "0";
@@ -184,7 +184,8 @@ Accommodation_Costrows.forEach((row) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} คน ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
+    const unit = idx === 0 ? "ห้อง" : "คน";
+    doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} ${unit} ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }
 });
