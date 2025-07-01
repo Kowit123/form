@@ -298,6 +298,7 @@ rows.forEach(row => {
 
   const line = `-${detail}  ${feeFormatted} บาท จำนวน ${person} คน เป็นเงิน ${total.toLocaleString()} บาท`;
   const lines = doc.splitTextToSize(line, 14); // ตัดบรรทัดอัตโนมัติถ้ายาวเกิน
+  lineY = checkAddPageGroup(doc, lineY, 0.7);
   doc.text(lines, 5, lineY);
   lineY += lines.length * 0.7;
 });
