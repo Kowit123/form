@@ -434,8 +434,9 @@ function updateGrandTotal() {
   const Accommodation = updateAccommodationTotal();
   const register = updateRegistration_fee_Total();
   const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.replace(/,/g, '').trim());
+  const reignCarDriver = parseFloat(document.getElementById("reign_car4412_result").textContent.replace(/,/g, '').trim()) || 0;
 
-  const grandTotal = other + allowance + Accommodation + register + vehicle;
+  const grandTotal = other + allowance + Accommodation + register + vehicle + reignCarDriver;
 
   document.getElementById("GrandTotal").textContent = grandTotal.toLocaleString();
   window.all_cost = grandTotal;
@@ -507,19 +508,61 @@ if (requesting_part && department_1) {
 
 const Box = document.getElementById("reign_car4412");
 const reign_car_checkbox = document.querySelector('input[name="topicT"][data-id="reign_car"]');
+const otherCostLabelForm = document.querySelector('.other-cost .F_line label');
 if (reign_car_checkbox && Box) {
   reign_car_checkbox.addEventListener('change', function () {
     if (this.checked) {
       Box.style.display = 'flex';
+      // Change label from "5. ค่าใช้จ่ายอื่นๆ" to "6. ค่าใช้จ่ายอื่นๆ"
+      if (otherCostLabelForm) {
+        otherCostLabelForm.textContent = '6. ค่าใช้จ่ายอื่นๆ';
+      }
     } else {
       Box.style.display = 'none';
+      // Change label back to "5. ค่าใช้จ่ายอื่นๆ"
+      if (otherCostLabelForm) {
+        otherCostLabelForm.textContent = '5. ค่าใช้จ่ายอื่นๆ';
+      }
       // ล้างค่า input ข้างใน Box
       const inputs = Box.querySelectorAll('input');
       inputs.forEach(input => input.value = '');
+      // ล้างผลลัพธ์การคำนวณ
+      document.getElementById('reign_car4412_result').textContent = '0';
     }
   });
   // ซ่อนกล่องตอนโหลดหน้า
   Box.style.display = reign_car_checkbox.checked ? 'flex' : 'none';
+  // Set initial label state
+  if (otherCostLabelForm) {
+    otherCostLabelForm.textContent = reign_car_checkbox.checked ? '6. ค่าใช้จ่ายอื่นๆ' : '5. ค่าใช้จ่ายอื่นๆ';
+  }
+}
+
+// Function to calculate ggx1 * ggx2 and update reign_car4412_result
+function calculateReignCarDriverCompensation() {
+  const ggx1 = document.getElementById('ggx1');
+  const ggx2 = document.getElementById('ggx2');
+  const resultElement = document.getElementById('reign_car4412_result');
+  
+  if (ggx1 && ggx2 && resultElement) {
+    const value1 = parseNumber(ggx1.value);
+    const value2 = parseNumber(ggx2.value);
+    const result = value1 * value2;
+    resultElement.textContent = result.toLocaleString();
+    updateGrandTotal(); // Update grand total when this calculation changes
+  }
+}
+
+// Add event listeners for ggx1 and ggx2
+const ggx1Element = document.getElementById('ggx1');
+const ggx2Element = document.getElementById('ggx2');
+
+if (ggx1Element) {
+  ggx1Element.addEventListener('input', calculateReignCarDriverCompensation);
+}
+
+if (ggx2Element) {
+  ggx2Element.addEventListener('input', calculateReignCarDriverCompensation);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -575,45 +618,33 @@ function calculateTotal() {
     const container = document.getElementById("container");
 
     // รถยนต์ส่วนบุคคล × 8
-    const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
-    const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
-    let personalCarAmount = 0;
-    if (personalCarInput) {
-        let multiplier = 4;
-        if (personalCarCheckbox && personalCarCheckbox.checked) {
-            multiplier = 8; // *4*2 เมื่อคลิก checkbox
-        }
-        personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
-        total += personalCarAmount;
+const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
+const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
+let personalCarAmount = 0;
+if (personalCarInput) {
+    let multiplier = 4;
+    if (personalCarCheckbox && personalCarCheckbox.checked) {
+        multiplier = 8; // *4*2 เมื่อคลิก checkbox
     }
-    totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+    personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
+    total += personalCarAmount;
+}
+totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-    // รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
-    const reignCar4412 = document.getElementById("reign_car4412");
-    const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
-    const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
-    let reignCarAmount = 0;
-    if (reignCarInput) {
-        let multiplier = 4;
-        if (reignCarCheckbox && reignCarCheckbox.checked) {
-            multiplier = 8;
-        }
-        reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
+// รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
+const reignCar4412 = document.getElementById("reign_car4412");
+const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
+const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
+let reignCarAmount = 0;
+if (reignCarInput) {
+    let multiplier = 4;
+    if (reignCarCheckbox && reignCarCheckbox.checked) {
+        multiplier = 8;
     }
-    // ค่าตอบแทนพนักงานขับรถ (reign_car4412)
-    let driverCompAmount = 0;
-    if (reignCar4412) {
-      const inputs = reignCar4412.querySelectorAll('input');
-      if (inputs.length >= 2) {
-        const idx0 = parseNumber(inputs[0].value);
-        const idx1 = parseNumber(inputs[1].value);
-        driverCompAmount = idx0 * idx1;
-      }
-    }
-    // รวมสองส่วนนี้ใน total_reign_car
-    const reignCarTotal = reignCarAmount + driverCompAmount;
-    totalReignCarDisplay.textContent = reignCarTotal.toLocaleString();
-    total += reignCarTotal;
+    reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
+    total += reignCarAmount;
+}
+totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
     // input-box อื่นๆ
     const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
@@ -636,15 +667,7 @@ const allInputs = document.querySelectorAll('.input-box input');
 allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
-// เพิ่ม listener สำหรับ reign_car4412
-const reignCar4412 = document.getElementById('reign_car4412');
-if (reignCar4412) {
-  const inputs = reignCar4412.querySelectorAll('input');
-  if (inputs.length >= 2) {
-    inputs[0].addEventListener('input', calculateTotal);
-    inputs[1].addEventListener('input', calculateTotal);
-  }
-}
+
 
 });
 document.addEventListener('DOMContentLoaded', function() {
@@ -693,17 +716,60 @@ if (airplaneCheckbox && reasonAirplaneBox) {
 // Logic for report form (container2) - show/hide driver compensation when R_reign_car is checked
 const reportDriverBox = document.getElementById("reign_car4413");
 const reportReignCarCheckbox = document.querySelector('input[name="type"][data-id="R_reign_car"]');
+const otherCostLabel = document.querySelector('.R_Other .left_part p');
+
 if (reportReignCarCheckbox && reportDriverBox) {
   reportReignCarCheckbox.addEventListener('change', function () {
     if (this.checked) {
       reportDriverBox.style.display = 'flex';
+      // Change the number from 4 to 5 in the "ค่าใช้จ่ายอื่นๆ" label
+      if (otherCostLabel) {
+        otherCostLabel.textContent = '5. ค่าใช้จ่ายอื่นๆ';
+      }
     } else {
       reportDriverBox.style.display = 'none';
       // Clear inputs inside the box
       const inputs = reportDriverBox.querySelectorAll('input');
       inputs.forEach(input => input.value = '');
+      // Clear calculation result
+      document.getElementById('reign_car4413_result').textContent = '0';
+      // Change the number back from 5 to 4 in the "ค่าใช้จ่ายอื่นๆ" label
+      if (otherCostLabel) {
+        otherCostLabel.textContent = '4. ค่าใช้จ่ายอื่นๆ';
+      }
     }
   });
   // Initial state on page load
   reportDriverBox.style.display = reportReignCarCheckbox.checked ? 'flex' : 'none';
+  // Set initial label text based on checkbox state
+  if (otherCostLabel) {
+    otherCostLabel.textContent = reportReignCarCheckbox.checked ? '5. ค่าใช้จ่ายอื่นๆ' : '4. ค่าใช้จ่ายอื่นๆ';
+  }
+}
+
+// Function to calculate ggx12 * ggx22 and update reign_car4413_result
+function calculateReportReignCarDriverCompensation() {
+  const ggx12 = document.getElementById('ggx12');
+  const ggx22 = document.getElementById('ggx22');
+  const resultElement = document.getElementById('reign_car4413_result');
+  
+  if (ggx12 && ggx22 && resultElement) {
+    const value1 = parseNumber(ggx12.value);
+    const value2 = parseNumber(ggx22.value);
+    const result = value1 * value2;
+    resultElement.textContent = result.toLocaleString();
+    grandTotal(); // Update grand total when this calculation changes
+  }
+}
+
+// Add event listeners for ggx12 and ggx22
+const ggx12Element = document.getElementById('ggx12');
+const ggx22Element = document.getElementById('ggx22');
+
+if (ggx12Element) {
+  ggx12Element.addEventListener('input', calculateReportReignCarDriverCompensation);
+}
+
+if (ggx22Element) {
+  ggx22Element.addEventListener('input', calculateReportReignCarDriverCompensation);
 }
