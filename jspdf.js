@@ -632,7 +632,16 @@ mainParagraphY22+= 1;
 
 const pdfBlob = doc.output("blob");
 const blobUrl = URL.createObjectURL(pdfBlob);
+
+// เปิดพรีวิวในแท็บใหม่
 window.open(blobUrl, "_blank");
+
+// ตั้งชื่อไฟล์ดาวน์โหลด
+const link = document.createElement("a");
+link.href = blobUrl;
+link.download = "เอกสารเดินทางราชการ.pdf"; // ใส่ชื่อไฟล์ที่พี่ต้องการ
+document.body.appendChild(link);
+link.click(); // <<< สำคัญมาก! ต้องเรียกใช้งาน เพื่อให้ชื่อไฟล์ทำงาน
 
 
 // doc.save("เอกสารขออนุมัติเดินทางไปราชการ.pdf");
