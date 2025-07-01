@@ -589,9 +589,23 @@ function calculateTotal() {
             multiplier = 8;
         }
         reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
-        total += reignCarAmount;
     }
-    totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+
+    // ค่าตอบแทนพนักงานขับรถ (reign_car4413)
+    let driverCompAmount = 0;
+    const driverBox = document.getElementById('reign_car4413');
+    if (driverBox) {
+      const inputs = driverBox.querySelectorAll('input');
+      if (inputs.length >= 2) {
+        const idx0 = parseNumber(inputs[0].value);
+        const idx1 = parseNumber(inputs[1].value);
+        driverCompAmount = idx0 * idx1;
+      }
+    }
+    // รวมสองส่วนนี้ใน R_total_reign_car
+    const reignCarTotal = reignCarAmount + driverCompAmount;
+    totalReignCarDisplay.textContent = reignCarTotal.toLocaleString();
+    total += reignCarTotal;
 
     // input-box อื่นๆ (ไม่นับรถยนต์ส่วนบุคคล/ราชการ)
     const allBoxes = container.querySelectorAll('.input-box');
@@ -618,6 +632,16 @@ const allInputs = document.querySelectorAll('.input-box input');
 allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
+
+// เพิ่ม listener สำหรับ reign_car4413
+const driverBox = document.getElementById('reign_car4413');
+if (driverBox) {
+  const inputs = driverBox.querySelectorAll('input');
+  if (inputs.length >= 2) {
+    inputs[0].addEventListener('input', calculateTotal);
+    inputs[1].addEventListener('input', calculateTotal);
+  }
+}
 
 // เรียกคำนวณครั้งแรกเมื่อโหลดหน้า
 calculateTotal();
@@ -709,3 +733,4 @@ entries.forEach((entry) => {
   console.log(inputs, Array.from(inputs).map(i => i.value));
   // ...rest of your code
 });
+

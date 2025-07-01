@@ -500,26 +500,26 @@ if (requesting_position && position) {
 const requesting_part = document.getElementById("requesting_part");
 const department_1 = document.getElementById("department_1");
 if (requesting_part && department_1) {
-  requesting_part.addEventListener("input", function () {
+  requesting_part.addEventListener('input', function () {
     department_1.value = requesting_part.value;
   });
 }
 
 const Box = document.getElementById("reign_car4412");
-const reign_car4412 = document.querySelector('input[name="topicT"][dataid="reign_car"]');
-if (reign_car4412 && Box) {
-  reign_car4412.addEventListener('change', function () {
+const reign_car_checkbox = document.querySelector('input[name="topicT"][data-id="reign_car"]');
+if (reign_car_checkbox && Box) {
+  reign_car_checkbox.addEventListener('change', function () {
     if (this.checked) {
       Box.style.display = 'flex';
     } else {
       Box.style.display = 'none';
-      // ล้างค่า input ข้างใน reason_airplane
+      // ล้างค่า input ข้างใน Box
       const inputs = Box.querySelectorAll('input');
       inputs.forEach(input => input.value = '');
     }
   });
   // ซ่อนกล่องตอนโหลดหน้า
-  Box.style.display = reign_car4412.checked ? 'flex' : 'none';
+  Box.style.display = reign_car_checkbox.checked ? 'flex' : 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -575,33 +575,45 @@ function calculateTotal() {
     const container = document.getElementById("container");
 
     // รถยนต์ส่วนบุคคล × 8
-const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
-const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
-let personalCarAmount = 0;
-if (personalCarInput) {
-    let multiplier = 4;
-    if (personalCarCheckbox && personalCarCheckbox.checked) {
-        multiplier = 8; // *4*2 เมื่อคลิก checkbox
+    const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
+    const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
+    let personalCarAmount = 0;
+    if (personalCarInput) {
+        let multiplier = 4;
+        if (personalCarCheckbox && personalCarCheckbox.checked) {
+            multiplier = 8; // *4*2 เมื่อคลิก checkbox
+        }
+        personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
+        total += personalCarAmount;
     }
-    personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
-    total += personalCarAmount;
-}
-totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+    totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-// รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
-const reignCar4412 = document.getElementById("reign_car4412");
-const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
-const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
-let reignCarAmount = 0;
-if (reignCarInput) {
-    let multiplier = 4;
-    if (reignCarCheckbox && reignCarCheckbox.checked) {
-        multiplier = 8;
+    // รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
+    const reignCar4412 = document.getElementById("reign_car4412");
+    const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
+    const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
+    let reignCarAmount = 0;
+    if (reignCarInput) {
+        let multiplier = 4;
+        if (reignCarCheckbox && reignCarCheckbox.checked) {
+            multiplier = 8;
+        }
+        reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
     }
-    reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
-    total += reignCarAmount;
-}
-totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
+    // ค่าตอบแทนพนักงานขับรถ (reign_car4412)
+    let driverCompAmount = 0;
+    if (reignCar4412) {
+      const inputs = reignCar4412.querySelectorAll('input');
+      if (inputs.length >= 2) {
+        const idx0 = parseNumber(inputs[0].value);
+        const idx1 = parseNumber(inputs[1].value);
+        driverCompAmount = idx0 * idx1;
+      }
+    }
+    // รวมสองส่วนนี้ใน total_reign_car
+    const reignCarTotal = reignCarAmount + driverCompAmount;
+    totalReignCarDisplay.textContent = reignCarTotal.toLocaleString();
+    total += reignCarTotal;
 
     // input-box อื่นๆ
     const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
@@ -624,7 +636,15 @@ const allInputs = document.querySelectorAll('.input-box input');
 allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
 });
-
+// เพิ่ม listener สำหรับ reign_car4412
+const reignCar4412 = document.getElementById('reign_car4412');
+if (reignCar4412) {
+  const inputs = reignCar4412.querySelectorAll('input');
+  if (inputs.length >= 2) {
+    inputs[0].addEventListener('input', calculateTotal);
+    inputs[1].addEventListener('input', calculateTotal);
+  }
+}
 
 });
 document.addEventListener('DOMContentLoaded', function() {
@@ -669,3 +689,21 @@ if (airplaneCheckbox && reasonAirplaneBox) {
 }
 
 });
+
+// Logic for report form (container2) - show/hide driver compensation when R_reign_car is checked
+const reportDriverBox = document.getElementById("reign_car4413");
+const reportReignCarCheckbox = document.querySelector('input[name="type"][data-id="R_reign_car"]');
+if (reportReignCarCheckbox && reportDriverBox) {
+  reportReignCarCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+      reportDriverBox.style.display = 'flex';
+    } else {
+      reportDriverBox.style.display = 'none';
+      // Clear inputs inside the box
+      const inputs = reportDriverBox.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+    }
+  });
+  // Initial state on page load
+  reportDriverBox.style.display = reportReignCarCheckbox.checked ? 'flex' : 'none';
+}
