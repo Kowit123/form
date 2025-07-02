@@ -695,6 +695,7 @@ document.addEventListener('DOMContentLoaded', function() {
     handleSeminarChange();
 
 const airplaneCheckbox = document.querySelector('input[name="topicT"][data-id="airplane"]');
+const reasonAirplaneBox = document.getElementById('reason_airplane');
 
 if (airplaneCheckbox && reasonAirplaneBox) {
   airplaneCheckbox.addEventListener('change', function () {
