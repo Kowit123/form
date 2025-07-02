@@ -1024,10 +1024,6 @@ window.open(blobUrl, "_blank");
 
 
 
-
-
-
-
     // doc.save("รายงานการเดินทางไปราชการ.pdf");
 
 
@@ -1095,5 +1091,3 @@ function numberToThaiText(number) {
 
   return bahtText;
 }
-
-
