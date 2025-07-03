@@ -8,13 +8,6 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-
-app.use(express.json()); // Add this line!
-const deleteRoute = require('./api/delete'); // หรือ path ถูกต้อง
-app.use('/api/delete', deleteRoute);
-
-
-
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -23,6 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 // serve static files
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
+// Import delete route
+const deleteRoute = require('./api/delete');
+app.use('/api/delete', deleteRoute);
 
 // config upload
 const storage = multer.diskStorage({
