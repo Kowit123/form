@@ -24,7 +24,7 @@
 
 body {
     font-family: 'Noto Sans Thai', sans-serif;
-    background-color: #dfbe03;
+    background-color: #fb9393;
 
     input {
         padding: 0.3rem;
@@ -35,32 +35,80 @@ body {
     }
 
         .navbar {
-            background-color: #b18500;
+            position: relative;
+            background-color: #800020;
             display: flex;
             align-items: center;
-            padding: 0px;
+            padding: 0;
+            justify-content: space-between;
         }
 
-        .navbar a {
+        .hamburger {
+            font-size: 2rem;
+            background: #800020;
+            border: none;
+            color: #fff;
+            margin: 0 1rem;
+            z-index: 2;
+            align-self: center;
+        }
+
+        .hamburger:hover {
+            background: #500101;
+        }
+
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100vw;
+            background: #800020;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            z-index: 1;
+            align-items: center;
+        }
+
+        .nav-links.show {
+            display: flex;
+        }
+
+        .nav-links li {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid #fff2;
+        }
+
+        .nav-links li:last-child {
+            border-bottom: none;
+        }
+
+        .nav-links a {
+            display: block;
+            color: #fff;
             text-decoration: none;
-            color: #fff7c7;
             font-weight: bold;
             font-size: 18px;
-            padding: 20px 16px;
+            padding: 20px 0;
             transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
-            border-right: 1px solid rgb(244, 236, 137);
         }
 
-        /* ตัวแรกไม่มีเส้นกั้น */
-        .navbar a:first-child {
-            border-left: none;
-        }
-        .navbar a:hover {
-            background-color: #fff7c7;
-            color: #292929;
+        .nav-links a:hover {
+            background: #500101;
+            color: #ffffff;
         }
 
+        .nav-logo-text {
+            display: flex;             /* เปิดใช้งาน Flexbox */
+            flex-direction: column;    /* จัดให้เป็นแนวตั้ง */
+            justify-content: center;   /* จัดกึ่งกลางแนวตั้ง */
+            align-items: center;       /* จัดกึ่งกลางแนวนอน */
+            /* ปรับความสูงตามต้องการ เช่น 100vh หรือค่าคงที่ px/em */
+            text-align: center;        /* รับรองว่าเนื้อหายังเป็นกึ่งกลางเมื่อมีข้อความหลายบรรทัด */
+          }
 
     label {
         display: block;
@@ -97,7 +145,7 @@ h1 {
     background-color: hsl(0, 0%, 99%);
     padding: 1.75rem 3rem 3rem 3rem;
     border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(128, 0, 32, 0.2);
 }
 
 .draft_form {
@@ -735,4 +783,47 @@ p {
             align-items: center;
         }
     }
+}
+
+.pdfbtt {
+    background-color: #800020;
+    color: #ffffff; 
+    box-shadow: 0 4px 12px rgba(128, 0, 32, 0.2);
+}
+.pdfbtt:hover {
+    background-color: #7f2424;
+}
+
+.nav-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+.nav-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    margin-bottom: 0.2rem;
+}
+.nav-logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+.faculty {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: bold;
+    line-height: 1.1;
+}
+.university {
+    font-size: 0.85rem;
+    color: #fff;
+    opacity: 0.85;
+    line-height: 1.1;
 }

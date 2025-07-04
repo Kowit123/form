@@ -25,16 +25,26 @@
     <title>แบบฟอร์มขออนุมัตเดินทางไปราชการ</title>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="#option1" onclick="switchForm(event)">แบบฟอร์มขออนุมัติเดินทางไปราชการ</a>
-        <a href="#option2" onclick="switchForm2(event)">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</a>
-        <a href="./public/search.html" target="_blank">เอกสารที่อนุมัติแล้ว</a>
-        <a href="คู่มือการใช้งานเว็บไซต์.pdf" target="_blank">📄 คู่มือการใช้งาน</a>
-        <a href="https://docs.google.com/spreadsheets/d/1jmpD6H16JBT2EkhgW0D3YJOIQjH32OJZ/edit?fbclid=IwY2xjawLQOtdleHRuA2FlbQIxMABicmlkETF2TE1xUDRZOWVNNzJMSVVjAR4tN3XHCFrqLzkX794UVGTjiZiF2_YeExEKfE6F13WYxLhrMPcMObbpFqknLw_aem_zxwTXPTbt5F9uXohDIk78w&gid=762496308#gid=762496308" target="_blank">ตรวจสอบรายการค้างชำระ</a>
-        <a href="https://dohgis.doh.go.th/dohtotravel/" target="_blank">ระบบสารสนเทศการเดินทางกรมทางหลวง</a>
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo-container" style="display: flex; flex-direction: row;">
+            <img src="public/img/logo.webp" alt="Faculty of Engineering Logo" class="nav-logo" style="width: 100px; height: 100px;">
+            <div class="nav-logo-text" style="margin-left: 10px;">
+                <div class="faculty">Faculty of Engineering</div>
+                <div class="university">Mahasarakham University</div>
+            </div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation">&#9776;</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#option1" onclick="switchForm(event)">แบบฟอร์มขออนุมัติเดินทางไปราชการ</a></li>
+            <li><a href="#option2" onclick="switchForm2(event)">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</a></li>
+            <li><a href="./public/search.html" target="_blank">เอกสารที่อนุมัติแล้ว</a></li>
+            <li><a href="คู่มือการใช้งานเว็บไซต์.pdf" target="_blank">📄 คู่มือการใช้งาน</a></li>
+            <li><a href="https://docs.google.com/spreadsheets/d/1jmpD6H16JBT2EkhgW0D3YJOIQjH32OJZ/edit?fbclid=IwY2xjawLQOtdleHRuA2FlbQIxMABicmlkETF2TE1xUDRZOWVNNzJMSVVjAR4tN3XHCFrqLzkX794UVGTjiZiF2_YeExEKfE6F13WYxLhrMPcMObbpFqknLw_aem_zxwTXPTbt5F9uXohDIk78w&gid=762496308#gid=762496308" target="_blank">ตรวจสอบรายการค้างชำระ</a></li>
+        </ul>
     </nav>
     <!--top_tag-->
-    <h1 style="margin-top: 3%;" id="h" >แบบฟอร์มขออนุมัติเดินทางไปราชการ</h1>
+    <div class="top_tag" style="padding-top: 3%;">
+    </div>
     <!--main_form-->
     <div id="container">
         <!--Draft_form-->
@@ -372,7 +382,7 @@
     </div>
     </div> 
 
-    <h1 style="margin-top: 3%;" id="h1" class="n_display">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</h1>
+    <h1 style="margin-top: 3%; color: #FFD700;;" id="h1" class="n_display">แบบฟอร์มบันทึกรายงานการเดินทางไปราชการ</h1>
     <div id="container2" class="n_display">
             <div class="draft_form">
             <!--label-->
@@ -822,6 +832,12 @@
     </script>
     <script src="docx_generator.js"></script>
     <script src="jspdf.js"></script>
+    <script>
+    document.getElementById('hamburger').addEventListener('click', function() {
+        var navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('show');
+    });
+    </script>
         
         
 

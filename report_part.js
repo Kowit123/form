@@ -458,9 +458,10 @@ doc.text(`ส่วนที่2`,pageWidth2-2,2, {align: 'right'});
 doc.text(`แบบ 8708`,pageWidth2-2,2.7,{align: 'right'});
 
 doc.setFont("THSarabunNew", "bold");
-doc.text(`หลักฐานการจ่ายเงินค่าใช้จ่ายในการเดินทางไปราชการ`,pageWidth2/2,2.7,{align: 'center'});
+doc.text(`หลักฐานการจ่ายเงินค่าใช้จ่ายในการเดินทางไปราชการ`,pageWidth2/2,2,{align: 'center'});
 doc.setFont("THSarabunNew", "normal");
-doc.text(`ชื่อส่วนราชการ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม  จังหวัด มหาสารคาม`,pageWidth2/2,3.4,{align: 'center'});
+doc.setFontSize(14);
+doc.text(`ชื่อส่วนราชการ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม  จังหวัด มหาสารคาม`,pageWidth2/2,2.6,{align: 'center'});
 const subject = document.getElementById("subject_re").value;
 const location = document.getElementById("lo_re").value;
 const dateStart = document.getElementById("thai-datepicker9").value;
@@ -476,11 +477,13 @@ const mainLines = doc.splitTextToSize(mainText, 17);
 
 // รวมกับบรรทัดวันที่
 const allLines = [...mainLines, dateText];
-
+let YY = 3.2;
 // พิมพ์ตรงกลาง
 allLines.forEach((line, idx) => {
-  doc.text(line, pageWidth2 / 2, 4.1 + idx * 0.7, { align: 'center' });
+  doc.text(line, pageWidth2 / 2, 3.2 + idx * 0.6, { align: 'center' });
+YY = 3.2 + idx * 0.6;
 });
+doc.setFontSize(16);
 const head = [
   [
     { content: 'ลำดับ', rowSpan: 2 },
@@ -589,7 +592,7 @@ doc.autoTable({
     lineWidth: 0.02,
     lineColor: [0, 0, 0]
   },
-  startY: 5.3, // หน่วย pt (ประมาณ 2cm)
+  startY: YY + 0.7, // หน่วย pt (ประมาณ 2cm)
   pageSize: 'a4',
   orientation: 'landscape',
   pageBreak: 'avoid',
@@ -627,26 +630,27 @@ doc.text("วันที่....................................................
 y+= 0.7;
 
 y2 = y-2;
+doc.setFontSize(14);
 doc.setFont("THSarabunNew", "bold");
 doc.text(`คำชี้แจง`,1.5, y2);
-y2 += 0.7;
+y2 += 0.6;
 doc.setFont("THSarabunNew", "normal");
 const alert1_2 = ` 1. ค่าเบี้ยเลี้ยงและค่าเช่าที่พัก ให้ระบุอัตราวันละและจำนวนวันที่ขอเบิกของแต่ละบุคคลในช่องหมายเหตุ`;
 const alertLine1_2 = doc.splitTextToSize(alert1_2,18);
 doc.text(alertLine1_2, 2, y2)
-y2 += alertLine1_2.length * 0.7;
+y2 += alertLine1_2.length * 0.6;
 
 const alert2_2 = ` 2. ให้ผู้มีสิทธิแต่ละคนเป็นผู้ลงลายมือชื่อผู้รับเงินและวันเดือนปีที่ได้รับเงิน กรณีเป็นการรับจากเงินยืมให้ระบุวันที่ที่ได้รับจากเงินยืม`;
 const alertLine2_2 = doc.splitTextToSize(alert2_2,18);
 doc.text(alertLine2_2, 2, y2)
-y2 += alertLine2_2.length * 0.7;
+y2 += alertLine2_2.length * 0.6;
 
 const alert3_2 = `3. ผู้จ่ายเงินหมายถึงผู้ที่ขอยืมเงินจากทางราชการ และจ่ายเงินยืมนั้นให้แก่ผู้เดินทางแต่ละคน เป็นผู้ลงลายมือชื่อผู้จ่ายเงิน`;
 const alertLine3_2 = doc.splitTextToSize(alert3_2,18);
 doc.text(alertLine3_2, 2, y2)
-y2 += alertLine3_2.length * 0.7;
+y2 += alertLine3_2.length * 0.6;
 };
-
+doc.setFontSize(16);
 doc.addPage('a4', 'portrait');
 
 let y3 = 3;
@@ -725,6 +729,9 @@ const foot1 = [
   });
 const finalY2 = doc.lastAutoTable.finalY
 y3 = finalY2 + 1.4;
+const kValue = Number((document.getElementById("k").textContent || "0").replace(/,/g, ''));
+doc.text(`รวมทั้งสิ้น(ตัวอักษร)   ${numberToThaiText(kValue)}`, 1.5, y3);
+y3 += 1;
 doc.text(`หมายเหตุ: เหมาจ่ายกิโลเมตรละ 4 บาท `, 1.5, y3);
 y3 += 0.7;
 // ...existing code...
@@ -757,9 +764,6 @@ if (reignBoxc && reignBoxc.style.display !== "none") {
 // ...existing code...
 // ...existing code...
 y3 += 0.7;
-const kValue = Number((document.getElementById("k").textContent || "0").replace(/,/g, ''));
-doc.text(`รวมทั้งสิ้น(ตัวอักษร)   ${numberToThaiText(kValue)}`, 1.5, y3);
-y3 += 2.1;
 doc.text(`ข้าพเจ้า ${document.getElementById("nrq_re").value}  ตำแหน่ง ${document.getElementById("pst_re").value}`,1.5,y3)
 y3 += 0.7;
 doc.text(`สังกัด กอง ${document.getElementById("pt_re").value}`,1.5,y3)
