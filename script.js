@@ -763,35 +763,100 @@ if (ggx22Element) {
 
 
 // ...existing code...
-
-// เพิ่ม/ลบแถว รถยนต์ของทางราชการ (reign_car)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const addBtn = document.getElementById('addReignCarBtn');
-    const rowContainer = document.getElementById('reign_car_box');
-    if (addBtn && rowContainer) {
-        addBtn.addEventListener('click', function() {
-            const div = document.createElement('div');
-            div.className = 'reign_car_row';
-            div.style.display = 'flex';
-            div.innerHTML = `
-              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 76%;">รถยนต์ของทางราชการ:
-                  <input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%; width: 20%;">
-                  <input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
-                  <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
-                  <input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
-              </label>
-              <button type="button" class="remove-btn" style="background-color:red; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&minus;</button>
-            `;
-            // ปุ่มลบ
-            div.querySelector('.remove-btn').addEventListener('click', function() {
-                div.remove();
+    const reignContainer = document.getElementById('reign_car_box');
+    const katopContainer = document.getElementById('katoptan_row');
+
+    if (addBtn && reignContainer && katopContainer) {
+        addBtn.addEventListener('click', () => {
+            const reignRow = createReignCarRow();
+            const katopRow = createKatopRow();
+
+            // ผูกกันด้วย property เพื่อให้ลบพร้อมกัน
+            reignRow.dataset.partner = katopRow.dataset.id;
+            katopRow.dataset.partner = reignRow.dataset.id;
+
+            reignContainer.appendChild(reignRow);
+            katopContainer.appendChild(katopRow);
+        });
+    }
+
+    // 👑 ฟังก์ชันสร้างแถว "รถยนต์ของทางราชการ"
+    function createReignCarRow() {
+        const div = document.createElement('div');
+        div.className = 'reign_car_row';
+        div.style.display = 'flex';
+        div.dataset.id = crypto.randomUUID();
+
+        div.innerHTML = `
+          <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 76%;">
+              รถยนต์ของทางราชการ:
+              <input type="text" placeholder="หมายเลขทะเบียนรถ" style="margin: 0; margin-left: 0%; width: 20%;">
+              <input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
+              <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
+              <input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
+          </label>
+          <button type="button" class="remove-btn" style="background-color:red; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&minus;</button>
+        `;
+
+        // ลบทั้งแถวตัวเองและแถวพาร์ทเนอร์
+        div.querySelector('.remove-btn').addEventListener('click', function () {
+            const partnerId = div.dataset.partner;
+            const partner = document.querySelector(`[data-id="${partnerId}"]`);
+            if (partner) partner.remove();
+            div.remove();
+            updateGrandTotal();
+        });
+
+        div.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateGrandTotal);
+        });
+
+        return div;
+    }
+
+    // 🚗 ฟังก์ชันสร้างกล่องคำนวณค่าตอบแทน
+    function createKatopRow() {
+        const div = document.createElement('div');
+        div.className = 'katoptan_row';
+        div.dataset.id = crypto.randomUUID();
+
+        div.style = "width: 100%; display: flex; justify-content: space-between; text-align: center; align-items: center;";
+
+        div.innerHTML = `
+            <div style="width:75%;">
+                <input type="text" placeholder="ชื่อพนักงานขับรถ" style="margin: 0; width: 33%;">
+                <input type="text" class="comma-number money" placeholder="จำนวนเงิน" style="margin: 0;"> X 
+                <input type="text" class="comma-number days" placeholder="จำนวนวัน" style="margin: 0;">
+            </div>
+            <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; text-align: center; margin-top: 1.2%;">
+                <p style="margin: 0; display: flex; align-items: center; justify-content: center;">เป็นจำนวนเงิน&nbsp;</p>
+                <span class="result" style="margin: 0; display: flex; align-items: center;">0</span>
+                <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
+            </div>
+        `;
+
+        // คำนวณทันทีเมื่อพิมพ์
+        const moneyInput = div.querySelector('.money');
+        const daysInput = div.querySelector('.days');
+        const resultSpan = div.querySelector('.result');
+
+        [moneyInput, daysInput].forEach(input => {
+            input.addEventListener('input', () => {
+                const money = parseFloat(moneyInput.value.replace(/,/g, '')) || 0;
+                const days = parseFloat(daysInput.value.replace(/,/g, '')) || 0;
+                const total = money * days;
+                resultSpan.textContent = total.toLocaleString();
                 updateGrandTotal();
             });
-            // input event
-            div.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', updateGrandTotal);
-            });
-            rowContainer.appendChild(div);
         });
+
+        return div;
+    }
+
+    // 📊 ฟังก์ชันคำนวณยอดรวมทั้งหมด
+    function updateGrandTotal() {
+        // Placeholder: เพิ่มได้หากต้องการยอดรวมทุกแถว
     }
 });
