@@ -3,6 +3,48 @@ function parseNumber(val) {
     if (!val) return 0;
     return parseFloat(val.replace(/,/g, '')) || 0;
 }
+function calculateTotal() {
+  let total = 0;
+  const container = document.getElementById("container");
+
+  const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
+  const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
+  let personalCarAmount = 0;
+  if (personalCarInput) {
+    let multiplier = 4;
+    if (personalCarCheckbox && personalCarCheckbox.checked) {
+      multiplier = 8;
+    }
+    personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
+    total += personalCarAmount;
+  }
+  totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+
+  const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
+  allBoxes.forEach(box => {
+    const numberInputs = box.querySelectorAll('input.comma-number');
+    numberInputs.forEach(input => {
+      const value = parseNumber(input.value);
+      if (!isNaN(value)) {
+        total += value;
+      }
+    });
+  });
+
+  const tthInputs = container.querySelectorAll('input.tth.comma-number');
+  let tthTotal = 0;
+  tthInputs.forEach(input => {
+    const val = parseNumber(input.value);
+    if (!isNaN(val)) {
+      tthTotal += val;
+    }
+  });
+
+  total += tthTotal;
+  document.getElementById("Transportation_expenses_result").textContent = total.toLocaleString();
+
+  updateGrandTotal();
+}
 
 // ฟังก์ชันอัปเดตค่าใน Transportation_expenses_result
 function updateTransportationTotal() {

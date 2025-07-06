@@ -435,8 +435,9 @@ function updateGrandTotal() {
   const register = updateRegistration_fee_Total();
   const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.replace(/,/g, '').trim());
   const reignCarDriver = parseFloat(document.getElementById("reign_car4412_result").textContent.replace(/,/g, '').trim()) || 0;
+  const totalCommaNumber = calculateTotalCommaGroup();
 
-  const grandTotal = other + allowance + Accommodation + register + vehicle + reignCarDriver;
+  const grandTotal = other + allowance + Accommodation + register + vehicle + reignCarDriver + totalCommaNumber;
 
   document.getElementById("GrandTotal").textContent = grandTotal.toLocaleString();
   window.all_cost = grandTotal;
@@ -617,22 +618,21 @@ function calculateTotal() {
     let total = 0;
     const container = document.getElementById("container");
 
-    // รถยนต์ส่วนบุคคล × 8
-const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
-const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
-let personalCarAmount = 0;
-if (personalCarInput) {
-    let multiplier = 4;
-    if (personalCarCheckbox && personalCarCheckbox.checked) {
-        multiplier = 8; // *4*2 เมื่อคลิก checkbox
+    // 🛻 คำนวณช่องรถยนต์ส่วนบุคคล × 4 หรือ ×8
+    const personalCarInput = container.querySelector('#personal_car_box input.comma-number');
+    const personalCarCheckbox = container.querySelector('#personal_car_box input[type="checkbox"]');
+    let personalCarAmount = 0;
+    if (personalCarInput) {
+        let multiplier = 4;
+        if (personalCarCheckbox && personalCarCheckbox.checked) {
+            multiplier = 8;
+        }
+        personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
+        total += personalCarAmount;
     }
-    personalCarAmount = parseNumber(personalCarInput.value) * multiplier;
-    total += personalCarAmount;
-}
-totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
+    totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-
-    // input-box อื่นๆ
+    // ✨ รวมกล่อง .input-box อื่น (ยกเว้น personal_car, reign_car)
     const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
     allBoxes.forEach(box => {
         const numberInputs = box.querySelectorAll('input.comma-number');
@@ -644,14 +644,37 @@ totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
         });
     });
 
+    // 🌟 รวมช่อง input[id="tth"] ด้วย
+    const tthInputs = container.querySelectorAll('input.tth.comma-number');
+    let tthTotal = 0;
+    tthInputs.forEach(input => {
+        const val = parseNumber(input.value);
+        if (!isNaN(val)) {
+            tthTotal += val;
+        }
+    });
+
+    // รวม tth กับค่าปกติ
+    total += tthTotal;
+
+    // 🧮 แสดงผลรวมทั้งหมด
     totalDisplay.textContent = total.toLocaleString();
+
+    // 🎯 คำนวณยอดรวมรวม
     updateGrandTotal();
 }
+
 
 // ➤ ติดตามทุก input
 const allInputs = document.querySelectorAll('.input-box input');
 allInputs.forEach(input => {
     input.addEventListener('input', calculateTotal);
+});
+
+document.addEventListener('input', function (e) {
+  if (e.target.classList.contains('tth')) {
+    calculateTotal();
+  }
 });
 
 
@@ -782,6 +805,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    
+
     // 👑 ฟังก์ชันสร้างแถว "รถยนต์ของทางราชการ"
     function createReignCarRow() {
         const div = document.createElement('div');
@@ -795,7 +820,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <input type="text" placeholder="หมายเลขทะเบียนรถ" style="margin: 0; margin-left: 0%; width: 20%;">
               <input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
               <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
-              <input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
+              <input type="text" class="comma-number tth" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
           </label>
           <button type="button" class="remove-btn" style="background-color:red; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&minus;</button>
         `;
@@ -832,7 +857,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; text-align: center; margin-top: 1.2%;">
                 <p style="margin: 0; display: flex; align-items: center; justify-content: center;">เป็นจำนวนเงิน&nbsp;</p>
-                <span class="result" style="margin: 0; display: flex; align-items: center;">0</span>
+                <span class="reign_car4412_result comma-number" data-group="grand" style="margin: 0; display: flex; align-items: center;">0</span>
                 <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
             </div>
         `;
@@ -840,7 +865,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // คำนวณทันทีเมื่อพิมพ์
         const moneyInput = div.querySelector('.money');
         const daysInput = div.querySelector('.days');
-        const resultSpan = div.querySelector('.result');
+        const resultSpan = div.querySelector('.reign_car4412_result');
 
         [moneyInput, daysInput].forEach(input => {
             input.addEventListener('input', () => {
@@ -854,9 +879,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return div;
     }
+  const container = document.getElementById("container");
+  if (container) {
+    const observer = new MutationObserver(() => {
+      calculateTotal();
+    });
 
-    // 📊 ฟังก์ชันคำนวณยอดรวมทั้งหมด
-    function updateGrandTotal() {
-        // Placeholder: เพิ่มได้หากต้องการยอดรวมทุกแถว
-    }
+    observer.observe(container, { childList: true, subtree: true });
+  }
+
 });
+
+function calculateTotalCommaGroup() {
+  let total = 0;
+  const elements = document.querySelectorAll('.comma-number[data-group="grand"]');
+
+  elements.forEach(el => {
+    // ถ้าเป็น input ใช้ value ถ้าไม่ใช่ใช้ textContent
+    const raw = el.tagName === 'INPUT' ? el.value : el.textContent;
+    const val = parseFloat(raw.replace(/,/g, '')) || 0;
+    total += val;
+  });
+
+  return total;
+}
