@@ -631,20 +631,6 @@ if (personalCarInput) {
 }
 totalPersonalCarDisplay.textContent = personalCarAmount.toLocaleString();
 
-// รถยนต์ราชการ × 4 หรือ × 8 ถ้า checkbox
-const reignCar4412 = document.getElementById("reign_car4412");
-const reignCarInput = container.querySelector('#reign_car_box input.comma-number');
-const reignCarCheckbox = container.querySelector('#reign_car_box input[type="checkbox"]');
-let reignCarAmount = 0;
-if (reignCarInput) {
-    let multiplier = 4;
-    if (reignCarCheckbox && reignCarCheckbox.checked) {
-        multiplier = 8;
-    }
-    reignCarAmount = parseNumber(reignCarInput.value) * multiplier;
-    total += reignCarAmount;
-}
-totalReignCarDisplay.textContent = reignCarAmount.toLocaleString();
 
     // input-box อื่นๆ
     const allBoxes = container.querySelectorAll('.input-box:not(#personal_car_box):not(#reign_car_box)');
