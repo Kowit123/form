@@ -234,12 +234,13 @@ if (personalBox && personalBox.style.display !== "none") {
     const license = inputs[0].value.trim();
     const driver = inputs[1].value.trim();
     const distance = inputs[2].value.trim();
-    const total = document.getElementById("total_reign_car").textContent.trim();
+    const total = inputs[3].value.trim();
     const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+    const totalFormat = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
     if (license || driver || distance) {
       const text1 = `-รถยนต์ของทางราชการ 
       หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
-      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${total} บาท`
+      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${totalFormat} บาท`
       const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
     const indentX = 5;

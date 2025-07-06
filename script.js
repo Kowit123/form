@@ -760,3 +760,38 @@ if (ggx12Element) {
 if (ggx22Element) {
   ggx22Element.addEventListener('input', calculateReportReignCarDriverCompensation);
 }
+
+
+// ...existing code...
+
+// เพิ่ม/ลบแถว รถยนต์ของทางราชการ (reign_car)
+document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('addReignCarBtn');
+    const rowContainer = document.getElementById('reign_car_box');
+    if (addBtn && rowContainer) {
+        addBtn.addEventListener('click', function() {
+            const div = document.createElement('div');
+            div.className = 'reign_car_row';
+            div.style.display = 'flex';
+            div.innerHTML = `
+              <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 76%;">รถยนต์ของทางราชการ:
+                  <input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%; width: 20%;">
+                  <input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
+                  <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
+                  <input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
+              </label>
+              <button type="button" class="remove-btn" style="background-color:red; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&minus;</button>
+            `;
+            // ปุ่มลบ
+            div.querySelector('.remove-btn').addEventListener('click', function() {
+                div.remove();
+                updateGrandTotal();
+            });
+            // input event
+            div.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', updateGrandTotal);
+            });
+            rowContainer.appendChild(div);
+        });
+    }
+});
