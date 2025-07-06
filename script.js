@@ -434,10 +434,14 @@ function updateGrandTotal() {
   const Accommodation = updateAccommodationTotal();
   const register = updateRegistration_fee_Total();
   const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.replace(/,/g, '').trim());
-  const reignCarDriver = parseFloat(document.getElementById("reign_car4412_result").textContent.replace(/,/g, '').trim()) || 0;
-  const totalCommaNumber = calculateTotalCommaGroup();
+const reignCarDriver = Array.from(document.querySelectorAll('.reign_car4412_result'))
+  .reduce((sum, el) => {
+    const num = parseFloat(el.textContent.replace(/,/g, '').trim()) || 0;
+    return sum + num;
+  }, 0);
 
-  const grandTotal = other + allowance + Accommodation + register + vehicle + reignCarDriver + totalCommaNumber;
+
+  const grandTotal = other + allowance + Accommodation + register + vehicle + reignCarDriver;
 
   document.getElementById("GrandTotal").textContent = grandTotal.toLocaleString();
   window.all_cost = grandTotal;
@@ -802,6 +806,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             reignContainer.appendChild(reignRow);
             katopContainer.appendChild(katopRow);
+
+            syncReignAndKatopInput(reignRow, katopRow);
         });
     }
 
@@ -824,7 +830,6 @@ document.addEventListener('DOMContentLoaded', function () {
           </label>
           <button type="button" class="remove-btn" style="background-color:red; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&minus;</button>
         `;
-
         // ลบทั้งแถวตัวเองและแถวพาร์ทเนอร์
         div.querySelector('.remove-btn').addEventListener('click', function () {
             const partnerId = div.dataset.partner;
@@ -857,11 +862,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; text-align: center; margin-top: 1.2%;">
                 <p style="margin: 0; display: flex; align-items: center; justify-content: center;">เป็นจำนวนเงิน&nbsp;</p>
-                <span class="reign_car4412_result comma-number" data-group="grand" style="margin: 0; display: flex; align-items: center;">0</span>
+                <span class="reign_car4412_result comma-number" style="margin: 0; display: flex; align-items: center;">0</span>
                 <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
             </div>
         `;
-
         // คำนวณทันทีเมื่อพิมพ์
         const moneyInput = div.querySelector('.money');
         const daysInput = div.querySelector('.days');
@@ -879,6 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return div;
     }
+
   const container = document.getElementById("container");
   if (container) {
     const observer = new MutationObserver(() => {
@@ -890,16 +895,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function calculateTotalCommaGroup() {
-  let total = 0;
-  const elements = document.querySelectorAll('.comma-number[data-group="grand"]');
 
-  elements.forEach(el => {
-    // ถ้าเป็น input ใช้ value ถ้าไม่ใช่ใช้ textContent
-    const raw = el.tagName === 'INPUT' ? el.value : el.textContent;
-    const val = parseFloat(raw.replace(/,/g, '')) || 0;
-    total += val;
+
+function syncReignAndKatopInput(reignRow, katopRow) {
+  const reignInput = reignRow.querySelectorAll('input')[1]; // input[1] = ชื่อพนักงานขับรถ
+  const katopInput = katopRow.querySelectorAll('input')[0]; // input[0] = ชื่อพนักงานขับรถค่าตอบแทน
+
+  // ถ้าแก้ฝั่งราชการ → ไปอัปเดตค่าตอบแทน
+  reignInput.addEventListener('input', () => {
+    katopInput.value = reignInput.value;
   });
 
-  return total;
+  // ถ้าแก้ฝั่งค่าตอบแทน → ไปอัปเดตรถราชการ
+  katopInput.addEventListener('input', () => {
+    reignInput.value = katopInput.value;
+  });
+}
+
+const cn = document.getElementById('cn');
+const cn1 = document.getElementById('cn1');
+
+if (cn && cn1) {
+  // เมื่อกรอกใน #cn → อัปเดต #cn1
+  cn.addEventListener('input', () => {
+    cn1.value = cn.value;
+  });
+
+  // เมื่อกรอกใน #cn1 → อัปเดต #cn
+  cn1.addEventListener('input', () => {
+    cn.value = cn1.value;
+  });
 }

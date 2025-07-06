@@ -291,7 +291,7 @@
                     <div class ="reign_car_row" style="display: flex;">
                     <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 76%;">รถยนต์ของทางราชการ:
                         <input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%; width: 20%;">
-                        <input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
+                        <input type="text" id="cn" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
                         <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
                         <input type="text" class="comma-number tth" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
                     </label>
@@ -334,16 +334,16 @@
 
             <div style="display:none; margin-top: 1%; margin-bottom: 1%;" id="reign_car4412">
                 <labe style="width: 100%;">5. ค่าตอบแทนพนักงานขับรถ </label>
-                <div id="katoptan_row">
+                <div id="katoptan_row" class="katoptan_row">
                 <div style="width: 100%; display: flex; justify-content: space-between; text-align: center; align-items: center;">
                     <div style="width:75%;">
-                        <input type="text" placeholder="ชื่อพนักงานขับรถ" style="margin: 0; width: 33%;">
+                        <input type="text" id="cn1" placeholder="ชื่อพนักงานขับรถ" style="margin: 0; width: 33%;">
                         <input id="ggx1" type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"> X 
                         <input id="ggx2" type="text" class="comma-number" placeholder="จำนวนวัน" style="margin: 0;">
                     </div>
                     <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; text-align: center; margin-top: 1.2%;" >
                     <p style="margin: 0; display: flex; align-items: center; justify-content: center;">เป็นจำนวนเงิน&nbsp;</p>
-                    <span id="reign_car4412_result" style="margin: 0; display: flex; align-items: center;">0</span>
+                    <span id="reign_car4412_result" class="reign_car4412_result" style="margin: 0; display: flex; align-items: center;">0</span>
                     <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
                     </div>
                 </div> 

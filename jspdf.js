@@ -228,30 +228,35 @@ if (personalBox && personalBox.style.display !== "none") {
 }
 
   // ===== รถยนต์ราชการ =====
-  const reignBox = document.querySelector("#reign_car_box");
-  if (reignBox && reignBox.style.display !== "none") {
-    const inputs = reignBox.querySelectorAll("input");
-    const license = inputs[0].value.trim();
-    const driver = inputs[1].value.trim();
-    const distance = inputs[2].value.trim();
-    const total = inputs[3].value.trim();
-    const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
-    const totalFormat = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
-    if (license || driver || distance) {
-      const text1 = `-รถยนต์ของทางราชการ 
-      หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
-      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${totalFormat} บาท`
-      const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+const reignRows = document.querySelectorAll("#reign_car_box .reign_car_row");
+
+reignRows.forEach(row => {
+  const inputs = row.querySelectorAll("input");
+  const license = inputs[0]?.value.trim() || "";
+  const driver = inputs[1]?.value.trim() || "";
+  const distance = inputs[2]?.value.trim() || "";
+  const total = inputs[3]?.value.trim() || "";
+
+  const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
+  const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
+
+  if (license || driver || distance) {
+    const text = `-รถยนต์ของทางราชการ 
+    หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
+
+    const lines = doc.splitTextToSize(text, pageWidth - 7);
     const firstX = 5;
     const indentX = 5;
 
     lines.forEach((line, index) => {
-    const x = index === 0 ? firstX : indentX;
-    doc.text(line, x, lineY + index * 0.7);
-  });
-      lineY += lines.length * 0.7;
-    }
+      const x = index === 0 ? firstX : indentX;
+      doc.text(line, x, lineY + index * 0.7);
+    });
+
+    lineY += lines.length * 0.7;
   }
+});
 
   // ===== รายการอื่น ๆ =====
   const transportTypes = [
@@ -307,15 +312,32 @@ lineY += 0.3;
 // Check if reign_car checkbox is checked before printing driver compensation
 const reignCarCheckbox = document.querySelector('input[name="topicT"][data-id="reign_car"]');
 if (reignCarCheckbox && reignCarCheckbox.checked) {
-  groupHeight = 2.8;
-  lineY = checkAddPageGroup(doc, lineY, groupHeight);
-  const gbx1Lines1  = `5.ค่าตอบแทนพนักงานขับรถ`;
-  doc.text(gbx1Lines1,3, lineY)
-  doc.text(`รวมเป็นเงิน ${document.getElementById("reign_car4412_result").textContent} บาท`,pageWidth-2, lineY, {align: 'right'});
-  lineY += 0.7;
-  const gbx1Lines2  = `ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx1").value} บาท X ${document.getElementById("ggx2").value} วัน `;
-  doc.text(gbx1Lines2,3, lineY)
-  lineY += 0.7;
+  const katopRows = document.querySelectorAll(".katoptan_row");
+  if (katopRows.length > 0) {
+    groupHeight = 2.8 + katopRows.length * 0.7;
+    lineY = checkAddPageGroup(doc, lineY, groupHeight);
+
+    doc.text(`5.ค่าตอบแทนพนักงานขับรถ`, 3, lineY);
+    const totalResult = Array.from(katopRows).reduce((sum, row) => {
+      const span = row.querySelector(".reign_car4412_result");
+      const value = parseFloat((span?.textContent || "0").replace(/,/g, "")) || 0;
+      return sum + value;
+    }, 0);
+    doc.text(`รวมเป็นเงิน ${totalResult.toLocaleString()} บาท`, pageWidth - 2, lineY, { align: 'right' });
+    lineY += 0.7;
+
+    katopRows.forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      const driverName = inputs[0]?.value.trim() || "-";
+      const money = parseFloat(inputs[1]?.value.replace(/,/g, '') || "0");
+      const days = parseFloat(inputs[2]?.value.replace(/,/g, '') || "0");
+      const total = money * days;
+
+      const lineText = `- ${driverName} ${money.toLocaleString()} บาท X ${days} วัน เป็นเงิน ${total.toLocaleString()} บาท`;
+      doc.text(lineText, 3, lineY);
+      lineY += 0.7;
+    });
+  }
 }
 lineY += 0.3;
 
