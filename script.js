@@ -901,3 +901,15 @@ if (cn && cn1) {
 }
 
 
+document.getElementById("uploadPDF").addEventListener("change", function () {
+  const fileList = Array.from(this.files);
+  const preview = fileList.map((f, i) => `📄 ${i + 1}. ${f.name}`).join("<br>");
+  document.getElementById("fileNameList").innerHTML = preview || "ยังไม่ได้เลือกไฟล์";
+});
+
+document.getElementById("uploadPDF").value = "";
+
+function clearFiles() {
+  const input = document.getElementById("uploadPDF");
+  input.value = ""; // ✅ ล้างไฟล์
+}
