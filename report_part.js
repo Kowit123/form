@@ -1011,15 +1011,146 @@ doc.text(text4_1, centerX-0.3, yy, { align: 'center' });
 yy += 0.7;
 
 
+doc.addPage("a4", "landscape");
+const pageWidth2 = doc.internal.pageSize.getWidth();
+doc.setFont("THSarabunNew", "bold");
+doc.setFontSize(24);
+doc.text('หลักฐานการจ่ายเงินค่าตอบแทนการปฏิบัติงานในการขับรถไปราชการ', pageWidth2/2, 2, {align:'center'});
+let yyyy= 2.7;
+doc.setFontSize(16);
+doc.setFont("THSarabunNew", "normal");
+doc.text(`สำหรับ ( )รถบัส  ( )รถมินิบัส  ( )รถตู้และรถอื่นๆ  ( )กรณี รับ-ส่ง ผู้โดยสารที่สนามบิน`,3,yyyy)
+yyyy+=1;
+doc.setFontSize(14);
+doc.text(`ประกอบใบเบิกค่าใช้จ่ายในการเดินทาง ${document.querySelector('input[name="qqee"]:checked')?.value} เรื่อง ${document.getElementById("subject_re").value} วันที่....................................`,2,yyyy);
+yyyy+=0.7;
+// 🪄 หัวตาราง 2 ชั้น
+const head = [
+  [
+    { content: "ลำดับที่", rowSpan: 2 },
+    { content: "ชื่อ - สกุล", rowSpan: 2 },
+    { content: "รวมเวลาปฏิบัติงาน", colSpan: 2 },
+    { content: "เป็นเงิน (บาท)", rowSpan: 2 },
+    { content: "ว.ด.ป. ที่รับเงิน", rowSpan: 2 },
+    { content: "ลายมือชื่อ ผู้รับเงิน", rowSpan: 2 },
+    { content: "หมายเหตุ", rowSpan: 2 }
+  ],
+  [
+    { content: "จำนวนวัน" },
+    { content: "จำนวนเงิน" }
+  ]
+];
+
+// ข้อมูล
+function getKatopTableBody() {
+  const rows = document.querySelectorAll(".R_katoptan_row");
+  const body = [];
+
+  rows.forEach((row, index) => {
+    const inputs = row.querySelectorAll("input");
+    const driver = inputs[0]?.value.trim() || "-";
+    const rateRaw = inputs[1]?.value.trim().replace(/,/g, "") || "0";
+    const daysRaw = inputs[2]?.value.trim().replace(/,/g, "") || "0";
+
+    const rate = Number(rateRaw);
+    const days = Number(daysRaw);
+    const total = rate * days;
+    const formattedRate = rate.toLocaleString(undefined, { minimumFractionDigits: 2 });
+    const formattedTotal = total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+    body.push([
+      (index + 1).toString(),
+      driver,
+      `${days} วัน`,
+      formattedRate,
+      formattedTotal,
+      "", "", "" // ช่องว่าง: ว.ด.ป., ลายเซ็น, หมายเหตุ
+    ]);
+  });
+
+  return body;
+}
 
 
+// 🧮 แถวรวม
+const foot = [
+  [
+    { content: "รวม", colSpan: 4, styles: { halign: "center" } },
+    { content: "300.00", styles: { halign: "right" } },
+    { content: "สามร้อยบาทถ้วน", colSpan: 3 }
+  ]
+];
+
+// 🪄 วาดตาราง
+doc.autoTable({
+  head: head,
+  body: getKatopTableBody(),
+  foot: foot,
+  startY: yyyy,
+  theme: 'grid',
+  styles: {
+    font: 'THSarabunNew',
+    fontSize: 14,
+    halign: 'center',
+    valign: 'middle',
+    overflow: 'linebreak',
+  },
+  columnStyles: {
+    1: { halign: 'left' }, // คอลัมน์ที่ 2 (เริ่มนับจาก 0)
+  },
+
+  headStyles: {
+    fillColor: [255, 255, 255],
+    textColor: 0,
+    lineWidth: 0.02,
+    lineColor: [0, 0, 0]
+  },
+  bodyStyles: {
+    fillColor: [255, 255, 255],
+    textColor: 0,
+    lineWidth: 0.02,
+    lineColor: [0, 0, 0],
+},
+  footStyles: {
+    fillColor: [255, 255, 255],
+    textColor: 0,
+    lineWidth: 0.02,
+    lineColor: [0, 0, 0]
+  },
+  columnStyles: {
+    1: { halign: 'left' },   // ชื่อ
+    2: { halign: 'center' }, // จำนวน(วัน)
+    3: { halign: 'right' },  // อัตรา
+    4: { halign: 'right' },  // รวมเงิน
+    6: { halign: 'center' }  // ลายเซ็น
+  }
+});
+
+function drawPayerSignatureBlockRight(doc, startY = 20) {
+  doc.setFont("THSarabunNew", "normal");
+  doc.setFontSize(16);
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const blockWidth = 8.5; // ความกว้างของกล่องเซ็นชื่อ
+  const rightX = pageWidth - blockWidth - 2; // ระยะห่างจากขอบขวา 2cm
+
+  let y = startY;
+
+  // บรรทัดที่ 1: ลายเซ็น
+  doc.text(`ลงชื่อ..........................................................ผู้จ่ายเงิน`, rightX, y);
+  y += 0.9;
+
+  // บรรทัดที่ 2: ชื่อ
+  doc.text(`(..........................................................)`, rightX + 0.6, y);
+  y += 0.9;
+
+  // บรรทัดที่ 3: ตำแหน่ง
+  doc.text(`ตำแหน่ง...............................................................`, rightX-0.2, y);
+}
 
 
-
-
-
-
-
+const finalY = doc.lastAutoTable.finalY;
+drawPayerSignatureBlockRight(doc, finalY + 1.5);
 
 
 
