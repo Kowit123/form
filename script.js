@@ -774,3 +774,4 @@ if (ggx12Element) {
 if (ggx22Element) {
   ggx22Element.addEventListener('input', calculateReportReignCarDriverCompensation);
 }
+
