@@ -591,13 +591,15 @@ if (airplaneBox && airplaneBox.style.display !== "none") {
   doc.text('วันที่', 10.5, 4.7);
   doc.setFont("THSarabunNew", "normal");
   doc.text(`อว 0605.14/............`, 3.5, 4.7);
+  doc.text(`${datepicker1}`, 11.5, 4.7);
   doc.setFont("THSarabunNew", "bold");
   doc.text('เรื่อง', 3, 5.4);
   doc.setFont("THSarabunNew", "normal");
   doc.text(`ขออนุมัติเดินทางไปราชการโดยเครื่องบิน`, 4, 5.4);
   doc.setFont("THSarabunNew", "bold");
   doc.text('เรียน', 3, 6.8);
-  doc.setFont("THSarabunNew", "normal");  
+  doc.setFont("THSarabunNew", "normal");
+  doc.text(`คณบดีคณะวิศวกรรมศาสตร์`, 4, 6.8);  
   let y22 = 8.2;
 
   const mainParagraph = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ระหว่างวันที่ ${thai_datepicker4} ถึงวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("rea").value}`;

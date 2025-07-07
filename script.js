@@ -167,7 +167,7 @@ function addEntry1() {
   div1.innerHTML = `
     <input type="text" name="name_${entryCount1}" placeholder="ชื่อ-นามสกุล">
     <input type="text" name="position_${entryCount1}" placeholder="ตำแหน่ง">
-    <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน">
+    <input type="text" name="department_${entryCount1}" placeholder="หน่วยงาน" value="คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม">
     <div>
     <button class="remove-btn" onclick="removeEntry(this)" style="margin:0; background-color:red;">&minus;</button>
     </div>
