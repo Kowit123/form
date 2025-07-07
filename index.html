@@ -706,17 +706,19 @@
                         <p style="margin: 0;">&nbsp;บาท</p>
                 </div>
                 </div>
-                <div id="R_reign_car_box" class="input-box" style="display: none;">
-                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 80%;">รถยนต์ของทางราชการ:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%; width: 20%;"><input type="text" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">                    <label style="text-align: center;">
-                    <input type="checkbox" id="R_car_roundtrip" style="text-align: center; margin: 0;">
-                        ไป - กลับ
-                    </label></label>
-                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; width: 20%; justify-content: flex-end;" >
-                        <p style="margin: 0;">เป็นจำนวนเงิน</p>
-                        <span id="R_total_reign_car">&nbsp;0</span>
-                        <p style="margin: 0;">&nbsp;บาท</p> 
+
+                    <div id="R_reign_car_box" class="input-box" style="display: none; flex-direction: column;">
+                    <div class ="R_reign_car_row" style="display: flex;">
+                    <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 76%;">รถยนต์ของทางราชการ:
+                        <input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 0%; width: 20%;">
+                        <input type="text" id="cn2" placeholder="พนักงานขับรถ" style="margin: 0; width: 25%;">
+                        <input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
+                        <input type="text" class="comma-number tth1" placeholder="จำนวนเงิน" style="margin: 0; width: 10%;">
+                    </label>
+                    <button type="button" id="addR_ReignCarBtn" style="background-color: #0004ff; color: white; margin: 0; margin-bottom: 1%; width: 6.2%;">&plus;</button>
                     </div>
-                </div>
+                    </div>
+
                 <div id="R_airplane_box" class="input-box" style="display: none; width: 100%;">
                     <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; width: 100%">เครื่องบิน:<input type="text" placeholder="รายละเอียด" style="width: 65%; margin: 0; margin-left: 2.5%;"><input type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"></label>
                 </div>
@@ -736,17 +738,20 @@
             <!--Endพาหนะรับจ้าง-->
             <div style="display:none; margin-top: 1%; margin-bottom: 1%;" id="reign_car4413">
                 <labe style="width: 100%;">4. ค่าตอบแทนพนักงานขับรถ </label>
-                <div style="width: 100%; display: flex; justify-content: space-between;">
-                    <div style="width: 50%;">
+                <div id="R_katoptan_row" class="katoptan_row">
+                <div style="width: 100%; display: flex; justify-content: space-between; text-align: center; align-items: center;">
+                    <div style="width:75%;">
+                        <input type="text" id="cn12" placeholder="ชื่อพนักงานขับรถ" style="margin: 0; width: 33%;">
                         <input id="ggx12" type="text" class="comma-number" placeholder="จำนวนเงิน" style="margin: 0;"> X 
                         <input id="ggx22" type="text" class="comma-number" placeholder="จำนวนวัน" style="margin: 0;">
                     </div>
-                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%;" >
-                    <p style="margin: 0; display: flex; align-items: center;">เป็นจำนวนเงิน&nbsp;</p>
-                    <span id="reign_car4413_result" style="margin: 0; display: flex; align-items: center;">0</span>
+                    <div class="cost_display" style="align-items: center; margin: 0; margin-bottom: 1%; text-align: center; margin-top: 1.2%;" >
+                    <p style="margin: 0; display: flex; align-items: center; justify-content: center;">เป็นจำนวนเงิน&nbsp;</p>
+                    <span id="reign_car4413_result" class="reign_car4413_result" style="margin: 0; display: flex; align-items: center;">0</span>
                     <p style="margin: 0; display: flex; align-items: center;">&nbsp;บาท</p>
                     </div>
-                </div>   
+                </div> 
+                </div>  
             </div>
             <!--other_cost-->
             <div class="R_Other">

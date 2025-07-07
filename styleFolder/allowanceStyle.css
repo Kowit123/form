@@ -98,7 +98,7 @@ p {
     }
 }
 
-.R_detail_car {
+.R_reign_car_box {
     grid-template-columns: 25% 37% ;
     gap: 9px;
     margin-bottom: 1rem;

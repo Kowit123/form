@@ -434,7 +434,7 @@ function updateGrandTotal() {
   const Accommodation = updateAccommodationTotal();
   const register = updateRegistration_fee_Total();
   const vehicle = parseFloat(document.getElementById("Transportation_expenses_result").textContent.replace(/,/g, '').trim());
-const reignCarDriver = Array.from(document.querySelectorAll('.reign_car4412_result'))
+  const reignCarDriver = Array.from(document.querySelectorAll('.reign_car4412_result'))
   .reduce((sum, el) => {
     const num = parseFloat(el.textContent.replace(/,/g, '').trim()) || 0;
     return sum + num;
@@ -761,33 +761,6 @@ if (reportReignCarCheckbox && reportDriverBox) {
   }
 }
 
-// Function to calculate ggx12 * ggx22 and update reign_car4413_result
-function calculateReportReignCarDriverCompensation() {
-  const ggx12 = document.getElementById('ggx12');
-  const ggx22 = document.getElementById('ggx22');
-  const resultElement = document.getElementById('reign_car4413_result');
-  
-  if (ggx12 && ggx22 && resultElement) {
-    const value1 = parseNumber(ggx12.value);
-    const value2 = parseNumber(ggx22.value);
-    const result = value1 * value2;
-    resultElement.textContent = result.toLocaleString();
-    grandTotal(); // Update grand total when this calculation changes
-  }
-}
-
-// Add event listeners for ggx12 and ggx22
-const ggx12Element = document.getElementById('ggx12');
-const ggx22Element = document.getElementById('ggx22');
-
-if (ggx12Element) {
-  ggx12Element.addEventListener('input', calculateReportReignCarDriverCompensation);
-}
-
-if (ggx22Element) {
-  ggx22Element.addEventListener('input', calculateReportReignCarDriverCompensation);
-}
-
 
 // ...existing code...
 document.addEventListener('DOMContentLoaded', function () {
@@ -926,3 +899,5 @@ if (cn && cn1) {
     cn.value = cn1.value;
   });
 }
+
+

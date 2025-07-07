@@ -199,29 +199,35 @@ if (personalBox && personalBox.style.display !== "none") {
 }
 
   // ===== รถยนต์ราชการ =====
-  const reignBox = document.querySelector("#R_reign_car_box");
-  if (reignBox && reignBox.style.display !== "none") {
-    const inputs = reignBox.querySelectorAll("input");
-    const license = inputs[0].value.trim();
-    const driver = inputs[1].value.trim();
-    const distance = inputs[2].value.trim();
-    const total = document.getElementById("R_total_reign_car").textContent.trim();
+const reignRows = document.querySelectorAll(".R_reign_car_row");
+
+reignRows.forEach(row => {
+  const inputs = row.querySelectorAll("input");
+  const license = inputs[0]?.value.trim() || "-";
+  const driver = inputs[1]?.value.trim() || "-";
+  const distance = inputs[2]?.value.trim();
+  const money = inputs[3]?.value.trim();
+
+  if (license !== "-" || driver !== "-" || distance || money) {
     const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
-    if (license || driver || distance) {
-      const text1 = `-รถยนต์ของทางราชการ 
-      หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นพนักงานขับรถ 
-      ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${total} บาท`
-      const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
+    const moneyFormatted = money ? Number(money.replace(/,/g, '')).toLocaleString() : "-";
+
+    const text = `-รถยนต์ของทางราชการ 
+หมายเลขทะเบียน ${license} โดยมี ${driver} เป็นพนักงานขับรถ 
+ระยะทางโดยประมาณ ${distanceFormatted} กม.  เป็นเงิน ${moneyFormatted} บาท`;
+
+    const lines = doc.splitTextToSize(text, pageWidth - 7);
     const firstX = 5;
     const indentX = 5;
 
     lines.forEach((line, index) => {
-    const x = index === 0 ? firstX : indentX;
-    doc.text(line, x, y + index * 0.7);
-  });
-      y += lines.length * 0.7;
-    }
+      const x = index === 0 ? firstX : indentX;
+      doc.text(line, x, y + index * 0.7);
+    });
+
+    y += lines.length * 0.7;
   }
+});
 
   // ===== รายการอื่น ๆ =====
   const transportTypes = [
@@ -738,7 +744,6 @@ y3 += 0.7;
 // หาตัวเลือกการเดินทาง
 // ...existing code...
 let personalBoxc = document.querySelector("#R_personal_car_box");
-let reignBoxc = document.querySelector("#R_reign_car_box");
 
 if (personalBoxc && personalBoxc.style.display !== "none") {
   let inputs = personalBoxc.querySelectorAll("input");
@@ -751,16 +756,6 @@ if (personalBoxc && personalBoxc.style.display !== "none") {
   y3 += 0.7;
 }
 
-if (reignBoxc && reignBoxc.style.display !== "none") {
-  let inputs = reignBoxc.querySelectorAll("input");
-  let license = inputs[0]?.value?.trim() || "";
-  let driver = inputs[1]?.value?.trim() || "";
-  let travelText = `เดินทางโดย รถยนต์ของทางราชการ`;
-  if (license) travelText += ` หมายเลขทะเบียน ${license}`;
-  if (driver) travelText += ` โดยมี ${driver} เป็นพนักงานขับรถ`;
-  doc.text(travelText, 1.5, y3);
-  y3 += 0.7;
-}
 // ...existing code...
 // ...existing code...
 y3 += 0.7;
