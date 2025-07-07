@@ -271,17 +271,35 @@ y = checkAddPageForGroup(doc, y, groupHeight);
 
 const reignCarCheckbox = document.querySelector('input[name="type"][data-id="R_reign_car"]');
 if (reignCarCheckbox && reignCarCheckbox.checked) {
-  groupHeight = 2.8;
-  y = checkAddPageGroup(doc, y, groupHeight);
-  const gbx1Lines1  = `4.ค่าตอบแทนพนักงานขับรถ`;
-  doc.text(gbx1Lines1,3, y)
-  doc.text(`รวมเป็นเงิน ${document.getElementById("reign_car4413_result").textContent} บาท`,pageWidth-2, y, {align: 'right'});
-  y += 0.7;
-  const gbx1Lines2  = `ค่าตอบแทนพนักงานขับรถ ${document.getElementById("ggx12").value} บาท X ${document.getElementById("ggx22").value} วัน `;
-  doc.text(gbx1Lines2,3, y)
-  y += 0.7;
+  const katopRows = document.querySelectorAll(".R_katoptan_row");
+  if (katopRows.length > 0) {
+    groupHeight = 2.8 + katopRows.length * 0.7;
+    y = checkAddPageGroup(doc, y, groupHeight);
+
+    doc.text(`4.ค่าตอบแทนพนักงานขับรถ`, 3, y);
+    const totalResult = Array.from(katopRows).reduce((sum, row) => {
+      const span = row.querySelector(".reign_car4413_result");
+      const value = parseFloat((span?.textContent || "0").replace(/,/g, "")) || 0;
+      return sum + value;
+    }, 0);
+    doc.text(`รวมเป็นเงิน ${totalResult.toLocaleString()} บาท`, pageWidth - 2, y, { align: 'right' });
+    y += 0.7;
+
+    katopRows.forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      const driverName = inputs[0]?.value.trim() || "-";
+      const money = parseFloat(inputs[1]?.value.replace(/,/g, '') || "0");
+      const days = parseFloat(inputs[2]?.value.replace(/,/g, '') || "0");
+      const total = money * days;
+
+      const lineText = `- ${driverName} ${money.toLocaleString()} บาท X ${days} วัน เป็นเงิน ${total.toLocaleString()} บาท`;
+      doc.text(lineText, 3, y);
+      y += 0.7;
+    });
+  }
 }
 y += 0.3;
+
 // พิมพ์หัวข้อ
 groupHeight = 2.1;
 y = checkAddPageGroup(doc, y, groupHeight);
