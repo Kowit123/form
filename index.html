@@ -21,6 +21,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!--filesaver.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.0.2/build/index.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
     <!--web_name-->
     <title>แบบฟอร์มขออนุมัตเดินทางไปราชการ</title>
 </head>
@@ -816,7 +822,7 @@
 <div style="text-align: center; width: 100%; display: flex; justify-content: center;">
         <div id="bttd" style="margin-bottom: 7rem; width: 100%; text-align: center;">
             <button class="pdfbtt" type="button" onclick="generatePDF()">ดาวโหลดเอกสาร PDF</button>
-            <!-- <button class="pdfbtt" type="button" onclick="generateDOCX()" style="margin-left: 10px; background-color: #217346;">ดาวโหลดเอกสาร DOCX</button> -->
+            <button class="pdfbtt" type="button" onclick="generateDoc()" style="margin-left: 10px; background-color: #217346;">ดาวโหลดเอกสาร DOCX</button>
         </div>
         <div id="bttd1" class="n_display" style="margin-bottom: 7rem; width: 100%; align-items: center;">
             <button class="pdfbtt1" type="button" onclick="generate_reportPDF()">ดาวโหลดเอกสาร</button>
@@ -829,6 +835,7 @@
     <script src="wordcut.min.js"></script>
     <!--docx library-->
     <script src="docx-library.js"></script>
+    
     <script>
         // Check if docx library loaded properly
         if (typeof docx !== 'undefined') {
@@ -837,7 +844,7 @@
             console.error('docx library failed to load');
         }
     </script>
-    <script src="docx_generator.js"></script>
+    <script src="generate-docx.js"></script>
     <script src="jspdf.js"></script>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 

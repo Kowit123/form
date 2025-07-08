@@ -782,31 +782,32 @@ function checkAddPageGroup(doc, lineY, groupHeight) {
 async function mergeUserPDFWithJsPDF(doc) {
   const input = document.getElementById("uploadPDF");
   const file = input.files[0];
-  if (!file) return alert("กรุณาเลือกไฟล์ PDF ก่อนเจ้าค่ะ!");
-
-  const userPdfBytes = await file.arrayBuffer();
 
   // 🟡 สร้าง PDF-lib จาก PDF ของ jsPDF
   const jsPdfBlob = doc.output("blob");
   const jsPdfArrayBuffer = await jsPdfBlob.arrayBuffer();
   const jsPdfLibDoc = await PDFLib.PDFDocument.load(jsPdfArrayBuffer);
 
-  const userPdfDoc = await PDFLib.PDFDocument.load(userPdfBytes);
-
-  // 🧬 รวมเอกสารทั้งสอง
+  // 🧬 สร้าง PDF ใหม่เพื่อรวมหน้า
   const mergedDoc = await PDFLib.PDFDocument.create();
 
+  // 🧾 คัดลอกหน้า PDF จาก jsPDF ก่อน
   const jsPages = await mergedDoc.copyPages(jsPdfLibDoc, jsPdfLibDoc.getPageIndices());
   jsPages.forEach(p => mergedDoc.addPage(p));
 
-  const userPages = await mergedDoc.copyPages(userPdfDoc, userPdfDoc.getPageIndices());
-  userPages.forEach(p => mergedDoc.addPage(p));
+  // ✅ ถ้ามีไฟล์ผู้ใช้ ให้รวมด้วย
+  if (file) {
+    const userPdfBytes = await file.arrayBuffer();
+    const userPdfDoc = await PDFLib.PDFDocument.load(userPdfBytes);
+
+    const userPages = await mergedDoc.copyPages(userPdfDoc, userPdfDoc.getPageIndices());
+    userPages.forEach(p => mergedDoc.addPage(p));
+  }
 
   const mergedBytes = await mergedDoc.save();
   const blob = new Blob([mergedBytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
-  window.open(url); // หรือจะใช้ download ก็ได้
+  window.open(url); // หรือใช้ download แทน
 }
-
 
 
