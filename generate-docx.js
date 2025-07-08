@@ -1,3 +1,5 @@
+const { Indent } = require("docx");
+
 //  แปลงภาพให้ใช่้ได้ใน docx
 //  ใช้ canvas ป้องกันปัญหา transparency
 async function loadAndFixImage(url) {
@@ -24,6 +26,12 @@ async function loadAndFixImage(url) {
 // สร้างเอกสาร DOCX
 // ใช้ docx.js เพื่อสร้างเอกสาร DOCX    
 async function generateDoc() {
+    //ดึงค่า input จาก html มาใช้
+    const bookNum = document.getElementById("bookNum").value;//เลขที่หนังสือ
+    const date1 = document.getElementById("thai-datepicker1").value;//วันที่ทำเอกสาร  input อยู่ข้างๆ เลขหนังสือ
+    const topic = document.getElementById("topic").value;//เรื่อง
+    const dear = document.getElementById("dear").value;// เรียน 
+
     // ตรวจสอบว่า docx.js และ FileSaver.js ว่าถูกโหลดแล้ว
     if (typeof window.docx === "undefined" || typeof window.saveAs === "undefined") {
         console.error("docx.js หรือ FileSaver.js ไม่ได้ถูกโหลด"); 
@@ -115,7 +123,89 @@ async function generateDoc() {
             insideHorizontal: { size: 0, color: "FFFFFF" },
             insideVertical: { size: 0, color: "FFFFFF" },
             }
-        })
+        }),
+            // ส่วนราชการ
+            new Paragraph({
+                spacing: { before: cmToTwip(0) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "ส่วนราชการ ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: "คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            // ส่วนราชการ
+            new Paragraph({
+                spacing: { before: cmToTwip(0) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "ที่ ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: bookNum,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+
+                    new TextRun({
+                        text: "                                     วันที่ ",
+                        font: "TH Sarabun New",
+                        bold:true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: date1,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "เรื่อง ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: topic,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "เรียน ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: dear,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),          
         ]
     }]
     });
