@@ -159,8 +159,9 @@ Accommodation_Costrows.forEach((row, idx) => {
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (cost !== "0" || rooms !== "0" || days !== "0") {
     const costH = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "0";
-    const unit = idx === 0 ? "ห้อง" : "คน";
-    doc.text(`-ค่าที่พักราคา ${costH} บาท จำนวน ${rooms} ${unit} ระยะเวลา ${days} วัน`, 5, y);
+    const unitRadio = row.querySelector('input[type="radio"]:checked');
+    const unit = unitRadio ? unitRadio.parentElement.textContent.trim() : "";  // เช่น "ห้อง" หรือ "คน"
+    doc.text(`-ค่าที่พัก ${costH} บาท จำนวน ${rooms} ${unit} ระยะเวลา ${days} วัน`, 5, y);
     y += 0.7;
   }
 });

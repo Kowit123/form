@@ -369,6 +369,10 @@ function addRealAccommodationRow() {
     <div class="left_part">
         <input class="real_accommodation_cost comma-number" id="real_accommodation_cost_${real_accommodationRow}" type="text" placeholder="ค่าที่พัก" oninput="grandTotal()">
         <input class="real_accommodation_person " id="real_accommodation_person_${real_accommodationRow}" type="number" placeholder="จำนวนคน" oninput="grandTotal()">
+        <div>
+            <label style="font-weight: normal;"><input type="radio" name="HOP1_${real_accommodationRow}" id="" style="margin: 0; padding: 0; display: inline; width: 25%;" value="ห้อง">ห้อง</label>
+            <label style="font-weight: normal;"><input type="radio" name="HOP1_${real_accommodationRow}" id="" style="margin: 0; padding: 0; display: inline; width: 25%;" valeu="คน">คน</label>
+        </div>
         <input class="real_accommodation_day " id="real_accommodation_day_${real_accommodationRow}" type="number" placeholder="จำนวนวัน" oninput="grandTotal()">
         <button class="add-btn" onclick="removeRealAccommodationeRow(this)" style="text-align: center; margin: 0; background-color: red;">&minus;</button>
     </div> 
