@@ -34,7 +34,7 @@ async function generateDoc() {
 
     // โหลดและแปลงภาพ
     // ใช้ loadAndFixImage เพื่อแปลงภาพให้เหมาะสมกับ doc
-    const imageData = await loadAndFixImage("/public/img/krut.jpg")
+    const imageData = await loadAndFixImage("form/public/img/krut.jpg")
 
     // ฟังก์ชันแปลง cm เป็น twip (1 cm = 567 twip) เพราะ docx.js ใช้หน่วย twip สำหรับ margin และขนาดอื่นๆ
     // ใช้สำหรับกำหนดขนาด margin ของเอกสาร
