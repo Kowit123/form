@@ -213,7 +213,7 @@
             <div class="F_line" style="display: flex; width: 100%; justify-content: space-between;">
             <label style="margin-right: 3%; width: 10%;">2. ค่าที่พัก</label>
                 <div style="width: 25%; display: flex;">
-                    <div style="display: flex;  margin-right: 10%;">
+                    <div style="display: flex;  margin-right: 5%;">
                         <input type="radio" id="mao" name="fav_language" value="เหมาจ่าย" style="margin: 0;">
                         <label for="mao" style="font-weight: normal;  align-content: center;">เหมาจ่าย</label>
                     </div>
@@ -222,7 +222,7 @@
                         <label for="jing" style="font-weight: normal; align-content: center;">จ่ายจริง</label>
                     </div>
                 </div>
-                <div class="cost_display" style="width: 30%; justify-content: flex-end;">
+                <div class="cost_display" style="width: 98%; justify-content: flex-end;">
                     <div class="tatal-cost_accommodation" id="top-right-total">
                     <p>เป็นจำนวนเงิน&nbsp;</p>
                     <span id="result_2">0</span>
@@ -233,7 +233,11 @@
             <div class="all" id="all">
                 <div class="detail_cost">
                     <input class="accommodation_cost comma-number" name="accommodation_cost_1" type="text" placeholder="ค่าที่พัก">
-                    <input class="accommodation_person" name="accommodation_person_1" type="number" placeholder="จำนวห้อง">
+                    <input class="accommodation_person" name="accommodation_person_1" type="number" placeholder="จำนวนห้อง/คน">
+                    <div>
+                        <label style="font-weight: normal;"><input type="radio" name="HOP" id="" style="margin: 0; padding: 0; display: inline; width: 15px;" value="ห้อง">ห้อง</label>
+                        <label style="font-weight: normal;"><input type="radio" name="HOP" id="" style="margin: 0; padding: 0; display: inline; width: 15px;" valeu="คน">คน</label>
+                    </div>
                     <input class="accommodation_day" name="accommodation_day_1" type="number" placeholder="จำนวนวัน">
                     <button class="add-btn" onclick="addAccommodationLine()" style="text-align: center; margin: 0;">＋</button>
                 </div>

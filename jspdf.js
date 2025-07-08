@@ -184,7 +184,8 @@ Accommodation_Costrows.forEach((row, idx) => {
   
   // ถ้ามีค่าใดค่าหนึ่งไม่เป็นศูนย์ ค่อยพิมพ์
   if (accommodation_cost !== "0" || accommodation_person !== "0" || accommodation_day !== "0") {
-    const unit = idx === 0 ? "ห้อง" : "คน";
+    const unitRadio = row.querySelector('input[type="radio"]:checked');
+    const unit = unitRadio ? unitRadio.parentElement.textContent.trim() : "";  // เช่น "ห้อง" หรือ "คน"
     doc.text(`-ค่าที่พัก ${accommodation_cost1} บาท จำนวน ${accommodation_person} ${unit} ระยะเวลา ${accommodation_day} วัน`, 5, lineY);
     lineY += 0.7;
   }

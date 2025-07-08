@@ -229,7 +229,11 @@ function addAccommodationLine() {
   div.innerHTML = `
     <div class="detail_cost">
         <input class="accommodation_cost comma-number" name="accommodation_cost_${accommodationRow}" type="text" placeholder="ค่าที่พัก">
-        <input class="accommodation_person" name="accommodation_person_${accommodationRow}" type="number" placeholder="จำนวนคน">
+        <input class="accommodation_person" name="accommodation_person_${accommodationRow}" type="number" placeholder="จำนวนห้อง/คน">
+        <div>
+            <label style="font-weight: normal;"><input type="radio" name="HOP_${accommodationRow}" id="" style="margin: 0; padding: 0; display: inline; width: 15px;" value="ห้อง">ห้อง</label>
+            <label style="font-weight: normal;"><input type="radio" name="HOP_${accommodationRow}" id="" style="margin: 0; padding: 0; display: inline; width: 15px;" value="คน">คน</label>
+        </div>
         <input class="accommodation_day" name="accommodation_day_${accommodationRow}" type="number" placeholder="จำนวนวัน">
         <button class="remove-btn" onclick="removeAccommodationline(this)" style = "margin:0;">&minus;</button>
     </div>
