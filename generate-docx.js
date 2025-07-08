@@ -24,11 +24,12 @@ async function loadAndFixImage(url) {
   return new Uint8Array(arrayBuffer); // ✅ ใช้ใน ImageRun
 }   
 
+// loop ดึง input ชื่อผู้ร่วมเดินทาง
 function getAllEntryData1() {
   const entries = document.querySelectorAll(".entry12");
   const data = [];
   entries.forEach((entry, idx) => {
-    if (idx === 0) return; // skip first
+    if (idx === 0) return; // skip first ชื่อแรกเป็น ของผู้ขออนุมัติ เลย ข้าม
     const name = entry.querySelector('input[name^="name_"]')?.value || "";
     const position = entry.querySelector('input[name^="position_"]')?.value || "";
     const department = entry.querySelector('input[name^="department_"]')?.value || "";
@@ -44,7 +45,7 @@ function getAllEntryData1() {
 // สร้างเอกสาร DOCX
 // ใช้ docx.js เพื่อสร้างเอกสาร DOCX    
 async function generateDoc() {
-
+    //แปลง cm เป็น twip
     const cmToTwip = (cm) => Math.round(cm * 567);
 
     //ดึงค่า input จาก html มาใช้
@@ -79,12 +80,12 @@ async function generateDoc() {
     // แปลงแต่ละบรรทัดเป็น Paragraph พร้อมจัด indent
     return mainParagraph.map((line, index) =>
     new Paragraph({
-        alignment: "left",
+        alignment: "left", //ไม่ มี th distributed 
         spacing: {
-            before: cmToTwip(0.5)
+            before: cmToTwip(0.5) // ให้ห่างจากเรียน
         },
         indent: {
-        left: cmToTwip(0),                 // ทุกบรรทัดเยื้องซ้าย 3 ซม.
+        left: cmToTwip(0),                 
         firstLine: index === 0 ? cmToTwip(2.5) : 0,  // บรรทัดแรกเยื้องเพิ่มอีก 2.5 = รวม 5.5 ซม.
         right: cmToTwip(2),                // ขอบขวา 2 ซม.
         },
@@ -100,6 +101,7 @@ async function generateDoc() {
     );
     }
 
+    //loop ชื่อผู้ร่วมเดินทาง มาเก็บ เป็น string 
     const participantData = getAllEntryData1();
     const participantText = participantData.length > 0
     ? ` พร้อมด้วย\n` + participantData.map((p, i) =>
@@ -107,15 +109,15 @@ async function generateDoc() {
     ).join("\n")
     : '';
 
+    // รวม string ที่จะใช้
     const lines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง ${requesting_position} สังกัด ${requesting_part}${participantText} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง ${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
+    // นำ string มาจัด format ด้วย function createMainParagraphs()
     const mainParagraphs = createMainParagraphs(lines);
 
     // โหลดและแปลงภาพ
     // ใช้ loadAndFixImage เพื่อแปลงภาพให้เหมาะสมกับ doc
     const imageData = await loadAndFixImage("./public/img/krut.jpg")
 
-    // ฟังก์ชันแปลง cm เป็น twip (1 cm = 567 twip) เพราะ docx.js ใช้หน่วย twip สำหรับ margin และขนาดอื่นๆ
-    // ใช้สำหรับกำหนดขนาด margin ของเอกสาร
     // สร้างเอกสารใหม่
     // กำหนดขนาด margin และสร้างตารางสำหรับส่วนหัวของเอกสาร
     const doc = new Document({
@@ -130,7 +132,7 @@ async function generateDoc() {
             }
         }
         },
-        // กำหนดส่วนหัวของเอกสาร
+        // กำหนดส่วนหัวของเอกสาร ใช้ตารางเพื่อให้อยู่แนวเดียวกันได้
         children: [
         new Table({
             rows: [
@@ -211,7 +213,7 @@ async function generateDoc() {
                     }),
                 ]
             }),
-            // ส่วนราชการ
+            // เลขที่ และวันที่ในการทำหนังสือ
             new Paragraph({
                 tabStops: [
                     {
@@ -222,11 +224,12 @@ async function generateDoc() {
                 children: [
                     new TextRun({ text: "ที่ ", bold: true, font: "TH Sarabun New", size: 32 }),
                     new TextRun({ text: bookNum, font: "TH Sarabun New", size: 32 }),
-                    new TextRun({ text: "\t", font: "TH Sarabun New", size: 32 }), // ใช้ tab
+                    new TextRun({ text: "\t", font: "TH Sarabun New", size: 32 }), // ใช้ tab แทนการเว้นด้วย spacebar
                     new TextRun({ text: "วันที่ ", bold: true, font: "TH Sarabun New", size: 32 }),
                     new TextRun({ text: date1, font: "TH Sarabun New", size: 32 }),
                 ],
             }),
+            //เรื่อง
             new Paragraph({
                 spacing: { before: cmToTwip(0) },
                 alignment: "left",
@@ -244,6 +247,7 @@ async function generateDoc() {
                     }),
                 ]
             }),
+            //เรียน
             new Paragraph({
                 spacing: { before: cmToTwip(0.5) },
                 alignment: "left",
@@ -261,11 +265,11 @@ async function generateDoc() {
                     }),
                 ]
             }),
-            ...mainParagraphs,
+            ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย
         ]
     }]
     });
 
     const blob = await Packer.toBlob(doc);
-    saveAs(blob, "document.docx");
+    saveAs(blob, "document.docx"); // download docx
 }
