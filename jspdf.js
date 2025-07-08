@@ -663,7 +663,7 @@ const pdfBlob = doc.output("blob");
 const blobUrl = URL.createObjectURL(pdfBlob);
 
 // เปิดพรีวิวในแท็บใหม่
-window.open(blobUrl, "_blank");
+
 
 
 
