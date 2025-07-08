@@ -121,5 +121,5 @@ async function generateDoc() {
     });
 
     const blob = await Packer.toBlob(doc);
-    saveAs(blob, "memo.docx");
+    saveAs(blob, "document.docx");
 }
