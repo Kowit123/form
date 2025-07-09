@@ -261,7 +261,7 @@ async function generateDoc() {
     const ReignCarCostFormatted = ReignCarCost ? Number(ReignCarCost.replace(/,/g, '')).toLocaleString() : "-";
 
     const reignCarBox = document.querySelector("#R_reign_car_box")
-    if (reignCarBox) {
+    if (reignCarBox&& personalBox.style.display !== "none") {
     reignCarParagraph.push(createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted));
     }
 });
@@ -468,7 +468,7 @@ async function generateDoc() {
                 ],
                 children: [
                     new TextRun({
-                    text: "2.ค่าที่พัก",
+                    text: `2.ค่าที่พัก   ${document.querySelector('input[name="fav_language"]:checked')?.value || ''}`,
                     font: "TH Sarabun New",
                     size: 32,
                     }),

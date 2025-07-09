@@ -1072,20 +1072,34 @@ function getKatopTableBody() {
   return body;
 }
 
+function getKatopTableFoot(body) {
+  let totalSum = 0;
 
+  for (const row of body) {
+    const total = parseFloat(row[4].replace(/,/g, ""));
+    totalSum += isNaN(total) ? 0 : total;
+  }
+
+  const formattedTotal = totalSum.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  const totalText = numberToThaiText(totalSum);
+
+  return [
+    [
+      { content: "รวม", colSpan: 4, styles: { halign: "center" } },
+      { content: formattedTotal, styles: { halign: "right" } },
+      { content: totalText, colSpan: 3 }
+    ]
+  ];
+}
+
+const body = getKatopTableBody();
 // 🧮 แถวรวม
-const foot = [
-  [
-    { content: "รวม", colSpan: 4, styles: { halign: "center" } },
-    { content: "300.00", styles: { halign: "right" } },
-    { content: "สามร้อยบาทถ้วน", colSpan: 3 }
-  ]
-];
+const foot = getKatopTableFoot(body);
 
 // 🪄 วาดตาราง
 doc.autoTable({
   head: head,
-  body: getKatopTableBody(),
+  body: body,
   foot: foot,
   startY: yyyy,
   theme: 'grid',
