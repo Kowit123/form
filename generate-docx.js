@@ -83,7 +83,7 @@ async function generateDoc() {
         alignment: "left", //ไม่ มี th distributed 
         spacing: {
         before: index === 0 ? cmToTwip(0.5) : 0, // ให้เฉพาะย่อหน้าแรกห่างจาก "เรียน"
-        after: cmToTwip(0.3),
+        after: cmToTwip(0),
         },
         indent: {
         left: cmToTwip(0),                 
@@ -106,7 +106,7 @@ async function generateDoc() {
     const text = `- ค่าเบี้ยเลี้ยง ${mc} บาท จำนวน ${pc} คน ระยะเวลา ${dc} วัน`;
     return new Paragraph({
         indent: { left: cmToTwip(2) },
-        spacing: { after: cmToTwip(0.3) },
+        spacing: { after: cmToTwip(0) },
         children: [
         new TextRun({
             text,
@@ -143,7 +143,7 @@ async function generateDoc() {
     const text = `- ค่าที่พัก ${cost} บาท จำนวน ${person} ${unit} ระยะเวลา ${days} วัน`;
     return new Paragraph({
         indent: { left: cmToTwip(2) },
-        spacing: { after: cmToTwip(0.3) },
+        spacing: { after: cmToTwip(0) },
         children: [
         new TextRun({
             text,
@@ -206,7 +206,7 @@ async function generateDoc() {
         }),
         new TextRun({ break: 1 }),
         new TextRun({
-            text: `\tระยะทาง ${personalCarDistanceFormatted} กม. (${personalBox.querySelector('input[type="checkbox"]:checked').parentElement.textContent.trim()}) เป็นเงิน ${PersonalCarCostFormatted} บาท`,
+            text: `\tระยะทาง ${personalCarDistanceFormatted} กม. (${personalBox.querySelector('input[type="checkbox"]:checked')?.parentElement.textContent.trim() || ''}) เป็นเงิน ${PersonalCarCostFormatted} บาท`,
             font: "TH Sarabun New",
             size: 32,
         }),
@@ -264,7 +264,47 @@ async function generateDoc() {
     if (reignCarBox&& personalBox.style.display !== "none") {
     reignCarParagraph.push(createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted));
     }
-});
+    });
+
+        //ค่าพาหนะ อื่นๆ
+    const otherTransportParagraphs = [];
+    const transportTypes = [
+        { id: "airplane", label: "เครื่องบิน" },
+        { id: "train", label: "รถไฟ" },
+        { id: "bus", label: "รถประจำทาง" },
+        { id: "vv", label: "พาหนะรับจ้าง" }
+    ];
+
+    function createTransportParagraph(type, detail, amountFormatted) {
+        return new Paragraph({
+            indent: { left: cmToTwip(2) },
+            spacing: { after: cmToTwip(0.3) },
+            children: [
+                new TextRun({
+                text: `- ${type.label} ${detail || ""} เป็นเงิน ${amountFormatted} บาท`,
+                font: "TH Sarabun New",
+                size: 32,
+                })
+            ]
+        });
+    }
+    for (const type of transportTypes) {
+    const box = document.querySelector(`#${type.id}_box`);
+    if (box && box.style.display !== "none") {
+        const inputs = box.querySelectorAll("input");
+        const detail = inputs[0].value.trim();
+        const amount = inputs[1].value.trim();
+        const amountFormatted = amount ? Number(amount.replace(/,/g, '')).toLocaleString() : "0";
+
+        if (detail || amount) {
+        otherTransportParagraphs.push(
+            createTransportParagraph(type, detail, amountFormatted)
+        );
+        }
+    }
+    }
+
+
 
 
 
@@ -438,6 +478,10 @@ async function generateDoc() {
             ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย // หมายเหตุสำคัญ การนำตัวแปรมาใช้ กับ ribarry docx.js ต้องมี ...นำหน้าทุกครั้งไม่งั้นเวลาเปิด word  จะขึ้น error!
 
             new Paragraph({
+                spacing:{
+                    before: cmToTwip(0.5),
+                    after: cmToTwip(0)
+                },
                 tabStops: [
                     {
                     type: "right",
@@ -503,6 +547,7 @@ async function generateDoc() {
             }),
             ...PersonalCarParagraph,
             ...reignCarParagraph,
+            ...otherTransportParagraphs,
 
         ]
     }]
