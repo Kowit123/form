@@ -82,14 +82,14 @@ async function generateDoc() {
     new Paragraph({
         alignment: "left", //ไม่ มี th distributed 
         spacing: {
-            before: cmToTwip(0.5) // ให้ห่างจากเรียน
+        before: index === 0 ? cmToTwip(0.5) : 0, // ให้เฉพาะย่อหน้าแรกห่างจาก "เรียน"
+        after: cmToTwip(0.3),
         },
         indent: {
         left: cmToTwip(0),                 
         firstLine: index === 0 ? cmToTwip(2.5) : 0,  // บรรทัดแรกเยื้องเพิ่มอีก 2.5 = รวม 5.5 ซม.
         right: cmToTwip(2),                // ขอบขวา 2 ซม.
         },
-        spacing: { after: cmToTwip(0.3) },   // ระยะบรรทัด
         children: [
         new TextRun({
             text: line,
@@ -170,6 +170,101 @@ async function generateDoc() {
         accommodationParagraphs.push(createAccommodationParagraph(costFormatted, person, unit, days)); // push เพิ่มข้อมูลเข้า accommodationParagraphs ที่เป็น array
     }
     });
+    // ส่วนพาหนะ
+    // ข้อมูลรายละเอียดรถยนต์ส่วนบบุคคล
+    const PersonalCarParagraph = [];//เก็บรายละเอียดใว้ใช้
+    const personalBox = document.querySelector("#personal_car_box");
+    const inputs = personalBox.querySelectorAll("input");
+    const personalCarPlate = inputs[0].value.trim();
+    const personalCarDriver = inputs[1].value.trim();
+    const personalCarDistance = inputs[2].value.trim();
+    const PersonalCarCost = document.getElementById("total_personal_car").textContent.trim();
+    const personalCarDistanceFormatted = personalCarDistance ? Number(personalCarDistance.replace(/,/g, '')).toLocaleString() : "-";
+    const PersonalCarCostFormatted = PersonalCarCost ? Number(PersonalCarCost.replace(/,/g, '')).toLocaleString() : "-";
+    
+    function createPersonalCarParagraph(personalCarPlate, personalCarDriver, personalCarDistanceFormatted, PersonalCarCostFormatted) {
+    return new Paragraph({
+        indent: { left: cmToTwip(2)},
+        tabStops: [
+            {
+                type: "left",
+                position: cmToTwip(1), // ปรับระยะตามต้องการ
+            },
+        ],
+        spacing: { after: cmToTwip(0) },
+        children: [
+        new TextRun({
+            text: "- รถยนต์ส่วนบุคคล",
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        new TextRun({ break: 1 }),
+        new TextRun({
+            text: `\tหมายเลขทะเบียน ${personalCarPlate} โดยมี ${personalCarDriver} เป็นผู้ขับรถ`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        new TextRun({ break: 1 }),
+        new TextRun({
+            text: `\tระยะทาง ${personalCarDistanceFormatted} กม. (${personalBox.querySelector('input[type="checkbox"]:checked').parentElement.textContent.trim()}) เป็นเงิน ${PersonalCarCostFormatted} บาท`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+    if (personalBox && personalBox.style.display !== "none") {
+        PersonalCarParagraph.push(createPersonalCarParagraph(personalCarPlate, personalCarDriver, personalCarDistanceFormatted, PersonalCarCostFormatted));
+    }
+
+
+    const reignCarParagraph = [];
+    function createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted) {
+    return new Paragraph({
+        indent: { left: cmToTwip(2)},
+        tabStops: [
+            {
+                type: "left",
+                position: cmToTwip(1), // ปรับระยะตามต้องการ
+            },
+        ],
+        spacing: { after: cmToTwip(0) },
+        children: [
+        new TextRun({
+            text: "- รถยนต์ของทางราชการ",
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        new TextRun({ break: 1 }),
+        new TextRun({
+            text: `\tหมายเลขทะเบียน ${ReignCarPlate} โดยมี ${ReignCarDriver} เป็นพนักงานขับรถ`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        new TextRun({ break: 1 }),
+        new TextRun({
+            text: `\tระยะทาง ${ReignCarDistanceFormatted} กม. เป็นเงิน ${ReignCarCostFormatted} บาท`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+    const reignRows = document.querySelectorAll("#reign_car_box .reign_car_row");
+    reignRows.forEach(row => {
+    const inputs = row.querySelectorAll("input");
+    const ReignCarPlate = inputs[0]?.value.trim() || "";
+    const ReignCarDriver = inputs[1]?.value.trim() || "";
+    const ReignCarDistance = inputs[2]?.value.trim() || "";
+    const ReignCarCost = inputs[3]?.value.trim() || ""
+    const ReignCarDistanceFormatted = ReignCarDistance ? Number(ReignCarDistance.replace(/,/g, '')).toLocaleString() : "-";
+    const ReignCarCostFormatted = ReignCarCost ? Number(ReignCarCost.replace(/,/g, '')).toLocaleString() : "-";
+
+  if (reignRows) {
+    reignCarParagraph.push(createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted));
+  }
+});
+
 
 
     //loop ชื่อผู้ร่วมเดินทาง มาเก็บ เป็น string 
@@ -384,6 +479,29 @@ async function generateDoc() {
                 ],
             }),
             ...accommodationParagraphs,
+
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "3.ค่าพาหนะ",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: `\tรวมเป็นเงิน ${document.getElementById("Transportation_expenses_result").textContent} บาท`,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),
+            ...PersonalCarParagraph,
+            ...reignCarParagraph,
 
         ]
     }]

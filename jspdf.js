@@ -207,7 +207,6 @@ if (personalBox && personalBox.style.display !== "none") {
   const driver = inputs[1].value.trim();
   const distance = inputs[2].value.trim();
   const total = document.getElementById("total_personal_car").textContent.trim();
-
   const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
   const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
 
@@ -230,14 +229,12 @@ if (personalBox && personalBox.style.display !== "none") {
 
   // ===== รถยนต์ราชการ =====
 const reignRows = document.querySelectorAll("#reign_car_box .reign_car_row");
-
 reignRows.forEach(row => {
   const inputs = row.querySelectorAll("input");
   const license = inputs[0]?.value.trim() || "";
   const driver = inputs[1]?.value.trim() || "";
   const distance = inputs[2]?.value.trim() || "";
-  const total = inputs[3]?.value.trim() || "";
-
+  const total = inputs[3]?.value.trim() || ""
   const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
   const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
 
