@@ -70,6 +70,7 @@ async function generateDoc() {
     // นำเข้าโมดูลที่จำเป็นจาก docx.js
     const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, VerticalAlign, ImageRun } = window.docx;
 
+///////////////////////////////////////////////////////////// SETUP TEXT ///////////////////////////////////////////////////////////// 
 
     // สร้าง Paragraph จากข้อความ `lines`
     function createMainParagraphs(lines) {
@@ -137,6 +138,39 @@ async function generateDoc() {
     allowanceParagraphs.push(createAllowanceParagraph(formatted, pc_2, dc_2));
     }
 
+    // รายละเอียดค่าเบบี้ยเลี้ยง
+    function createAccommodationParagraph(cost, person, unit, days) {
+    const text = `- ค่าที่พัก ${cost} บาท จำนวน ${person} ${unit} ระยะเวลา ${days} วัน`;
+    return new Paragraph({
+        indent: { left: cmToTwip(2) },
+        spacing: { after: cmToTwip(0.3) },
+        children: [
+        new TextRun({
+            text,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+
+    const accommodationParagraphs = [];// array เก็บ ข้อมูลค่าเบี้ยเลี้ยง
+    const Accommodation_Costrows = document.querySelectorAll("#accommodation .all"); 
+
+    Accommodation_Costrows.forEach((row) => {
+    const cost = row.querySelector(".accommodation_cost")?.value.trim() || "0";
+    const person = row.querySelector(".accommodation_person")?.value.trim() || "0";
+    const days = row.querySelector(".accommodation_day")?.value.trim() || "0";
+    const costFormatted = cost ? Number(cost.replace(/,/g, '')).toLocaleString() : "-";
+
+    if (cost !== "0" || person !== "0" || days !== "0") {
+        const unitRadio = row.querySelector('input[type="radio"]:checked');
+        const unit = unitRadio ? unitRadio.parentElement.textContent.trim() : ""; 
+        
+        accommodationParagraphs.push(createAccommodationParagraph(costFormatted, person, unit, days)); // push เพิ่มข้อมูลเข้า accommodationParagraphs ที่เป็น array
+    }
+    });
+
 
     //loop ชื่อผู้ร่วมเดินทาง มาเก็บ เป็น string 
     const participantData = getAllEntryData1();
@@ -154,6 +188,8 @@ async function generateDoc() {
     // โหลดและแปลงภาพ
     // ใช้ loadAndFixImage เพื่อแปลงภาพให้เหมาะสมกับ doc
     const imageData = await loadAndFixImage("./public/img/krut.jpg")
+
+///////////////////////////////////////////////////////////// SETUP TEXT ///////////////////////////////////////////////////////////// 
 
     // สร้างเอกสารใหม่
     // กำหนดขนาด margin และสร้างตารางสำหรับส่วนหัวของเอกสาร
@@ -256,7 +292,7 @@ async function generateDoc() {
                 tabStops: [
                     {
                         type: "left",
-                        position: cmToTwip(7.5), // ปรับระยะตามต้องการ
+                        position: cmToTwip(7), // ปรับระยะตามต้องการ
                     },
                 ],
                 children: [
@@ -303,7 +339,7 @@ async function generateDoc() {
                     }),
                 ]
             }),
-            ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย
+            ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย // หมายเหตุสำคัญ การนำตัวแปรมาใช้ กับ ribarry docx.js ต้องมี ...นำหน้าทุกครั้งไม่งั้นเวลาเปิด word  จะขึ้น error!
 
             new Paragraph({
                 tabStops: [
@@ -326,6 +362,28 @@ async function generateDoc() {
                 ],
             }),
             ...allowanceParagraphs,
+
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "2.ค่าที่พัก",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: `\tรวมเป็นเงิน ${document.getElementById("result_2").textContent} บาท`,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),
+            ...accommodationParagraphs,
 
         ]
     }]
