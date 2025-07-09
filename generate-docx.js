@@ -1,4 +1,3 @@
-
 const { Indent } = require("docx");
 
 //  แปลงภาพให้ใช่้ได้ใน docx
@@ -41,7 +40,6 @@ function getAllEntryData1() {
 }
 
 
-
 // สร้างเอกสาร DOCX
 // ใช้ docx.js เพื่อสร้างเอกสาร DOCX    
 async function generateDoc() {
@@ -62,6 +60,7 @@ async function generateDoc() {
     const thai_datepicker3 = document.getElementById("thai-datepicker3").value;
     const thai_datepicker4 = document.getElementById("thai-datepicker4").value;
     const thai_datepicker5 = document.getElementById("thai-datepicker5").value;
+    //ตัวแปรไว้เก็บยอดรวม
 
     // ตรวจสอบว่า docx.js และ FileSaver.js ว่าถูกโหลดแล้ว
     if (typeof window.docx === "undefined" || typeof window.saveAs === "undefined") {
@@ -101,12 +100,50 @@ async function generateDoc() {
     );
     }
 
+    // สร้างข้อมูลค่าเบี้ยเลี้ยง
+    function createAllowanceParagraph(mc, pc, dc) {
+    const text = `- ค่าเบี้ยเลี้ยง ${mc} บาท จำนวน ${pc} คน ระยะเวลา ${dc} วัน`;
+    return new Paragraph({
+        indent: { left: cmToTwip(2) },
+        spacing: { after: cmToTwip(0.3) },
+        children: [
+        new TextRun({
+            text,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+
+    // ดึง input ค่าเบี้ยเลี้ยง มาใช้
+    const mc_1 = document.getElementById("mc_1").value.trim();
+    const pc_1 = document.getElementById("pc_1").value.trim();
+    const dc_1 = document.getElementById("dc_1").value.trim();
+
+    const mc_2 = document.getElementById("mc_2").value.trim();
+    const pc_2 = document.getElementById("pc_2").value.trim();
+    const dc_2 = document.getElementById("dc_2").value.trim();
+
+    const allowanceParagraphs = [];
+
+    if (mc_1) {
+    const formatted = Number(mc_1.replace(/,/g, '')).toLocaleString();
+    allowanceParagraphs.push(createAllowanceParagraph(formatted, pc_1, dc_1));
+    }
+
+    if (mc_2) {
+    const formatted = Number(mc_2.replace(/,/g, '')).toLocaleString();
+    allowanceParagraphs.push(createAllowanceParagraph(formatted, pc_2, dc_2));
+    }
+
+
     //loop ชื่อผู้ร่วมเดินทาง มาเก็บ เป็น string 
     const participantData = getAllEntryData1();
     const participantText = participantData.length > 0
     ? ` พร้อมด้วย\n` + participantData.map((p, i) =>
-        `${i + 1}. ${p.name} ตำแหน่ง ${p.position}`
-    ).join("\n")
+        `${i + 1}. ${p.name} ตำแหน่ง ${p.position}\n`
+    ).join("")
     : '';
 
     // รวม string ที่จะใช้
@@ -166,7 +203,8 @@ async function generateDoc() {
                         spacing: {
                         before: cmToTwip(1)
                         },
-                        alignment: "center",
+                        alignment: "left", 
+                        indent: { left: cmToTwip(3.5) }, // เยื้องเข้าไปทางขวาประมาณ 1.5 ซม. ปรับได้ตามต้องการ
                         children: [
                         new TextRun({
                             text: "บันทึกข้อความ",
@@ -218,7 +256,7 @@ async function generateDoc() {
                 tabStops: [
                     {
                         type: "left",
-                        position: cmToTwip(9), // ปรับระยะตามต้องการ
+                        position: cmToTwip(7.5), // ปรับระยะตามต้องการ
                     },
                 ],
                 children: [
@@ -266,6 +304,29 @@ async function generateDoc() {
                 ]
             }),
             ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย
+
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "1.ค่าเบี้ยเลี้ยง",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: "\tรวมเป็นเงิน " + allowanceTotal.toLocaleString() + " บาท",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),
+            ...allowanceParagraphs,
+
         ]
     }]
     });

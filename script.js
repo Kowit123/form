@@ -209,6 +209,7 @@ function calculateAllowance () {
   let total = allowanceTotal;
   return total;
 }
+
 mc1.addEventListener('input',calculateAllowance);
 pc1.addEventListener('input',calculateAllowance);
 dc1.addEventListener('input',calculateAllowance);
