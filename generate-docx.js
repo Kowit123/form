@@ -260,9 +260,10 @@ async function generateDoc() {
     const ReignCarDistanceFormatted = ReignCarDistance ? Number(ReignCarDistance.replace(/,/g, '')).toLocaleString() : "-";
     const ReignCarCostFormatted = ReignCarCost ? Number(ReignCarCost.replace(/,/g, '')).toLocaleString() : "-";
 
-  if (reignRows) {
+    const reignCarBox = document.querySelector("#R_reign_car_box")
+    if (reignCarBox) {
     reignCarParagraph.push(createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted));
-  }
+    }
 });
 
 
