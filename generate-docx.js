@@ -304,6 +304,40 @@ async function generateDoc() {
     }
     }
 
+    //registerParagraph
+    const registerParagraph = [];
+    function createregisterParagraph(registerDetail,registerFeeFormatted, registerPerson, registerCost) {
+    return new Paragraph({
+        indent: { left: cmToTwip(2)},
+        spacing: { after: cmToTwip(0)},
+        children: [
+        new TextRun({
+            text: `- ${registerDetail} จำนวน${registerFeeFormatted} บาท x จำนวน ${registerPerson} คน เป็นเงิน ${registerCost.toLocaleString()} บาท`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+    const registerRows = document.querySelectorAll(".Registration_fee_cost");
+    console.log("before forEach play normal");
+    registerRows.forEach(row => {
+    const registerDetail = row.querySelector('.Registration_fee_detail')?.value || "";
+    // รองรับ comma และแสดงผล fee แบบมี comma
+    const registerFeeRow = row.querySelector('.Registration-fee')?.value || "0";
+    const registerFee = Number(registerFeeRow.replace(/,/g, ''));
+    const registerFeeFormatted = registerFee.toLocaleString();
+    const registerPerson = parseFloat(row.querySelector('.Registrationp-fee')?.value || 0);
+    const registerCost = registerFee * registerPerson;
+    console.log("forEach play normal");
+
+
+    if (registerRows) {
+    registerParagraph.push(createregisterParagraph(registerDetail,registerFeeFormatted, registerPerson, registerCost));
+    console.log("push play normal");
+    }
+    });
+
 
 
 
@@ -548,6 +582,29 @@ async function generateDoc() {
             ...PersonalCarParagraph,
             ...reignCarParagraph,
             ...otherTransportParagraphs,
+
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "4.ค่าลงทะเบียน",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: `\tรวมเป็นเงิน ${document.getElementById("Registration-fee_result").textContent} บาท`,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),            
+            ...registerParagraph,
+
 
         ]
     }]
