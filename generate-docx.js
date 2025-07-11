@@ -278,7 +278,7 @@ async function generateDoc() {
     function createTransportParagraph(type, detail, amountFormatted) {
         return new Paragraph({
             indent: { left: cmToTwip(2) },
-            spacing: { after: cmToTwip(0.3) },
+            spacing: { after: cmToTwip(0) },
             children: [
                 new TextRun({
                 text: `- ${type.label} ${detail || ""} เป็นเงิน ${amountFormatted} บาท`,
@@ -338,7 +338,37 @@ async function generateDoc() {
     }
     });
 
+    //ค่าตอบทนพนักงานขับรถ   
+    const katopRows = document.querySelectorAll(".katoptan_row");
+    const totalResult = Array.from(katopRows).reduce((sum, row) => {
+    const span = row.querySelector(".reign_car4412_result");
+    const value = parseFloat((span?.textContent || "0").replace(/,/g, "")) || 0;
+    return sum + value;
+    }, 0);
 
+    const katoptanParagraph = [];
+    function createKatoptanParagraph(driverName,money, days, total) {
+    return new Paragraph({
+        indent: { left: cmToTwip(2)},
+        spacing: { after: cmToTwip(0)},
+        children: [
+        new TextRun({
+            text: `- ${driverName} ${money.toLocaleString()} บาท X ${days} วัน เป็นเงิน ${total.toLocaleString()} บาท`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+    katopRows.forEach(row => {
+    const inputs = row.querySelectorAll("input");
+    const driverName = inputs[0]?.value.trim() || "-";
+    const money = parseFloat(inputs[1]?.value.replace(/,/g, '') || "0");
+    const days = parseFloat(inputs[2]?.value.replace(/,/g, '') || "0");
+    const total = money * days;
+    katoptanParagraph.push(createKatoptanParagraph(driverName,money, days, total));
+    });
+    
 
 
 
@@ -604,6 +634,28 @@ async function generateDoc() {
                 ],
             }),            
             ...registerParagraph,
+
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "5.ค่าตอบแทนพนักงานขับรถ",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: `\tรวมเป็นเงิน ${totalResult} บาท`,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),
+            ...katoptanParagraph, 
 
 
         ]
