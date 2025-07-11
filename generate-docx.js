@@ -360,6 +360,8 @@ async function generateDoc() {
         ],
     });
     }
+    const reignCarCheckbox = document.querySelector('input[name="topicT"][data-id="reign_car"]');
+    if (reignCarCheckbox && reignCarCheckbox.checked){
     katopRows.forEach(row => {
     const inputs = row.querySelectorAll("input");
     const driverName = inputs[0]?.value.trim() || "-";
@@ -368,7 +370,7 @@ async function generateDoc() {
     const total = money * days;
     katoptanParagraph.push(createKatoptanParagraph(driverName,money, days, total));
     });
-    
+    }
 
 
 
