@@ -181,11 +181,13 @@ if (personalBox && personalBox.style.display !== "none") {
 
   const distanceFormatted = distance ? Number(distance.replace(/,/g, '')).toLocaleString() : "-";
   const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
+  const isRoundTrip = document.querySelector('#R_personal_car_box input[type="checkbox"]');
+  const roundTripText = isRoundTrip ? "x 2 (ไป-กลับ)" : "";
 
   if (license || driver || distance) {
     const text1 = `-รถยนต์ส่วนบุคคล 
     หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นผู้ขับรถ
-    ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. ${roundTripText}  เป็นเงิน ${totalFormatted} บาท`;
     const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
     const indentX = 5;

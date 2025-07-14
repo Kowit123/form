@@ -211,9 +211,11 @@ if (personalBox && personalBox.style.display !== "none") {
   const totalFormatted = total ? Number(total.replace(/,/g, '')).toLocaleString() : "-";
 
   if (license || driver || distance) {
+    const isRoundTrip = document.getElementById("R_personal_car_roundtrip").checked;
+    const roundTripText = isRoundTrip ? "x 2 (ไป-กลับ)" : "";
     const text1 = `-รถยนต์ส่วนบุคคล 
     หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นผู้ขับรถ
-    ระยะทางโดยประมาณ ${distanceFormatted} กม. เป็นเงิน ${totalFormatted} บาท`;
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. ${roundTripText}  เป็นเงิน ${totalFormatted} บาท`;
     const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
     const indentX = 5;
@@ -456,7 +458,7 @@ doc.addPage();
       styles: {
         font: 'THSarabunNew',
         fontSize: 14,
-        halign: 'center',
+        halign: 'left',
         valign: 'middle',
       },
       headStyles: {
@@ -507,7 +509,7 @@ const checkbox = document.getElementById('personal_car');
       doc.text(`คณบดีคณะวิศวกรรมศาสตร์`, 4, 6.8);
       let y12 = 8.2;
 
-const mainParagraph = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ระหว่างวันที่ ${thai_datepicker4} ถึงวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`;
+const mainParagraph = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง${requesting_position} สังกัด${requesting_part} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง${project} ณ ${at} ระหว่างวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ตามเอกสารแนบนั้น จึงขออนุมัติเดินทางไปราชการ ในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`;
 
 const mainParagraphLines = doc.splitTextToSize(mainParagraph, firstLineWidth);
 
@@ -544,7 +546,7 @@ if (license || driver || distance) {
     const roundTripText = isRoundTrip ? "x 2 (ไป-กลับ)" : "";
     const text1 = `-รถยนต์ส่วนบุคคล 
     หมายเลขทะเบียน ${license || "-"} โดยมี ${driver || "-"} เป็นผู้ขับรถ
-    ระยะทางโดยประมาณ ${distanceFormatted} กม. X 4 เป็นเงิน ${roundTripText} `;
+    ระยะทางโดยประมาณ ${distanceFormatted} กม. ${roundTripText} เป็นเงิน เป็นเงิน ${totalFormatted} บาท`;
     const lines = doc.splitTextToSize(text1, pageWidth - 7); // ความกว้างหน้ากระดาษลบ margin ซ้ายขวา
     const firstX = 5;
     const indentX = 5;
@@ -736,6 +738,10 @@ function numberToThaiText(number) {
     }
     return result;
   }
+
+if (parseInt(integerPart) === 0 && parseInt(decimalPart) === 0) {
+  return "ศูนย์บาทถ้วน";
+}
 
   // รองรับจำนวนหลักล้านขึ้นไป
   let segments = [];

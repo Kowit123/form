@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
 
-    // 👑 ฟังก์ชันสร้างแถว "รถยนต์ของทางราชการ"
+    //  ฟังก์ชันสร้างแถว "รถยนต์ของทางราชการ"
     function createR_ReignCarRow() {
         const div = document.createElement('div');
         div.className = 'R_reign_car_row';
@@ -449,11 +449,12 @@ R_checkbox.addEventListener('change', function() {
     });
     
 const R2_checkbox = document.getElementById('R_personal_car');
+const R2_inputDiv = document.getElementById('personal_car_box');
 R2_checkbox.addEventListener('change', function() {
   if (this.checked) {
-    R_inputDiv.style.display = 'grid';
+    R2_inputDiv.style.display = 'grid';
     } else {
-      R_inputDiv.style.display = 'none';
+      R2_inputDiv.style.display = 'none';
     }
     });
 

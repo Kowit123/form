@@ -60,6 +60,8 @@ async function generateDoc() {
     const thai_datepicker3 = document.getElementById("thai-datepicker3").value;
     const thai_datepicker4 = document.getElementById("thai-datepicker4").value;
     const thai_datepicker5 = document.getElementById("thai-datepicker5").value;
+    const isRoundTrip = document.getElementById("R_personal_car_roundtrip").checked;
+    const roundTripText = isRoundTrip ? "x 2 (ไป-กลับ)" : "";
     //ตัวแปรไว้เก็บยอดรวม
 
     // ตรวจสอบว่า docx.js และ FileSaver.js ว่าถูกโหลดแล้ว
@@ -206,7 +208,7 @@ async function generateDoc() {
         }),
         new TextRun({ break: 1 }),
         new TextRun({
-            text: `\tระยะทาง ${personalCarDistanceFormatted} กม. (${personalBox.querySelector('input[type="checkbox"]:checked')?.parentElement.textContent.trim() || ''}) เป็นเงิน ${PersonalCarCostFormatted} บาท`,
+            text: `\tระยะทาง ${personalCarDistanceFormatted} กม. ${roundTripText}  เป็นเงิน ${PersonalCarCostFormatted} บาท`,
             font: "TH Sarabun New",
             size: 32,
         }),
@@ -225,7 +227,7 @@ async function generateDoc() {
         tabStops: [
             {
                 type: "left",
-                position: cmToTwip(1), // ปรับระยะตามต้องการ
+                position: cmToTwip(1),
             },
         ],
         spacing: { after: cmToTwip(0) },
@@ -260,13 +262,13 @@ async function generateDoc() {
     const ReignCarDistanceFormatted = ReignCarDistance ? Number(ReignCarDistance.replace(/,/g, '')).toLocaleString() : "-";
     const ReignCarCostFormatted = ReignCarCost ? Number(ReignCarCost.replace(/,/g, '')).toLocaleString() : "-";
 
-    const reignCarBox = document.querySelector("#R_reign_car_box")
-    if (reignCarBox&& personalBox.style.display !== "none") {
+    const reignCarBox = document.querySelector("#reign_car_box")
+    if (reignCarBox&& reignCarBox.style.display !== "none") {
     reignCarParagraph.push(createReignCarParagraph(ReignCarPlate,ReignCarDriver, ReignCarDistanceFormatted, ReignCarCostFormatted));
     }
     });
 
-        //ค่าพาหนะ อื่นๆ
+    //ค่าพาหนะ อื่นๆ
     const otherTransportParagraphs = [];
     const transportTypes = [
         { id: "airplane", label: "เครื่องบิน" },
@@ -372,7 +374,37 @@ async function generateDoc() {
     });
     }
 
+    //registerParagraph
+    const otherCostParagraph = [];
+    function createotherCostParagraph(otherCostDetail,otherCostFeeFormatted) {
+    return new Paragraph({
+        indent: { left: cmToTwip(2)},
+        spacing: { after: cmToTwip(0)},
+        children: [
+        new TextRun({
+            text: `- ${otherCostDetail} จำนวน${otherCostFeeFormatted} บาท`,
+            font: "TH Sarabun New",
+            size: 32,
+        }),
+        ],
+    });
+    }
+    const otherCostRows = document.querySelectorAll(".other_cost");
+    console.log("before forEach play normal");
+    otherCostRows.forEach(row => {
+    const otherCostDetail = row.querySelector('.Other-cost_detail')?.value || "";
+    // รองรับ comma และแสดงผล fee แบบมี comma
+    const otherCostFeeRow = row.querySelector('.otherCost')?.value || "0";
+    const otherCostFee = Number(otherCostFeeRow.replace(/,/g, ''));
+    const otherCostFeeFormatted = otherCostFee.toLocaleString();
+    console.log("forEach play normal");
 
+
+    if (otherCostRows) {
+    otherCostParagraph.push(createotherCostParagraph(otherCostDetail,otherCostFeeFormatted));
+    console.log("push play normal");
+    }
+    });
 
     //loop ชื่อผู้ร่วมเดินทาง มาเก็บ เป็น string 
     const participantData = getAllEntryData1();
@@ -382,7 +414,7 @@ async function generateDoc() {
     ).join("")
     : '';
 
-    // รวม string ที่จะใช้
+    //เนื้อหา main ที่จะใช้
     const lines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง ${requesting_position} สังกัด ${requesting_part}${participantText} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง ${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} พร้อมประมาณการค่าใช้จ่ายในการเดินทางไปราชการดังนี้`;
     // นำ string มาจัด format ด้วย function createMainParagraphs()
     const mainParagraphs = createMainParagraphs(lines);
@@ -391,6 +423,131 @@ async function generateDoc() {
     // ใช้ loadAndFixImage เพื่อแปลงภาพให้เหมาะสมกับ doc
     const imageData = await loadAndFixImage("./public/img/krut.jpg")
 
+    //กล่องเซ็นชื่อ
+    window.signatureBox = new Table({
+    width: {
+        size: 35,
+        type: WidthType.PERCENTAGE,
+    },
+    alignment: "right", // ✅ กล่องชิดขวา
+    borders: {
+        top: { size: 0, color: "FFFFFF" },
+        bottom: { size: 0, color: "FFFFFF" },
+        left: { size: 0, color: "FFFFFF" },
+        right: { size: 0, color: "FFFFFF" },
+        insideHorizontal: { size: 0, color: "FFFFFF" },
+        insideVertical: { size: 0, color: "FFFFFF" },
+    },
+    rows: [
+        new TableRow({
+        children: [
+            new TableCell({
+            width: { size: cmToTwip(8), type: WidthType.DXA }, // ✅ กำหนดความกว้างกล่อง
+            children: [
+                new Paragraph({
+                alignment: "center", // ✅ ข้อความอยู่กลางในกล่อง
+                children: [
+                    new TextRun({
+                    text: "ลงชื่อ......................................ผู้ขอรับเงิน",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+                }),
+                new Paragraph({
+                alignment: "center",
+                children: [
+                    new TextRun({
+                    text: document.getElementById("requesting_name").value,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+                }),
+                new Paragraph({
+                alignment: "center",
+                children: [
+                    new TextRun({
+                    text: document.getElementById("requesting_position").value,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+                }),
+            ],
+            }),
+        ],
+        }),
+    ],
+    });
+
+    //ตารางชื่อผู้ร่วมเดินทาง
+    function createParticipantTable(data) {
+    const { Table, TableRow, TableCell, Paragraph, TextRun, WidthType } = docx;
+
+    // สร้างแถวหัวตาราง
+    const headerRow = new TableRow({
+        children: ['ชื่อ-นามสกุล', 'ตำแหน่ง', 'หน่วยงาน'].map(text =>
+        new TableCell({
+            children: [new Paragraph({ children: [new TextRun({ text, bold: true, font: "TH Sarabun New", size: 32 })] })],
+        })
+        )
+    });
+
+    // สร้างแถวเนื้อหา
+    const bodyRows = data.map(row => new TableRow({
+        children: row.map(cell =>
+        new TableCell({
+            children: [new Paragraph({ children: [new TextRun({ text: cell, font: "TH Sarabun New", size: 32 })] })],
+        })
+        )
+    }));
+
+    // สร้างตารางทั้งหมด
+    return new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [headerRow, ...bodyRows],
+    });
+    }
+
+// เก็บข้อมูลก่อน
+const participantData1 = [];
+const entries = document.querySelectorAll(".entry12");
+entries.forEach((entry, index) => {
+  const name = entry.querySelector("input[name^='name_']").value;
+  const pos = entry.querySelector("input[name^='position_']").value;
+  const dept = entry.querySelector("input[name^='department_']").value;
+  participantData1.push([name, pos, dept]);
+});
+
+// ⬅️ สร้างตาราง ถ้ามีข้อมูล
+let participantTable;
+if (participantData1.length > 0) {
+  participantTable = createParticipantTable(participantData1);
+}
+
+//เนื้อหา ขอใช้เครื่องบิน
+const airplantLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง ${requesting_position} สังกัด ${requesting_part}${participantText} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง ${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("rea").value}`;
+// นำ string มาจัด format ด้วย function createMainParagraphs()
+const airplantParagraphs = createMainParagraphs(airplantLines);
+const airplaneCheckbox = document.querySelector('input[name="topicT"][data-id="airplane"]');
+let airplaneSection = null;
+if (airplaneCheckbox?.checked && typeof window.createAirplaneSection === "function") {
+airplaneSection = window.createAirplaneSection(imageData, cmToTwip, dear, bookNum, date1, airplantParagraphs);
+}
+
+//เนื้อหา ขอใช้รถยนต์ส่วนบุคคล
+const personalCarLines = `ด้วยข้าพเจ้า ${requesting_name} ตำแหน่ง ${requesting_position} สังกัด ${requesting_part}${participantText} ประสงค์ขออนุญาตเดินทางไปราชการเพื่อ ${document.querySelector('input[name="qqe"]:checked')?.value || ''} เรื่อง ${project} ณ ${at} ในวันที่ ${thai_datepicker2} ถึงวันที่ ${thai_datepicker3} ดังเอกสารแนบต้นเรื่อง(ถ้ามี) และขออนุมัติเดินทางในวันที่ ${thai_datepicker4} และเดินทางกลับวันที่ ${thai_datepicker5} เนื่องจาก ${document.getElementById("reason_personal_car_").value}`;
+// นำ string มาจัด format ด้วย function createMainParagraphs()
+const personalParagraphs = createMainParagraphs(personalCarLines);
+const personalCarCheckbox = document.querySelector('input[name="topicT"][data-id="personal_car"]');
+let personalSection = null;
+if (personalCarCheckbox?.checked && typeof window.createPersonalCarSection === "function") {
+personalSection = window.createPersonalCarSection(imageData, cmToTwip, dear, bookNum, date1, personalParagraphs);
+}
+
+
+    
 ///////////////////////////////////////////////////////////// SETUP TEXT ///////////////////////////////////////////////////////////// 
 
     // สร้างเอกสารใหม่
@@ -541,7 +698,7 @@ async function generateDoc() {
                     }),
                 ]
             }),
-            ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย // หมายเหตุสำคัญ การนำตัวแปรมาใช้ กับ ribarry docx.js ต้องมี ...นำหน้าทุกครั้งไม่งั้นเวลาเปิด word  จะขึ้น error!
+            ...mainParagraphs,// เนื่อหาหลัก ก่อน เข้า part ค่าใช้จ่าย // หมายเหตุสำคัญ การนำตัวแปร array มาใช้ กับ ribarry docx.js ต้องมี ...นำหน้าทุกครั้งไม่งั้นเวลาเปิด word  จะขึ้น error!
 
             new Paragraph({
                 spacing:{
@@ -659,10 +816,185 @@ async function generateDoc() {
             }),
             ...katoptanParagraph, 
 
+            new Paragraph({
+                tabStops: [
+                    {
+                    type: "right",
+                    position: cmToTwip(15.5), // ปรับให้ตรงขอบขวา (ขึ้นกับความกว้างหน้ากระดาษ)
+                    },
+                ],
+                children: [
+                    new TextRun({
+                    text: "6.ค่าใช้จ่ายอื่นๆที่จำเป็นในการเดินทางไปราชการ",
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                    new TextRun({
+                    text: `\tรวมเป็นเงิน ${document.getElementById("other-cost_result").textContent} บาท`,
+                    font: "TH Sarabun New",
+                    size: 32,
+                    }),
+                ],
+            }),
+            ...otherCostParagraph,
 
+            new Paragraph({
+            spacing:{
+                before:cmToTwip(0.5),
+            },
+            alignment: "right", 
+            children: [
+            new TextRun({
+                text: `รวมค่าใช้จ่ายเป็นเงินประมาณ ${document.getElementById("GrandTotal").textContent} บาท`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            alignment: "right", 
+            children: [
+            new TextRun({
+                text: `(${numberToThaiText(parseNumber(document.getElementById("GrandTotal").textContent))})`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `จึงเรียนมาเพื่อโปรดพิจารณา`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+
+            signatureBox,
+
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความเห็นงานการเงินโดยเบิกจ่ายจาก (  )เงินงบประมาณแผ่นดิน (  )งบประมาณเงินรายได้ (  )เงินรับฝาก`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `หมวดรายจ่าย..............................รหัสงบประมาณ..............................จำนวนเงิน ${document.getElementById("GrandTotal").textContent} บาท`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `จำนวนเงิน(ตัวอักษร) ${numberToThaiText(parseNumber(document.getElementById("GrandTotal").textContent))}`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความคิดเห็นจาก งานการเงินบัญชี/งานบุคคลฯ/หัวหน้ากลุมงานฯ................................................................`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความเห็นจาก หัวหน้าสำนักงานเลขานุการฯ..................................................................................................`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความเห็นจาก หัวหน้าสำนักวิชาฯ/หัวหน้าส่วนงานฯ......................................................................................`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความเห็นจาก รองคณบดีคณะวิศวกรรมศาสตร์ ฝ่ายบริหารฯ........................................................................`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+            children: [
+            new TextRun({
+                text: `ความเห็นจาก คณบดีคณะวิศวกรรมศาสตร์  (  )อนุมัติ     (  )ไม่อนุมัติ`,
+                font: "TH Sarabun New",
+                size: 32,
+            }),
+            ],
+            }),
+            new Paragraph({
+                alignment: "right", // จัดให้ข้อความชิดขวา
+                spacing: { before: cmToTwip(0.5) }, // ระยะห่างบรรทัด (ประมาณ 0.7 ใน jsPDF)
+                children: [
+                new TextRun({
+                    text: "ลงชื่อ..............................................ผู้อนุมัติ",
+                    font: "TH Sarabun New",
+                    size: 32,
+                }),
+                ],
+            }),
+            new Paragraph({
+                alignment: "right",
+                spacing: { after: cmToTwip(0.3) },
+                children: [
+                new TextRun({
+                    text: "(................................................................)",
+                    font: "TH Sarabun New",
+                    size: 32,
+                }),
+                ],
+            }),
+        ],
+    },
+
+        {
+        //หน้าใหม่สำหรับ "ผู้อนุมัติ"
+        children: [
+        new Paragraph({
+            alignment: "center",
+            spacing: { after: cmToTwip(0.5) },
+            children: [
+            new TextRun({
+                text: "รายชื่อผู้ร่วมเดินทาง",
+                bold: true,
+                font: "TH Sarabun New",
+                size: 36,
+            }),
+            ],
+        }),
+        participantTable,
         ]
-    }]
-    });
+        },
+        ...(airplaneSection ? [airplaneSection] : []),
+        ...(personalSection ? [personalSection] : []),
+        
+    ],
+
+    
+});
 
     const blob = await Packer.toBlob(doc);
     saveAs(blob, "document.docx"); // download docx
