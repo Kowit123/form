@@ -1013,20 +1013,20 @@ yy += 0.7;
 doc.text(text4_1, centerX-0.3, yy, { align: 'center' });
 yy += 0.7;
 
-
+if(reignCarCheckbox && reignCarCheckbox.checked){
 doc.addPage("a4", "landscape");
 const pageWidth2 = doc.internal.pageSize.getWidth();
 doc.setFont("THSarabunNew", "bold");
 doc.setFontSize(24);
 doc.text('หลักฐานการจ่ายเงินค่าตอบแทนการปฏิบัติงานในการขับรถไปราชการ', pageWidth2/2, 2, {align:'center'});
-let yyyy= 2.7;
+let yyyy= 3;
 doc.setFontSize(16);
 doc.setFont("THSarabunNew", "normal");
 doc.text(`สำหรับ ( )รถบัส  ( )รถมินิบัส  ( )รถตู้และรถอื่นๆ  ( )กรณี รับ-ส่ง ผู้โดยสารที่สนามบิน`,3,yyyy)
 yyyy+=1;
 doc.setFontSize(14);
 doc.text(`ประกอบใบเบิกค่าใช้จ่ายในการเดินทาง ${document.querySelector('input[name="qqee"]:checked')?.value} เรื่อง ${document.getElementById("subject_re").value} วันที่....................................`,2,yyyy);
-yyyy+=0.7;
+yyyy+=0.5;
 // 🪄 หัวตาราง 2 ชั้น
 const head = [
   [
@@ -1168,6 +1168,7 @@ function drawPayerSignatureBlockRight(doc, startY = 20) {
 
 const finalY = doc.lastAutoTable.finalY;
 drawPayerSignatureBlockRight(doc, finalY + 1.5);
+}
 
 
 

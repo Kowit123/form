@@ -716,7 +716,7 @@
 
                     <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; margin-right: 1%; width: 80%;">รถยนต์ส่วนบุคคล:<input type="text" placeholder="หมายเลขทะเบียนรถ" style=" margin: 0; margin-left: 4.5%; width: 20%;"><input type="text" placeholder="ผู้ขับรถ" style="margin: 0; width: 25%;"><input type="text" class="comma-number" placeholder="ระยะทาง" style="margin: 0; width: 10%;">
                     <label style="text-align: center;">
-                    <input type="checkbox" id="R_personal_car_roundtrip" style="text-align: center; margin: 0;" value="ไป-กลับ">
+                    <input type="checkbox" id="R_personal_car_roundtrip1" style="text-align: center; margin: 0;" value="ไป-กลับ">
                         ไป - กลับ
                     </label>
                     </label>
@@ -837,6 +837,7 @@
         </div>
         <div id="bttd1" class="n_display" style="margin-bottom: 7rem; width: 100%; align-items: center;">
             <button class="pdfbtt1" type="button" onclick="generate_reportPDF()">ดาวโหลดเอกสาร</button>
+            <button class="pdfbtt" type="button" onclick="generateDoc2()" style="margin-left: 10px; background-color: #0004ff;">ดาวโหลดเอกสาร DOCX</button>
         </div>
 </div>        
     <script src="script.js"></script>
@@ -845,6 +846,14 @@
     <script src="cal_p2.js"></script>
     <script src="airplant1-docx.js"></script>
     <script src="personalCar1-docx.js"></script>
+    <script src="/elementOfDocx2/mainParagraphDocx2.js"></script>
+    <script src="getDataFormDom.js"></script>
+    <script src="/elementOfDocx2/allowanceDetail2.js"></script>
+    <script src="/elementOfDocx2/accommodationDetail2.js"></script>
+    <script src="/elementOfDocx2/carDetail2.js"></script>
+    <script src="/elementOfDocx2/katoptanDetail2.js"></script>
+    <script src="/elementOfDocx2/otherCost2.js"></script>
+    <script src="/elementOfDocx2/signBox.js"></script>
     <script src="wordcut.min.js"></script>
     <!--docx library-->
     <script src="docx-library.js"></script>
@@ -871,6 +880,7 @@
         
 
 
+    <script src="genarate-docx2.js"></script>
 
     
 </body>

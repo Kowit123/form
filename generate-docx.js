@@ -90,7 +90,6 @@ async function generateDoc() {
         indent: {
         left: cmToTwip(0),                 
         firstLine: index === 0 ? cmToTwip(2.5) : 0,  // บรรทัดแรกเยื้องเพิ่มอีก 2.5 = รวม 5.5 ซม.
-        right: cmToTwip(2),                // ขอบขวา 2 ซม.
         },
         children: [
         new TextRun({
@@ -374,7 +373,7 @@ async function generateDoc() {
     });
     }
 
-    //registerParagraph
+    //otherParagraph
     const otherCostParagraph = [];
     function createotherCostParagraph(otherCostDetail,otherCostFeeFormatted) {
     return new Paragraph({
@@ -390,19 +389,16 @@ async function generateDoc() {
     });
     }
     const otherCostRows = document.querySelectorAll(".other_cost");
-    console.log("before forEach play normal");
     otherCostRows.forEach(row => {
     const otherCostDetail = row.querySelector('.Other-cost_detail')?.value || "";
     // รองรับ comma และแสดงผล fee แบบมี comma
     const otherCostFeeRow = row.querySelector('.otherCost')?.value || "0";
     const otherCostFee = Number(otherCostFeeRow.replace(/,/g, ''));
     const otherCostFeeFormatted = otherCostFee.toLocaleString();
-    console.log("forEach play normal");
 
 
     if (otherCostRows) {
     otherCostParagraph.push(createotherCostParagraph(otherCostDetail,otherCostFeeFormatted));
-    console.log("push play normal");
     }
     });
 
