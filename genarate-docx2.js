@@ -319,7 +319,7 @@ console.log("section children =", eachotherCost[0]?.children?.length);
                         alignment: "center",
                         children: [
                             new TextRun({
-                            text: data_f2.requesting_name_F2,
+                            text: `(${data_f2.requesting_name_F2})`,
                             font: "TH Sarabun New",
                             size: 32,
                             }),
@@ -329,7 +329,7 @@ console.log("section children =", eachotherCost[0]?.children?.length);
                         alignment: "center",
                         children: [
                             new TextRun({
-                            text: data_f2.requesting_position_F2,
+                            text: `ตำแหน่ง ${data_f2.requesting_position_F2}`,
                             font: "TH Sarabun New",
                             size: 32,
                             }),
@@ -421,6 +421,278 @@ console.log("section children =", eachotherCost[0]?.children?.length);
         ...eachotherCost,
         sendSectionReceipt(),
         sendReceiptVoucherSection(),
+        {   
+        children: [
+        new Table({
+            rows: [
+            new TableRow({
+                children: [
+                // ✅ คอลัมน์ภาพ
+                new TableCell({
+                    children: [
+                    new Paragraph({
+                        children: [
+                        new ImageRun({
+                            data: imageData,
+                            transformation: {
+                            height: 65,
+                            width: 65
+                            }
+                        })
+                        ]
+                    })
+                    ],
+                    width: {
+                    size: cmToTwip(2),
+                    type: WidthType.DXA
+                    },
+                }),
+                // ✅ คอลัมน์ข้อความ
+                new TableCell({
+                    verticalAlign: VerticalAlign.BOTTOM,
+                    children: [
+                    new Paragraph({
+                        spacing: {
+                        before: cmToTwip(1)
+                        },
+                        alignment: "left", 
+                        indent: { left: cmToTwip(3.5) }, // เยื้องเข้าไปทางขวาประมาณ 1.5 ซม. ปรับได้ตามต้องการ
+                        children: [
+                        new TextRun({
+                            text: "บันทึกข้อความ",
+                            bold: true,
+                            size: 48,
+                            font: "TH Sarabun New"
+                        })
+                        ]
+                    })
+                    ]
+                })
+                ]
+            })
+            ],
+            // กำหนดรูปแบบตารางให้ไม่เห็นเส้นตาราง
+            width: {
+            size: 100,
+            type: WidthType.PERCENTAGE
+            },
+            borders: {
+            top: { size: 0, color: "FFFFFF" },
+            bottom: { size: 0, color: "FFFFFF" },
+            left: { size: 0, color: "FFFFFF" },
+            right: { size: 0, color: "FFFFFF" },
+            insideHorizontal: { size: 0, color: "FFFFFF" },
+            insideVertical: { size: 0, color: "FFFFFF" },
+            }
+        }),
+            // ส่วนราชการ
+            new Paragraph({
+                spacing: { before: cmToTwip(0) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "ส่วนราชการ ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: "คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหาสารคาม",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            // เลขที่ และวันที่ในการทำหนังสือ
+            new Paragraph({
+                tabStops: [
+                    {
+                        type: "left",
+                        position: cmToTwip(7), // ปรับระยะตามต้องการ
+                    },
+                ],
+                children: [
+                    new TextRun({ text: "ที่ ", bold: true, font: "TH Sarabun New", size: 32 }),
+                    new TextRun({ text: `${document.getElementById("rebd2").value || 'อว 0605.14/..........'}`, font: "TH Sarabun New", size: 32 }),
+                    new TextRun({ text: "\t", font: "TH Sarabun New", size: 32 }), // ใช้ tab แทนการเว้นด้วย spacebar
+                    new TextRun({ text: "วันที่ ", bold: true, font: "TH Sarabun New", size: 32 }),
+                    new TextRun({ text: `${document.getElementById("thai-datepicker7").value}`, font: "TH Sarabun New", size: 32 }),
+                ],
+            }),
+            //เรื่อง
+            new Paragraph({
+                spacing: { before: cmToTwip(0) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "เรื่อง ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: `ขออนุมัติเบิกเงินค่าลงทะเบียน`,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            //เรียน
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "เรียน ",
+                        font: "TH Sarabun New",
+                        bold: true,
+                        size: 32,
+                    }),
+                    new TextRun({
+                        text: `คณบดีคณะวิศวกรรมศาสตร์`,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                indent: {
+                    firstLine:cmToTwip(2.5),
+                },
+                children: [
+                    new TextRun({
+                        text: `ตามหนังสือที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} เรื่อง ขออนุมัติเดินทางไปราชการ เพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} ระหว่างวันที่ ${document.getElementById("thai-datepicker9").value} ถึงวันที่ ${document.getElementById("thai-datepicker10").value} บัดนี้ผู้เดินทางได้ดำเนินการชำระค่าลงทะเบียน เป็นที่เรียบร้อยแล้ว จึงขออนุมัติ เบิกค่าลงทะเบียน รวมเป็นเงิน ${document.getElementById("s").value} ตัวอักษร ( ${numberToThaiText(parseNumber(document.getElementById("s").value))} )`,
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "โดยเบิกค่าใช้จ่ายจากเงินงบประมาณรายได้คณะวิศวกรรมศาสตร์ปี......................",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "แผนงานที่1 ขยายโอกาสและพัฒนาการศึกษา",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "ผลผลิตที่1 ผู้สำเร็จการศึกษาด้านวิทยาศาสตร์และเทคโนโลยี",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "หมวด.........................",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "รหัสงบ.......................",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Paragraph({
+                spacing: { before: cmToTwip(0.5) },
+                alignment: "left",
+                children: [
+                    new TextRun({
+                        text: "จึงเรียนมาเพื่อโปรดพิจารณาการอนุมัติเบิกจ่ายเงิน",
+                        font: "TH Sarabun New",
+                        size: 32,
+                    }),
+                ]
+            }),
+            new Table({
+            width: {
+                size: 35,
+                type: WidthType.PERCENTAGE,
+            },
+            alignment: "right", // ✅ กล่องชิดขวา
+            borders: {
+                top: { size: 0, color: "FFFFFF" },
+                bottom: { size: 0, color: "FFFFFF" },
+                left: { size: 0, color: "FFFFFF" },
+                right: { size: 0, color: "FFFFFF" },
+                insideHorizontal: { size: 0, color: "FFFFFF" },
+                insideVertical: { size: 0, color: "FFFFFF" },
+            },
+            rows: [
+                new TableRow({
+                children: [
+                    new TableCell({
+                    width: { size: cmToTwip(8), type: WidthType.DXA }, // ✅ กำหนดความกว้างกล่อง
+                    children: [
+                        new Paragraph({
+                        alignment: "center", // ✅ ข้อความอยู่กลางในกล่อง
+                        children: [
+                            new TextRun({
+                            text: "ลงชื่อ......................................ผู้ขอรับเงิน",
+                            font: "TH Sarabun New",
+                            size: 32,
+                            }),
+                        ],
+                        }),
+                        new Paragraph({
+                        alignment: "center",
+                        children: [
+                            new TextRun({
+                            text: `(${data_f2.requesting_name_F2})`,
+                            font: "TH Sarabun New",
+                            size: 32,
+                            }),
+                        ],
+                        }),
+                        new Paragraph({
+                        alignment: "center",
+                        children: [
+                            new TextRun({
+                            text: `ตำแหน่ง ${data_f2.requesting_position_F2}`,
+                            font: "TH Sarabun New",
+                            size: 32,
+                            }),
+                        ],
+                        }),
+                    ],
+                    }),
+                ],
+                }),
+            ],
+            }),
+        ]
+        }
     ],
 
     });
@@ -428,3 +700,4 @@ console.log("section children =", eachotherCost[0]?.children?.length);
     const blob = await Packer.toBlob(doc);
     saveAs(blob, "document.docx"); // download docx
 }
+

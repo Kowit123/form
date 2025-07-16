@@ -71,8 +71,8 @@ function generateReceiptInsteadOfBillDOCX(tableData, totalAmount, totalText, met
   children.push(new Paragraph({ children: [new TextRun({ text: "ขอรับรองว่ารายจ่ายข้างต้นนี้ ไม่อาจเรียกใบเสร็จรับเงินจากผู้รับได้ และข้าพเจ้าได้จ่ายในงานของราชการโดยแท้", font: "TH Sarabun New", size: 32 })] }));
 
   children.push(new Paragraph({ spacing: { before: 500 }, alignment: "center", children: [new TextRun({ text: "ลงชื่อ....................................................ผู้ขอรับเงิน", font: "TH Sarabun New", size: 32 })] }));
-  children.push(new Paragraph({ alignment: "center", children: [new TextRun({ text: meta.name, font: "TH Sarabun New", size: 32 })] }));
-  children.push(new Paragraph({ alignment: "center", children: [new TextRun({ text: meta.position, font: "TH Sarabun New", size: 32 })] }));
+  children.push(new Paragraph({ alignment: "center", children: [new TextRun({ text: `(${meta.name})`, font: "TH Sarabun New", size: 32 })] }));
+  children.push(new Paragraph({ alignment: "center", children: [new TextRun({ text: `ตำแหน่ง ${meta.position}`, font: "TH Sarabun New", size: 32 })] }));
 
   return {
     properties: {

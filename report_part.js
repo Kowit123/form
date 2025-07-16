@@ -360,13 +360,13 @@ const rangeWidth = pageWidthForSignature - marginLeft - marginRight;
 const centerX = marginLeft + rangeWidth / 2;
 doc.text(text1, centerX, y, { align: 'center' });
 y += 0.7;
-const text2_1 = `${document.getElementById("nrq_re").value}`;
+const text2_1 = `( ${document.getElementById("nrq_re").value} )`;
 doc.text(text2_1, centerX-0.3, y, { align: 'center' });
 y += 0.7;
-const text3_1 = `${document.getElementById("pst_re").value}`;
+const text3_1 = `ตำแหน่ง ${document.getElementById("pst_re").value}`;
 doc.text(text3_1, centerX-0.3, y, { align: 'center' });
 y += 0.7;
-const text4_1 = `${document.getElementById("thai-datepicker7").value}`;
+const text4_1 = `วันที่ ${document.getElementById("thai-datepicker7").value}`;
 doc.text(text4_1, centerX-0.3, y, { align: 'center' });
 y += 0.7;
 
@@ -419,7 +419,7 @@ centerText("ลงชื่อ .................................................
 centerText("ลงชื่อ ......................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y);
 y += 0.7;
 
-const nameTextf =`(${document.getElementById("nrq_re").value || ".........................................................................."})`;
+const nameTextf =`( ${document.getElementById("nrq_re").value || ".........................................................................."} )`;
 const nameText ="(............................................................................)";
 centerText(nameTextf, leftBlockX, blockWidth, y);
 centerText(nameText, rightBlockX, blockWidth, y);
@@ -788,9 +788,9 @@ doc.text(`ขอรับรองว่ารายจ่ายข้างต�
 y3 += 2.1;
 doc.text("ลงชื่อ....................................................ผู้ขอรับเงิน",pageWidth/2,y3, {align: 'center'});
 y3 += 0.7;
-doc.text(`${document.getElementById("nrq_re").value}`,pageWidth/2,y3,{align: 'center'});
+doc.text(`( ${document.getElementById("nrq_re").value} )`,pageWidth/2,y3,{align: 'center'});
 y3 += 0.7;
-doc.text(`${document.getElementById("pst_re").value}`,pageWidth/2,y3,{align: 'center'});
+doc.text(`ตำแหน่ง ${document.getElementById("pst_re").value}`,pageWidth/2,y3,{align: 'center'});
 
 
 doc.addPage();
@@ -889,12 +889,12 @@ centerText("ลงชื่อ .................................................
 y3 += 0.7;
 
 const nameText1 = document.getElementById("nrq_re")?.value || "..........................................................................";
-centerText((nameText1), leftBlockX, blockWidth, y3);
+centerText(`( ${nameText1} )`, leftBlockX, blockWidth, y3);
 centerText(`(..........................................................................)`, rightBlockX, blockWidth, y3);
 y3 += 0.7;
 
-const positionText1 = document.getElementById("pst_re")?.value || "ตำแหน่ง............................................................";
-centerText(positionText1, leftBlockX, blockWidth, y3);
+const positionText1 = document.getElementById("pst_re")?.value || "............................................................";
+centerText(`ตำแหน่ง ${positionText1}`, leftBlockX, blockWidth, y3);
 centerText(`ตำแหน่ง.............................................................`, rightBlockX, blockWidth, y3);
 y3 += 0.7;
 
@@ -941,7 +941,7 @@ yy+=0.7;
 doc.setFont("THSarabunNew", "bold");
 doc.text(`ที่`,3,yy);
 doc.setFont("THSarabunNew", "normal");
-doc.text(`    อว 0605.14/..........`,3,yy)
+doc.text(`    ${document.getElementById("rebd2").value || 'อว 0605.14/..........'}`,3,yy)
 doc.setFont("THSarabunNew", "bold");
 doc.text(`วันที่`,pageWidth/2,yy);
 doc.setFont("THSarabunNew", "normal");
@@ -950,7 +950,7 @@ doc.text(`      ${document.getElementById("thai-datepicker7").value}`,pageWidth/
  doc.setFont("THSarabunNew", "bold");
 doc.text(`เรื่อง`,3,yy);
 doc.setFont("THSarabunNew", "normal");
-doc.text(`        ขออนุมัติเบิกเงินค่าลงทะเเบียน`,3,yy)
+doc.text(`        ขออนุมัติเบิกเงินค่าลงทะเบียน`,3,yy)
 yy+=1;
 doc.setFont("THSarabunNew", "bold");
 doc.text(`เรียน`,3,yy);
