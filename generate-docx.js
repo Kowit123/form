@@ -1,5 +1,3 @@
-const { Indent } = require("docx");
-
 //  แปลงภาพให้ใช่้ได้ใน docx
 //  ใช้ canvas ป้องกันปัญหา transparency
 async function loadAndFixImage(url) {
