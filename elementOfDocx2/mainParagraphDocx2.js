@@ -77,6 +77,6 @@ function createMainParagraphsDocx2(lines) {
     //เนื้อหา main ที่จะใช้
     const lines =`ตามคำสั่ง/บันทึกที่ ${document.getElementById("rebd2").value} ลงวันที่ ${document.getElementById("thai-datepicker8").value} ได้อนุมัติให้ ข้าพเจ้า ${document.getElementById("nrq_re").value} ตำแหน่ง ${document.getElementById("pst_re").value} สังกัด ${document.getElementById("pt_re").value} เดินทางไปปฏิบัติราชการเพื่อ ${document.querySelector('input[name="qqee"]:checked')?.value || ''} เรื่อง ${document.getElementById("subject_re").value} ณ ${document.getElementById("lo_re").value} `;
      // นำ string มาจัด format ด้วย function createMainParagraphs()
-    const mainParagraphs = createMainParagraphsDocx2(lines);
-    return mainParagraphs;
+    const mainParagraphs_F2 = createMainParagraphsDocx2(lines);
+    return mainParagraphs_F2;
     }
