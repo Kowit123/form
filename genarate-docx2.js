@@ -1,6 +1,3 @@
-const { Spacing } = require("docx");
-const { Alignment } = require("docx");
-
 async function generateDoc2() {
 const data_f2 = getReportDataFrom2DOM();
 const mainParagraphs = mainParagraphLineDocx2();
