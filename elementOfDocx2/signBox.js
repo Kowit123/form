@@ -41,9 +41,9 @@ function createApprovalSignatureTableFixed(dataLeft, dataRight) {
         makeParagraph(data.titleLine3, false, "center"),
         new Paragraph({ spacing: { before: 200 } }), // เว้นระยะก่อนเซ็นชื่อ
         makeParagraph("ลงชื่อ ......................................................", false, "center"),
-        makeParagraph(`(${data.name || ".............................................................."})`, false, "center"),
-        makeParagraph(`ตำแหน่ง ${data.position || ".................................................."}`, false, "center"),
-        makeParagraph(`วันที่ ${data.date || "........................................................."}`, false, "center"),
+        makeParagraph(`(..............................................................)`, false, "center"),
+        makeParagraph(`ตำแหน่ง..................................................`, false, "center"),
+        makeParagraph(`วันที่.........................................................`, false, "center"),
       ],
     });
 
@@ -64,9 +64,9 @@ function createApprovalSignatureTableFixed(dataLeft, dataRight) {
         makeParagraph(data.title3, false, "center"),
         new Paragraph({ spacing: { before: 350 } }),
         makeParagraph("ลงชื่อ ......................................................", false, "center"),
-        makeParagraph(`(${data.name || ".............................................................."})`, false, "center"),
-        makeParagraph(`ตำแหน่ง ${data.position || ".................................................."}`, false, "center"),
-        makeParagraph(`วันที่ ${data.date || "........................................................."}`, false, "center"),
+        makeParagraph(`(..............................................................)`, false, "center"),
+        makeParagraph(`ตำแหน่ง..................................................`, false, "center"),
+        makeParagraph(`วันที่.........................................................`, false, "center"),
       ],
     });
 
@@ -167,9 +167,9 @@ function createApprovalSignaturegroup(dataLeft, dataRight) {
       verticalAlign: VerticalAlign.TOP,
       children: [
         makeParagraph("ลงชื่อ ......................................................ผู้จ่ายเงิน", false, "center"),
-        makeParagraph(`(${data.name || "........................................................................."})`, false, "center"),
-        makeParagraph(`ตำแหน่ง ${data.position || "............................................................."}`, false, "center"),
-        makeParagraph(`วันที่ ${data.date || "..................................................................."}`, false, "center"),
+        makeParagraph(`(${data.name || "............................................................................"})`, false, "center"),
+        makeParagraph(`ตำแหน่ง ${data.position || "..............................................................."}`, false, "center"),
+        makeParagraph(`วันที่ ${data.date || "....................................................................."}`, false, "center"),
       ],
     });
 

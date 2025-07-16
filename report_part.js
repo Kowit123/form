@@ -383,19 +383,19 @@ doc.rect(1.5, y, 9, 6); // x, y, width, height
 doc.text("ได้ตรวจสอบหลักฐาน การเบิกจ่ายเงิน ที่แนบถูกต้องแล้ว", 1.85, y + 0.7);
 doc.text("เห็นควรอนุมัติให้เบิกจ่ายได้", 4, y + 1.4);
 
-doc.text("ลงชื่อ.....................................................", 3.2, y + 2.7);
-doc.text("(.....................................................)", 3.9, y + 3.4);
-doc.text("ตำแหน่ง....................................................", 2.7, y + 4.1);
-doc.text("วันที่.....................................................", 3.2, y + 4.8);
+doc.text("ลงชื่อ ......................................................", 3.2, y + 2.7);
+doc.text("(..............................................................)", 3.2, y + 3.4);
+doc.text("ตำแหน่ง..................................................", 3.2, y + 4.1);
+doc.text("วันที่.........................................................", 3.2, y + 4.8);
 
 // วาดกล่องขวา
 doc.rect(10.5, y, 9, 6);
 doc.text("อนุมัติให้เบิกจ่ายได้", 13.5, y + 0.7);
 
-doc.text("ลงชื่อ.....................................................", 12.2, y + 2.7);
-doc.text("(.....................................................)", 12.9, y + 3.4);
-doc.text("ตำแหน่ง......................................................", 11.7, y + 4.1);
-doc.text("วันที่......................................................", 12.2, y + 4.8);
+doc.text("ลงชื่อ ......................................................", 12.2, y + 2.7);
+doc.text("(..............................................................)", 12.2, y + 3.4);
+doc.text("ตำแหน่ง..................................................", 12.2, y + 4.1);
+doc.text("วันที่.........................................................", 12.2, y + 4.8);
 
 y += 7.5; // ปรับตำแหน่ง Y ลงหลังจากวาดกล่อง
 
@@ -415,24 +415,24 @@ function centerText(text, xStart, width, y) {
   doc.text(text, centeredX, y);
 }
 
-centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y);
-centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y);
+centerText("ลงชื่อ ......................................................ผู้รับเงิน", leftBlockX, blockWidth, y);
+centerText("ลงชื่อ ......................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y);
 y += 0.7;
 
-const nameTextf =`${document.getElementById("nrq_re").value || "(....................................................)"}`;
-const nameText ="(....................................................)";
+const nameTextf =`(${document.getElementById("nrq_re").value || ".........................................................................."})`;
+const nameText ="(............................................................................)";
 centerText(nameTextf, leftBlockX, blockWidth, y);
-centerText(nameText, rightBlockX-0.2, blockWidth, y);
+centerText(nameText, rightBlockX, blockWidth, y);
 y += 0.7;
 
-const positionTextf =`${document.getElementById("pst_re").value || "ตำแหน่ง...................................................................."}`;
-const positionText ="ตำแหน่ง....................................................................";
+const positionTextf =`ตำแหน่ง ${document.getElementById("pst_re").value || "............................................................"}`;
+const positionText ="ตำแหน่ง...............................................................";
 centerText(positionTextf, leftBlockX, blockWidth, y);
-centerText(positionText, rightBlockX-0.25, blockWidth, y);
+centerText(positionText, rightBlockX, blockWidth, y);
 y += 0.7;
 
-centerText("วันที่.....................................................................", leftBlockX-0.02, blockWidth, y);
-centerText("วันที่.....................................................................", rightBlockX-0.02, blockWidth, y);
+centerText("วันที่...................................................................", leftBlockX, blockWidth, y);
+centerText("วันที่.....................................................................", rightBlockX, blockWidth, y);
 y += 1;
 
 doc.text(`จากเงินตามสัญญายืมเงินเลขที่ ${document.getElementById("con_number")?.value || "......................."}  วันที่ ${document.getElementById("thai-datepicker6")?.value || "......................."}`,2,y)
@@ -580,12 +580,12 @@ function generateBodyFromInputs() {
 const foot = [
     [
       { content: 'รวมเงิน', colSpan: 3, styles: { halign: 'center' } },
-      { content: `${document.getElementById("thisResult1").textContent}`, styles: { halign: 'right' } },
-      { content: `${document.getElementById("thisResult2").textContent}`, styles: { halign: 'right' } },
-      { content: `${document.getElementById("thisResult3").textContent}`, styles: { halign: 'right' } },
-      { content: `${document.getElementById("thisResult4").textContent}`, styles: { halign: 'right' } },
-      { content: `${document.getElementById("thisResultGran").textContent}`, styles: { halign: 'right' } },
-      { content: `ตามสัญญาเงินยืมเลขที่ ${document.getElementById("con_number")?.value || "................"} วันที่ ${document.getElementById("thai-datepicker6")?.value || "................"}`, colSpan: 3 }
+      { content: `${document.getElementById("thisResult1").textContent}`, styles: { halign: 'center' } },
+      { content: `${document.getElementById("thisResult2").textContent}`, styles: { halign: 'center' } },
+      { content: `${document.getElementById("thisResult3").textContent}`, styles: { halign: 'center' } },
+      { content: `${document.getElementById("thisResult4").textContent}`, styles: { halign: 'center' } },
+      { content: `${document.getElementById("thisResultGran").textContent}`, styles: { halign: 'center' } },
+      { content: `ตามสัญญาเงินยืมเลขที่ ${document.getElementById("con_number")?.value || "................"} วันที่ ${document.getElementById("thai-datepicker6")?.value || "................"}`, colSpan: 3, styles: { halign: 'center' } }
     ]
   ];
 
@@ -884,18 +884,18 @@ doc.text(
   y3
 );
 y3 += 1.4;
-centerText("ลงชื่อ.....................................................ผู้รับเงิน", leftBlockX, blockWidth, y3);
-centerText("ลงชื่อ.....................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y3);
+centerText("ลงชื่อ ......................................................ผู้รับเงิน", leftBlockX, blockWidth, y3);
+centerText("ลงชื่อ ......................................................ผู้จ่ายเงิน", rightBlockX, blockWidth, y3);
 y3 += 0.7;
 
-const nameText1 = document.getElementById("nrq_re")?.value || "(......................................................)";
-centerText(nameText1, leftBlockX, blockWidth, y3);
-centerText(`(......................................................)`, rightBlockX-0.3, blockWidth, y3);
+const nameText1 = document.getElementById("nrq_re")?.value || "..........................................................................";
+centerText((nameText1), leftBlockX, blockWidth, y3);
+centerText(`(..........................................................................)`, rightBlockX, blockWidth, y3);
 y3 += 0.7;
 
-const positionText1 = document.getElementById("pst_re")?.value || "ตำแหน่ง....................................................";
+const positionText1 = document.getElementById("pst_re")?.value || "ตำแหน่ง............................................................";
 centerText(positionText1, leftBlockX, blockWidth, y3);
-centerText(`ตำแหน่ง.....................................................`, rightBlockX-0.9, blockWidth, y3);
+centerText(`ตำแหน่ง.............................................................`, rightBlockX, blockWidth, y3);
 y3 += 0.7;
 
 /**

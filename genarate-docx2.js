@@ -15,10 +15,17 @@ const katoptanTotal = sumKatoptanParagraph();
 const otherCostParagraph = sendOtherCostParagraph();
 
 const approvalTable = sendApprovalTable();
+
+const eachotherCost = sendEachotherCost();
 //แปลง cm เป็น twip
 const cmToTwip = (cm) => Math.round(cm * 567);
 const imageData = await loadAndFixImage("./public/img/krut.jpg");
-const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, VerticalAlign, ImageRun } = window.docx;
+const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, VerticalAlign, ImageRun} = window.docx;
+console.log("eachotherCost =", eachotherCost);
+console.log("typeof eachotherCost =", typeof eachotherCost);
+console.log("isArray =", Array.isArray(eachotherCost));
+console.log("section children =", eachotherCost[0]?.children?.length);
+
     // สร้างเอกสารใหม่
     // กำหนดขนาด margin และสร้างตารางสำหรับส่วนหัวของเอกสาร
     const doc = new Document({
@@ -411,29 +418,11 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthT
 
         ],
         },
-        {
-            children: [
-                new Paragraph({
-                    alignment: "right",
-                    children: [
-                        new TextRun({text: "บก 4231", font: "TH Sarabun New", size: 32}),
-                    ]
-                }),
-                new Paragraph({
-                    alignment: "center",
-                    children: [
-                        new TextRun({text: "ใบรับรองแทนใบเสร็จรับเงิน", font: "TH Sarabun New", size: 32}),
-                    ]
-                }),
-                new Paragraph({
-                    alignment: "center",
-                    children: [
-                        new TextRun({text: "ส่วนราชการ มหาวิทยาลัยมหาสารคาม", font: "TH Sarabun New", size: 32}),
-                    ]
-                })
-            ]
-        },
+        ...eachotherCost,
+        sendSectionReceipt(),
+        sendReceiptVoucherSection(),
     ],
+
     });
 
     const blob = await Packer.toBlob(doc);
